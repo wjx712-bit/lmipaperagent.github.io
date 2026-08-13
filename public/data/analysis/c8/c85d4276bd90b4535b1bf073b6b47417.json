@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1172/jci205962",
+  "doi": "10.1172/jci205962",
+  "title": "Molecular evaluation of residual disease following neoadjuvant chemotherapy in triple negative breast cancer CALGB40603 (Alliance)",
+  "originalUrl": "https://doi.org/10.1172/jci205962",
+  "generatedAt": "2026-08-13T10:35:02.526417Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42550611",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Early-stage triple negative breast cancer (TNBC)에서 neoadjuvant therapy 후 residual disease (RD)는 불량한 예후의 주요 예측인자이다. RD의 생물학적 특성과 생존 관련 특징을 규명하는 것이 환자 예후 개선을 위해 필요하다.",
+    "main_question": "CALGB 40603 (Alliance) trial의 TNBC에서 neoadjuvant chemotherapy 후 RD의 transcriptomic/genomic 특성은 무엇이며, 특히 예후 불량 RD 아형에 대해 ADC 치료가 전임상적으로 효과를 보이는가?",
+    "hypothesis": "명시적으로 가설이 서술되지는 않았다. 직접적으로 뒷받침되는 연구 전제는 RD에서 측정되는 예후 관련 genomic feature가 치료 전 종양의 예후 관련 feature와 다를 수 있으며, Basal-like RD가 고위험 및 치료 표적 집단일 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "CALGB 40603 (Alliance) Phase 2 clinical trial TNBC specimens",
+        "details": "Stage II/III TNBC의 치료 전 종양 340개와 이에 매칭된 치료 후 RD 검체 70개를 대상으로 분석하였다."
+      },
+      {
+        "model": "Patient-derived xenograft (PDX) mouse model",
+        "details": "Basal-like RD와 유사하고 conventional chemotherapy-resistant한 PDX 모델에서 ADC 치료를 평가하였다."
+      }
+    ],
+    "methods": [
+      "치료 전 TNBC 및 매칭된 치료 후 RD 검체의 comprehensive transcriptomic profiling",
+      "PAM50 genomic subtype 분석",
+      "치료 전 및 RD 검체 간 paired analysis",
+      "B-cell 및 T-cell expression feature, MHC class I, interferon signaling 관련 발현 특징 평가",
+      "PDX 마우스 모델에서 sacituzumab govitecan 또는 trastuzumab deruxtecan ADC 치료 평가"
+    ],
+    "key_results": [
+      {
+        "finding": "치료 전 측정된 prognostic genomic feature와 RD 검체에서 측정된 prognostic feature는 서로 다를 수 있었다.",
+        "evidence": "초록은 RD biology가 pre-treatment tumor와 다르며, 치료 전과 RD에서 예후 관련 genomic feature가 상이할 수 있다고 서술한다.",
+        "figures": []
+      },
+      {
+        "finding": "RD 검체가 genomic PAM50 Basal-like subtype인 환자는 불량한 생존 결과를 보였다.",
+        "evidence": "초록에서 Basal-like RD 환자가 poor survival outcome을 보였다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Basal-like RD에 매칭되는 치료 전 종양은 MYC, CDK6, CCND1 등 oncogenic driver의 chromosomal amplification 증가와 유의하게 감소한 B-cell 및 T-cell expression feature를 보였다.",
+        "evidence": "초록에 해당 분자 및 면역 특징이 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Basal-like RD와 매칭 치료 전 종양의 paired analysis에서 RD는 추가적인 lymphocyte depletion, 낮은 MHC class I 발현 및 낮은 interferon signaling을 나타냈다.",
+        "evidence": "초록은 이러한 변화가 immune-cold RD microenvironment를 시사한다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "Basal-like RD와 유사한 chemotherapy-resistant PDX에서 sacituzumab govitecan 또는 trastuzumab deruxtecan은 뚜렷한 antitumor response를 유도했다.",
+        "evidence": "초록에서 두 ADC가 marked antitumor response를 보였다고 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "CALGB 40603의 치료 전 stage II/III TNBC 340개와 매칭 RD 70개의 transcriptomic profiling에서, PAM50 Basal-like RD는 불량한 생존과 연관되었다. 이 집단의 치료 전 종양은 MYC/CDK6/CCND1 amplification 증가 및 낮은 B-/T-cell feature를 보였고, RD에서는 lymphocyte, MHC class I, interferon signaling이 추가로 감소한 immune-cold 상태가 관찰되었다. Basal-like RD를 모사한 chemotherapy-resistant PDX에서는 sacituzumab govitecan 및 trastuzumab deruxtecan이 항종양 반응을 보였다.",
+    "conclusion": "Neoadjuvant chemotherapy 후 Basal-like RD는 immune-cold phenotype 및 불량한 생존과 연관된다. 전임상 PDX 결과는 이 고위험군에서 adjuvant ADC therapy의 잠재적 유용성을 시사한다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료는 초록뿐이므로 transcriptomic platform, 세부 통계 분석, 생존효과의 크기, PDX 모델 수 및 ADC 반응의 정량적 데이터는 확인할 수 없다.",
+      "[분석자 추론] ADC 효능은 전임상 PDX에서 제시되었으며, Basal-like RD 환자에서 adjuvant ADC therapy의 임상적 효과를 직접 입증하지는 않는다.",
+      "[분석자 추론] 초록에 제시된 immune-cold 특성은 연관성 관찰에 근거하며, lymphocyte depletion 또는 MHC class I/interferon signaling 저하의 인과 기전은 이 자료만으로 확정할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이며 main figure caption 또는 본문이 제공되지 않았다.",
+      "따라서 수치, 통계량, 세부 assay 조건, 추가 subgroup 분석 및 figure-level 근거는 평가할 수 없다.",
+      "Clinical trial identifier는 NCT00861705이다."
+    ]
+  }
+}

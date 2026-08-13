@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-13T10:09:40.455314Z",
+  "generatedAt": "2026-08-13T10:35:12.433095Z",
   "papers": {
     "10.1038/s41467-026-74906-z": {
       "doi": "10.1038/s41467-026-74906-z",
@@ -313,8 +313,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.521846Z"
     },
     "10.1038/s41467-026-75770-7": {
       "doi": "10.1038/s41467-026-75770-7",
@@ -367,8 +368,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.522265Z"
     },
     "10.1097/hep.0000000000001833": {
       "doi": "10.1097/hep.0000000000001833",
@@ -382,8 +384,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.522687Z"
     },
     "10.1038/s41467-026-75100-x": {
       "doi": "10.1038/s41467-026-75100-x",
@@ -436,8 +439,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.523085Z"
     },
     "10.1038/s41556-026-02025-4": {
       "doi": "10.1038/s41556-026-02025-4",
@@ -451,8 +455,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.523443Z"
     },
     "10.1126/science.adu6688": {
       "doi": "10.1126/science.adu6688",
@@ -466,8 +471,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.523810Z"
     },
     "10.1038/s41556-026-02041-4": {
       "doi": "10.1038/s41556-026-02041-4",
@@ -481,8 +487,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.524142Z"
     },
     "10.1038/s41467-026-75426-6": {
       "doi": "10.1038/s41467-026-75426-6",
@@ -535,8 +542,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.524480Z"
     },
     "10.1038/s41467-026-76327-4": {
       "doi": "10.1038/s41467-026-76327-4",
@@ -589,8 +597,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.524969Z"
     },
     "10.1172/jci201406": {
       "doi": "10.1172/jci201406",
@@ -604,8 +613,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.525334Z"
     },
     "10.1097/hep.0000000000001830": {
       "doi": "10.1097/hep.0000000000001830",
@@ -619,8 +629,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.525715Z"
     },
     "10.1038/s41467-026-75853-5": {
       "doi": "10.1038/s41467-026-75853-5",
@@ -634,8 +645,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.526071Z"
     },
     "10.1038/s41467-026-76331-8": {
       "doi": "10.1038/s41467-026-76331-8",
@@ -688,8 +700,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.526417Z"
     },
     "10.1097/hep.0000000000001825": {
       "doi": "10.1097/hep.0000000000001825",
@@ -703,8 +716,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.526811Z"
     },
     "10.1172/jci194449": {
       "doi": "10.1172/jci194449",
@@ -718,8 +732,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.527162Z"
     },
     "10.1038/s41467-026-76237-5": {
       "doi": "10.1038/s41467-026-76237-5",
@@ -746,8 +761,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.527513Z"
     },
     "10.1172/jci208681": {
       "doi": "10.1172/jci208681",
@@ -774,8 +790,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.527882Z"
     },
     "10.1172/jci193280": {
       "doi": "10.1172/jci193280",
@@ -789,8 +806,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.528203Z"
     },
     "10.1172/jci206924": {
       "doi": "10.1172/jci206924",
@@ -804,8 +822,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.528554Z"
     },
     "10.1172/jci208767": {
       "doi": "10.1172/jci208767",
@@ -819,8 +838,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97ddd2dc8190ade81d7863029cbf",
+      "analyzedAt": "2026-08-13T10:35:02.528912Z"
     },
     "10.1172/jci203162": {
       "doi": "10.1172/jci203162",
@@ -834,8 +854,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.133819Z"
     },
     "10.1172/jci209169": {
       "doi": "10.1172/jci209169",
@@ -849,8 +870,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.134247Z"
     },
     "10.1038/s41467-026-76209-9": {
       "doi": "10.1038/s41467-026-76209-9",
@@ -929,8 +951,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.134590Z"
     },
     "10.1038/s41467-026-76162-7": {
       "doi": "10.1038/s41467-026-76162-7",
@@ -957,8 +980,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.134996Z"
     },
     "10.1016/s0168-8278(26)02670-x": {
       "doi": "10.1016/s0168-8278(26)02670-x",
@@ -1024,8 +1048,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.135344Z"
     },
     "10.1016/j.cmet.2026.07.005": {
       "doi": "10.1016/j.cmet.2026.07.005",
@@ -1039,8 +1064,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.135790Z"
     },
     "10.1016/j.immuni.2026.07.005": {
       "doi": "10.1016/j.immuni.2026.07.005",
@@ -1054,8 +1080,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.136125Z"
     },
     "10.1016/j.cmet.2026.07.011": {
       "doi": "10.1016/j.cmet.2026.07.011",
@@ -1095,8 +1122,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.136476Z"
     },
     "10.1016/j.immuni.2026.07.010": {
       "doi": "10.1016/j.immuni.2026.07.010",
@@ -1123,8 +1151,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.136835Z"
     },
     "10.1016/j.immuni.2026.07.004": {
       "doi": "10.1016/j.immuni.2026.07.004",
@@ -1138,8 +1167,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.137270Z"
     },
     "10.1016/j.immuni.2026.07.001": {
       "doi": "10.1016/j.immuni.2026.07.001",
@@ -1153,8 +1183,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.137592Z"
     },
     "10.1038/s41467-026-76285-x": {
       "doi": "10.1038/s41467-026-76285-x",
@@ -1181,8 +1212,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.137966Z"
     },
     "10.1038/s41467-026-76175-2": {
       "doi": "10.1038/s41467-026-76175-2",
@@ -1222,8 +1254,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.138312Z"
     },
     "10.1038/s41590-026-02604-5": {
       "doi": "10.1038/s41590-026-02604-5",
@@ -1237,8 +1270,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.138707Z"
     },
     "10.1038/s41467-026-76230-y": {
       "doi": "10.1038/s41467-026-76230-y",
@@ -1278,8 +1312,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.139080Z"
     },
     "10.1126/science.ady0832": {
       "doi": "10.1126/science.ady0832",
@@ -1293,8 +1328,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.139431Z"
     },
     "10.1038/s41467-026-75991-w": {
       "doi": "10.1038/s41467-026-75991-w",
@@ -1308,8 +1344,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.139791Z"
     },
     "10.1038/s41467-026-76083-5": {
       "doi": "10.1038/s41467-026-76083-5",
@@ -1349,8 +1386,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.140118Z"
     },
     "10.1038/s41467-026-76103-4": {
       "doi": "10.1038/s41467-026-76103-4",
@@ -1390,8 +1428,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.140437Z"
     },
     "10.1038/s41586-026-10939-0": {
       "doi": "10.1038/s41586-026-10939-0",
@@ -1431,8 +1470,9 @@
       "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
       "lastError": "",
-      "analysisStatus": "submitted",
-      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da"
+      "analysisStatus": "complete",
+      "batchId": "batch_6a7d97e401ec81908bc07d5e31e3e7da",
+      "analyzedAt": "2026-08-13T10:35:03.140811Z"
     },
     "10.1038/s42255-026-01555-3": {
       "doi": "10.1038/s42255-026-01555-3",
@@ -1443,9 +1483,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1385,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-73485-3": {
       "doi": "10.1038/s41467-026-73485-3",
@@ -1456,9 +1498,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1267,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-74599-4": {
       "doi": "10.1038/s41467-026-74599-4",
@@ -1469,9 +1513,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1194,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75425-7": {
       "doi": "10.1038/s41467-026-75425-7",
@@ -1482,9 +1528,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1392,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-72027-1": {
       "doi": "10.1038/s41467-026-72027-1",
@@ -1495,9 +1543,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1254,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75493-9": {
       "doi": "10.1038/s41467-026-75493-9",
@@ -1508,9 +1558,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1182,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75262-8": {
       "doi": "10.1038/s41467-026-75262-8",
@@ -1521,9 +1573,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1288,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75114-5": {
       "doi": "10.1038/s41467-026-75114-5",
@@ -1534,9 +1588,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1302,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75415-9": {
       "doi": "10.1038/s41467-026-75415-9",
@@ -1547,9 +1603,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1118,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75024-6": {
       "doi": "10.1038/s41467-026-75024-6",
@@ -1560,9 +1618,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1177,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75260-w": {
       "doi": "10.1038/s41467-026-75260-w",
@@ -1573,9 +1633,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1105,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s42255-026-01567-z": {
       "doi": "10.1038/s42255-026-01567-z",
@@ -1586,9 +1648,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1053,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1126/science.aea1200": {
       "doi": "10.1126/science.aea1200",
@@ -1599,9 +1663,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1052,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-74904-1": {
       "doi": "10.1038/s41467-026-74904-1",
@@ -1612,9 +1678,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1197,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1172/jci205059": {
       "doi": "10.1172/jci205059",
@@ -1625,9 +1693,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1718,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1172/jci190646": {
       "doi": "10.1172/jci190646",
@@ -1638,9 +1708,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1471,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1126/science.aee9519": {
       "doi": "10.1126/science.aee9519",
@@ -1651,9 +1723,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1056,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1126/science.adv1219": {
       "doi": "10.1126/science.adv1219",
@@ -1664,9 +1738,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 943,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41586-026-10750-x": {
       "doi": "10.1038/s41586-026-10750-x",
@@ -1677,9 +1753,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1578,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-75319-8": {
       "doi": "10.1038/s41467-026-75319-8",
@@ -1690,9 +1768,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1235,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9ddb79908190b98f72e1601351c4"
     },
     "10.1038/s41467-026-73683-z": {
       "doi": "10.1038/s41467-026-73683-z",
@@ -1703,9 +1783,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1133,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1016/j.jhep.2026.06.041": {
       "doi": "10.1016/j.jhep.2026.06.041",
@@ -1729,9 +1811,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 2206,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1016/j.immuni.2026.06.012": {
       "doi": "10.1016/j.immuni.2026.06.012",
@@ -1742,9 +1826,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1233,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1016/j.cell.2026.06.018": {
       "doi": "10.1016/j.cell.2026.06.018",
@@ -1755,9 +1841,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 297,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75112-7": {
       "doi": "10.1038/s41467-026-75112-7",
@@ -1768,9 +1856,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1575,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74675-9": {
       "doi": "10.1038/s41467-026-74675-9",
@@ -1781,9 +1871,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 972,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74858-4": {
       "doi": "10.1038/s41467-026-74858-4",
@@ -1794,9 +1886,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1483,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75214-2": {
       "doi": "10.1038/s41467-026-75214-2",
@@ -1807,9 +1901,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1039,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74104-x": {
       "doi": "10.1038/s41467-026-74104-x",
@@ -1820,9 +1916,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1305,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74782-7": {
       "doi": "10.1038/s41467-026-74782-7",
@@ -1833,9 +1931,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1213,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75308-x": {
       "doi": "10.1038/s41467-026-75308-x",
@@ -1846,9 +1946,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1099,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75231-1": {
       "doi": "10.1038/s41467-026-75231-1",
@@ -1859,9 +1961,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1370,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41590-026-02580-w": {
       "doi": "10.1038/s41590-026-02580-w",
@@ -1885,9 +1989,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1202,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74942-9": {
       "doi": "10.1038/s41467-026-74942-9",
@@ -1898,9 +2004,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1435,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41590-026-02578-4": {
       "doi": "10.1038/s41590-026-02578-4",
@@ -1911,9 +2019,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1200,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41590-026-02585-5": {
       "doi": "10.1038/s41590-026-02585-5",
@@ -1924,9 +2034,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1175,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41590-026-02583-7": {
       "doi": "10.1038/s41590-026-02583-7",
@@ -1950,9 +2062,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1042,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75276-2": {
       "doi": "10.1038/s41467-026-75276-2",
@@ -1963,9 +2077,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1064,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-74997-8": {
       "doi": "10.1038/s41467-026-74997-8",
@@ -1976,9 +2092,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1168,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75066-w": {
       "doi": "10.1038/s41467-026-75066-w",
@@ -1989,9 +2107,11 @@
       "pmcid": "",
       "sourceUrl": "",
       "abstractCharacters": 1465,
-      "figureCount": null,
+      "figureCount": 0,
       "checkedAt": "2026-08-13T05:38:00.227866Z",
-      "lastError": ""
+      "lastError": "",
+      "analysisStatus": "submitted",
+      "batchId": "batch_6a7d9de045688190b878cefab90cd83b"
     },
     "10.1038/s41467-026-75208-0": {
       "doi": "10.1038/s41467-026-75208-0",

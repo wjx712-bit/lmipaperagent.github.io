@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1172/jci208767",
+  "doi": "10.1172/jci208767",
+  "title": "Good cop, bad cop? Rethinking the roles of cardiac macrophages in injury",
+  "originalUrl": "https://doi.org/10.1172/jci208767",
+  "generatedAt": "2026-08-13T10:35:02.528912Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42544583",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Cardiac macrophages (CMs)는 세포 잔해 제거와 electrical conduction 촉진을 통해 심장 항상성을 유지한다. 기존 관점에서는 embryonically derived CMs (em-CMs)는 조직 회복에 유익하고, monocyte-derived CMs (mo-CMs)는 염증 및 조직 손상에 기여하는 해로운 집단으로 구분되어 왔다.",
+    "main_question": "심장 손상, 특히 transverse aortic constriction (TAC) 후 em-CM과 mo-CM의 확장이 심장 기능 및 병리에 각각 어떤 영향을 미치며, 이들 macrophage subset의 역할을 단순한 beneficial/detrimental 이분법으로 설명할 수 있는가를 평가하였다.",
+    "hypothesis": "명시적인 가설은 초록에 제시되지 않았다. 직접적으로 뒷받침되는 연구 전제는 em-CM은 유익하고 mo-CM은 해롭다는 기존의 이분법적 분류가 심장 손상 상황에서 재검토될 필요가 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Mouse model with cardiac-specific mo-CM expansion",
+        "details": "심장 특이적 전략으로 mo-CM population을 확장한 마우스에서 TAC 후 결과를 평가하였다."
+      },
+      {
+        "model": "Mouse model with cardiac-specific em-CM expansion",
+        "details": "심장 특이적 전략으로 em-CM population을 확장한 마우스에서 TAC 후 심장 기능 및 mo-CM과의 상호작용을 평가하였다."
+      },
+      {
+        "model": "Transverse aortic constriction (TAC)",
+        "details": "압력 과부하성 심장 손상 모델로 사용되었다."
+      }
+    ],
+    "methods": [
+      "Cardiac-specific strategies to expand either embryonically derived cardiac macrophages (em-CMs) or monocyte-derived cardiac macrophages (mo-CMs)",
+      "Transverse aortic constriction (TAC) induction",
+      "Post-TAC cardiac functional assessment (구체적 assay는 초록에 명시되지 않음)"
+    ],
+    "key_results": [
+      {
+        "finding": "Cardiac-specific mo-CM expansion은 TAC 후 adverse outcomes를 유발하였다.",
+        "evidence": "초록은 mo-CM이 확장된 마우스에서 TAC 후 adverse outcomes가 나타났다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "예상과 달리 cardiac-specific em-CM expansion도 TAC 후 cardiac function의 현저한 저하와 연관되었다.",
+        "evidence": "초록은 em-CM 확장 마우스에서 TAC 후 marked decline in cardiac function이 관찰되었다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "em-CM 확장에 따른 기능 악화는 mo-CMs와의 예상치 못한 interaction과 연관되었다.",
+        "evidence": "초록은 이 심기능 저하가 unexpected interaction with mo-CMs와 associated되었다고 기술한다. 상호작용의 분자적·세포적 기전은 제시되지 않는다.",
+        "figures": []
+      },
+      {
+        "finding": "em-CM 확장에 따른 악화는 시간 의존적이며, TAC 유도 전에 em-CM을 확장했을 때에만 발생하였다.",
+        "evidence": "초록은 deterioration가 temporally regulated되며 em-CMs가 TAC induction 전에 expanded된 경우에만 일어났다고 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "Kasam et al.의 연구를 소개하는 본 논문은 cardiac-specific em-CM 또는 mo-CM expansion과 TAC를 이용해 심장 macrophage subset의 역할을 재평가하였다. mo-CM 확장은 예상대로 TAC 후 불리한 결과를 보였지만, 통상 reparative하다고 간주된 em-CM의 사전 확장 역시 mo-CM과의 상호작용에 연관된 심기능 저하를 유발했다. 따라서 cardiac macrophage의 기능은 발생 기원만으로 일률적으로 beneficial 또는 detrimental로 분류하기 어렵고, 손상 전후의 시간적 맥락과 subset 간 상호작용을 고려해야 한다.",
+    "conclusion": "심장 손상에서 em-CM과 mo-CM의 역할은 기존의 단순한 ‘good cop/bad cop’ 모델로 충분히 설명되지 않는다. 특히 em-CM의 효과는 TAC 전 확장 여부라는 시간적 조건 및 mo-CM과의 상호작용에 따라 해로울 수 있으며, cardiac macrophage 기능에 대한 현재의 해석을 재검토할 필요가 있다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료가 초록뿐이므로 cardiac-specific expansion 전략의 구체적 방법, macrophage subset 정의 및 검증 방식, cardiac function 측정법, 표본 수, 통계, 그리고 효과 크기를 평가할 수 없다.",
+      "[분석자 추론] em-CM과 mo-CM 간 ‘unexpected interaction’의 구체적 세포학적 또는 분자적 기전은 초록에 제시되지 않아 인과기전을 판단할 수 없다.",
+      "[분석자 추론] TAC 이외의 심장 손상 모델 또는 사람 질환에서 결과가 재현·일반화되는지는 제공된 초록으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 초록에 명시된 내용으로만 제한하였다.",
+      "Main figure captions 또는 본문이 제공되지 않아 개별 figure 분석, 구체적 실험 조건, 정량 결과 및 기전적 해석은 수행할 수 없다.",
+      "제공된 초록은 Kasam et al. 연구를 논의하는 형식이며, 해당 원 연구의 전체 데이터가 제공된 것은 아니다."
+    ]
+  }
+}

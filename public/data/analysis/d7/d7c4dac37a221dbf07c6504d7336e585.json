@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1016/j.jhep.2026.07.029",
+  "doi": "10.1016/j.jhep.2026.07.029",
+  "title": "Reproducibility of Biomarkers in MASLD: A Benchmark for Clinically Meaningful Change in Serially Measured Non-Invasive Tests",
+  "originalUrl": "https://doi.org/10.1016/j.jhep.2026.07.029",
+  "generatedAt": "2026-08-13T10:35:03.135344Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42546879",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "MASLD에서 non-invasive tests (NITs)를 이용해 질병 중증도와 경과를 반복 측정하려면, 개별 환자 수준에서 관찰되는 변화 중 측정 변동을 넘어 임상적으로 의미 있는 변화의 크기를 규정할 필요가 있다. 질환 특이적 biomarker reproducibility 자료의 부족은 임상에서의 종적 모니터링 및 약물개발에서 surrogate endpoint로서의 NIT 활용을 제한해 왔다.",
+    "main_question": "Biopsy-confirmed at-risk MASLD 환자를 포함한 Phase 2 임상시험의 screening 과정에서 널리 사용되는 NIT들의 반복 측정 변동성과 재현성은 어느 정도인가?",
+    "hypothesis": "명시적으로 가설이 서술되지는 않았다. 직접적으로 뒷받침되는 연구 전제는 MASLD에서 NIT의 longitudinal change를 해석하려면 각 biomarker의 측정 변동성 및 재현성에 대한 정량적 기준이 필요하다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Screening Analysis Set (ScrAS)",
+        "details": "11개국 198개 센터에서 임상시험 등록을 위해 screening을 받은 환자 중 eligibility 평가에 사용 가능한 biopsy를 가진 803명."
+      },
+      {
+        "model": "Randomised Analysis Set (RAS)",
+        "details": "Histologically confirmed at-risk steatohepatitis 및 모든 trial entry criteria를 충족해 무작위배정된 255명. ScrAS 내에 포함되는, 더 고도로 특성화된 subset."
+      }
+    ],
+    "methods": [
+      "Phase 2 clinical trial의 pre-randomisation screening pipeline에서 NIT 측정값의 변동성을 평가하였다.",
+      "각 NIT의 측정 변동성은 within-subject percentage coefficient of variation (wCV) 및 reproducibility coefficient percentage (RDC)로 보고하였다.",
+      "FibroScan™-derived parameter인 liver stiffness measurement by vibration-controlled transient elastography (LSM-VCTE)와 controlled attenuation parameter (CAP), 그리고 enhanced liver fibrosis (ELF) score를 포함한 biomarkers를 평가하였다."
+    ],
+    "key_results": [
+      {
+        "finding": "LSM-VCTE의 측정 변동성은 비교적 컸다.",
+        "evidence": "ScrAS에서 wCV 19.9%, RDC 55.2%였고, RAS에서 wCV 23.0%, RDC 63.8%였다.",
+        "figures": []
+      },
+      {
+        "finding": "CAP는 FibroScan™-derived parameters 중 가장 낮은 측정 변동성을 보였다.",
+        "evidence": "CAP의 wCV/RDC는 ScrAS에서 각각 8.8%/24.2%, RAS에서 각각 8.7%/24.1%였다.",
+        "figures": []
+      },
+      {
+        "finding": "ELF score는 평가된 모든 biomarkers 중 가장 낮은 변동성과 재현성 계수를 보였다.",
+        "evidence": "ELF score의 wCV는 3.4%, RDC는 9.3%였다.",
+        "figures": []
+      },
+      {
+        "finding": "저자들은 본 재현성 자료가 MASLD의 질병 진행 및 치료 반응을 longitudinal하게 평가할 때 biomarker 변화량의 해석에 활용될 수 있다고 제시했다.",
+        "evidence": "Conclusion 및 Impact and Implications에서 NIT 재현성 자료가 clinical practice에서의 disease monitoring 및 therapeutic trial에서 treatment-response assessment에 정보를 제공한다고 서술했다.",
+        "figures": []
+      }
+    ],
+    "summary": "이 다국가 Phase 2 trial screening 기반 분석은 biopsy-evaluable MASLD 환자 803명(ScrAS) 및 그중 무작위배정된 histologically confirmed at-risk steatohepatitis 환자 255명(RAS)에서 NIT의 반복 측정 변동성을 wCV와 RDC로 정량화했다. LSM-VCTE는 wCV 약 20–23% 및 RDC 약 55–64%의 변동성을 보인 반면, CAP는 FibroScan™ parameters 중 가장 낮은 변동성을 보였다. ELF score는 보고된 전체 biomarker 중 가장 낮은 wCV 3.4%와 RDC 9.3%를 보였다.",
+    "conclusion": "저자들은 널리 사용되는 MASLD NIT에 대해 재현성의 정량적 기준을 제공했으며, 이 자료가 반복 측정에서 관찰되는 변화가 생물학적으로 의미 있을 가능성을 판단하고 임상 추적 및 치료시험의 반응 평가에 기여할 수 있다고 결론지었다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료가 abstract에 한정되어 있어, 평가한 NIT의 전체 목록, 반복 측정의 시간 간격과 횟수, 측정 표준화 절차, 통계 모델 및 subgroup 분석 여부를 확인할 수 없다.",
+      "[분석자 추론] 본 자료는 Phase 2 trial screening population 및 biopsy-evaluable at-risk MASLD 환자에 기반하므로, 다른 MASLD 질환 단계나 일반 진료 환경으로의 일반화 가능성은 abstract만으로 평가할 수 없다.",
+      "[분석자 추론] 재현성 지표는 측정 변동의 크기를 제시하지만, 특정 변화량이 조직학적 변화 또는 임상 outcome과 직접적으로 연결되는지는 제공된 abstract만으로 확인할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 abstract에 명시된 정보로만 제한하였다.",
+      "Main figure caption 또는 figure 본문이 제공되지 않아 figure별 분석은 수행하지 않았다.",
+      "Abstract에는 ELF score의 RAS별 수치 또는 다른 개별 biomarker의 상세 재현성 결과가 모두 제시되지 않았다."
+    ]
+  }
+}

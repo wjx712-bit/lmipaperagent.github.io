@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1038/s41556-026-02041-4",
+  "doi": "10.1038/s41556-026-02041-4",
+  "title": "CLOCK/BMAL1 interactome uncovers homeodomain factors as tissue regulators",
+  "originalUrl": "https://doi.org/10.1038/s41556-026-02041-4",
+  "generatedAt": "2026-08-13T10:35:02.524142Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42562924",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Circadian clock는 전신의 일주기적 생리 리듬을 조절하며, 포유류에서는 ubiquitously expressed CLOCK/BMAL1 heterodimeric transcription factor complex가 중심 역할을 한다. 그러나 CLOCK/BMAL1이 조직별로 상이한 circadian gene expression을 만드는 기반은 불명확하다. 저자들은 chromatin에서의 조직 특이적 상호작용이 이러한 특이성의 한 원인일 수 있다는 전제에서 연구를 수행했다.",
+    "main_question": "CLOCK/BMAL1의 chromatin-associated protein interaction이 mouse liver, kidney 및 lung 사이에서 조직 특이적이며, 이러한 상호작용이 organ-specific circadian transcription을 설명할 수 있는가?",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 직접적으로 지지되는 연구 전제는 조직 특이적 transcription factor가 chromatin에서 CLOCK/BMAL1과 상호작용하여 조직별 circadian gene expression을 부여할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Mouse liver",
+        "details": "CLOCK/BMAL1-associated chromatin protein complex mapping에 사용되었다."
+      },
+      {
+        "model": "Mouse kidney",
+        "details": "CLOCK/BMAL1-associated chromatin protein complex mapping에 사용되었다."
+      },
+      {
+        "model": "Mouse lung",
+        "details": "CLOCK/BMAL1-associated chromatin protein complex mapping에 사용되었다."
+      }
+    ],
+    "methods": [
+      "Chromatin immunoprecipitation coupled to mass spectrometry를 이용하여 mouse liver, kidney 및 lung에서 chromatin-associated CLOCK/BMAL1 protein complex를 매핑했다.",
+      "PROX1, HNF1B 및 HOXA5의 BMAL1 binding과 BMAL1 genomic-site co-occupancy를 평가했으나, abstract에는 구체적 assay가 명시되지 않았다."
+    ],
+    "key_results": [
+      {
+        "finding": "CLOCK/BMAL1-associated protein 1,510개가 검출되었다.",
+        "evidence": "Abstract는 mouse liver, kidney 및 lung의 chromatin에서 CLOCK/BMAL1-associated complexes를 분석하여 1,510 associated proteins를 검출했다고 서술한다.",
+        "figures": []
+      },
+      {
+        "finding": "검출된 CLOCK/BMAL1-associated proteins의 대부분은 tissue-specific했으며, 이러한 차이는 단순한 protein abundance로 설명되지 않았다.",
+        "evidence": "Abstract에서 대부분의 associated proteins가 tissue-specific이고 protein abundance에 의해 설명되지 않는다고 명시했다.",
+        "figures": []
+      },
+      {
+        "finding": "Homeodomain transcription factors인 PROX1, HNF1B 및 HOXA5가 각각 tissue-enriched CLOCK/BMAL1 interactors로 확인되었다.",
+        "evidence": "Abstract는 이 세 인자를 tissue-enriched interactors로 확인했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "PROX1, HNF1B 및 HOXA5는 BMAL1에 결합하고, 대부분의 BMAL1 genomic sites를 co-occupy하며, organ-restricted circadian transcription을 확립하는 것으로 제시되었다.",
+        "evidence": "Abstract가 세 homeodomain factor의 BMAL1 binding, 대부분의 BMAL1 genomic-site co-occupancy 및 organ-restricted circadian transcription establishment를 직접 서술한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 mouse liver, kidney 및 lung에서 chromatin immunoprecipitation coupled to mass spectrometry로 CLOCK/BMAL1 interactome을 비교했다. 총 1,510개 associated proteins 중 다수가 조직 특이적이었고 abundance 차이만으로 설명되지 않았다. 특히 PROX1, HNF1B 및 HOXA5는 tissue-enriched homeodomain factors로서 BMAL1과 결합하고 BMAL1 sites를 광범위하게 co-occupy하며, organ-restricted circadian transcription에 관여하는 것으로 제시되었다.",
+    "conclusion": "저자들은 tissue-specific transcription factors가 core clock component인 CLOCK/BMAL1에 cellular identity를 부여하여 organ-specific rhythmic gene-expression patterns 형성에 기여한다고 결론지었다.",
+    "limitations": [
+      "Abstract에는 저자들이 명시한 제한점이 없다.",
+      "[분석자 추론] 제공된 자료가 abstract로 제한되어 있어, 각 조직에서의 표본 수, 시간대 설계, 상호작용 검증의 세부 방법, 개별 factor의 기능적 perturbation 설계 및 효과 크기를 평가할 수 없다.",
+      "[분석자 추론] Abstract만으로는 PROX1, HNF1B 및 HOXA5가 organ-restricted circadian transcription을 확립하는 과정의 직접성, 인과성 검증 방식 및 조직별 기여도를 구체적으로 판정할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 abstract에 명시된 정보만 반영했다.",
+      "Main figure captions 및 본문이 제공되지 않아 figure 기반 근거, 세부 실험 조건, 정량 결과 및 추가 기전 해석은 평가할 수 없다."
+    ]
+  }
+}

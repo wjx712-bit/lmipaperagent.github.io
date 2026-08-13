@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1038/s42255-026-01582-0",
+  "doi": "10.1038/s42255-026-01582-0",
+  "title": "Palmitate promotes liver metastases by decreasing neutrophil antitumour behaviour",
+  "originalUrl": "https://doi.org/10.1038/s42255-026-01582-0",
+  "generatedAt": "2026-08-13T10:35:02.524480Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42557388",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "간은 대사적으로 활발하고 immune-tolerant한 환경 때문에 liver metastasis가 흔하며 치료가 어렵다. 암세포가 간의 영양소 가용성을 이용해 immune surveillance를 회피하는 방식은 알려지지 않았다고 저자들은 제시한다.",
+    "main_question": "간에서의 palmitate availability가 암세포의 liver metastasis 및 neutrophil-mediated antitumour response에 어떻게 영향을 미치는가?",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 초록이 직접 뒷받침하는 연구 전제는 liver palmitate가 암세포의 ZDHHC17 의존적 laminin-511 안정화·분비를 통해 neutrophil의 antitumour function을 약화시켜 liver metastasis를 촉진할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Breast cancer cells metastasizing to the liver",
+        "details": "간 전이 상황에서 ZDHHC17 요구성과 laminin-511 관련 기전이 기술되었다."
+      },
+      {
+        "model": "Colorectal cancer cells metastasizing to the liver",
+        "details": "간 전이 상황에서 ZDHHC17 요구성과 laminin-511 관련 기전이 기술되었다."
+      },
+      {
+        "model": "Lung metastasis",
+        "details": "유방암 및 대장암 세포의 lung metastasis에서는 ZDHHC17 requirement가 관찰되지 않았다고 초록에서 대비하였다."
+      },
+      {
+        "model": "Neutrophil-present versus neutrophil-dependent setting",
+        "details": "ZDHHC17 silencing에 따른 liver metastasis 감소가 neutrophil 존재 시에만 나타났다고 기술되었다."
+      }
+    ],
+    "methods": [
+      "Cancer cell ZDHHC17 silencing",
+      "Laminin-511 injection",
+      "Neutrophil degranulation inhibition",
+      "Liver versus lung metastasis 비교",
+      "Neutrophil cancer cell-killing capacity 평가(구체적 assay는 초록에 명시되지 않음)"
+    ],
+    "key_results": [
+      {
+        "finding": "간으로 전이하는 breast 및 colorectal cancer cell은 lung metastasis와 달리 palmitoyltransferase 17 (DHHC17; ZDHHC17)을 필요로 한다.",
+        "evidence": "초록은 liver-metastasizing breast and colorectal cancer cells가 laminin-511의 안정화 및 분비를 위해 ZDHHC17을 요구하지만, lung metastasis에서는 그렇지 않다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "ZDHHC17은 laminin-511을 안정화하여 그 분비를 가능하게 한다.",
+        "evidence": "초록에서 ZDHHC17의 기능이 laminin-511 stabilization 및 secretion enablement로 직접 제시되었다.",
+        "figures": []
+      },
+      {
+        "finding": "Liver metastasis environment의 neutrophil은 laminin-511에 반응하여 cancer cell-killing capacity를 감소시킨다.",
+        "evidence": "초록이 laminin-511에 대한 neutrophil 반응으로 항암세포 살해능 저하를 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Cancer cell에서 ZDHHC17을 silencing하면 neutrophil이 존재하는 경우에만 liver metastasis가 감소한다.",
+        "evidence": "초록은 ZDHHC17 silencing의 전이 감소 효과가 neutrophil presence에 의존적이라고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "ZDHHC17-silenced metastasis의 성장 저하는 laminin-511 injection 또는 neutrophil degranulation inhibition으로 회복된다.",
+        "evidence": "초록에서 두 intervention이 ZDHHC17-silenced metastasis의 metastasis growth를 restore한다고 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 간의 palmitate availability가 암세포의 ZDHHC17 의존적 laminin-511 안정화 및 분비를 뒷받침하고, 분비된 laminin-511이 neutrophil의 cancer cell-killing capacity를 낮춰 liver metastasis를 촉진한다는 모델을 제시한다. 이 축은 breast cancer 및 colorectal cancer의 liver metastasis에서, lung metastasis와 구별되게 기술되었다.",
+    "conclusion": "저자들은 liver palmitate가 tumour-intrinsic process를 지원할 뿐 아니라, ZDHHC17–laminin-511 축 및 neutrophil antitumour behaviour 억제를 통해 immune evasion을 가능하게 한다고 결론짓는다.",
+    "limitations": [
+      "초록에는 저자들이 명시적으로 서술한 연구 제한점이 없다.",
+      "[분석자 추론] 제공 자료가 초록에 한정되어 있어, 사용된 in vivo model, neutrophil depletion 또는 조작의 구체적 방식, ZDHHC17 및 laminin-511 측정법, 표본 수와 효과 크기를 평가할 수 없다.",
+      "[분석자 추론] 초록만으로는 이 기전의 사람 liver metastasis 검체에서의 검증 여부 및 임상적 일반화 가능성을 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 초록에 명시된 정보로만 제한했다.",
+      "Main figure caption 또는 figure data가 제공되지 않아 figure 기반 근거와 figure-by-figure 분석은 제시할 수 없다.",
+      "기전적 인과관계의 세부 단계 및 실험 조건은 초록에서 확인 가능한 범위로만 기술했다."
+    ]
+  }
+}

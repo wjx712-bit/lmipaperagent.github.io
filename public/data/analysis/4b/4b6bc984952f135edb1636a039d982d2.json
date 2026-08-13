@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1016/j.immuni.2026.06.024",
+  "doi": "10.1016/j.immuni.2026.06.024",
+  "title": "Disease-associated microglia adopt stage-specific phenotypes that regulate T cell fate and immunity in glioma",
+  "originalUrl": "https://doi.org/10.1016/j.immuni.2026.06.024",
+  "generatedAt": "2026-08-13T10:35:03.136476Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42497861",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Malignant glioma는 강한 국소 면역억제와 재구성된 myeloid landscape를 특징으로 한다. 종양은 resident microglia와 infiltrating monocyte-derived macrophage를 동원하지만, 이들의 phenotype convergence 및 diversification을 조절하는 기전은 불명확하다.",
+    "main_question": "GL261 glioma에서 glioma-associated microglia의 상태(state)는 종양의 공간적 구조 및 질병 진행 단계에 따라 어떻게 조직되며, 이러한 상태 변화가 T cell fate와 국소 면역에 어떻게 연결되는가?",
+    "hypothesis": "명시적으로 가설이 기술되지는 않았다. 초록이 직접 뒷받침하는 연구 전제는 glioma-associated microglia가 진행 단계별 상태 전이를 거치고, 이러한 plasticity가 DAM-T cell 상호작용을 통해 국소 면역과 T cell fate를 조절할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "GL261 glioma model",
+        "details": "glioma-associated microglia의 single-cell profiling 및 spatial transcriptomics 분석에 사용되었다."
+      }
+    ],
+    "methods": [
+      "Single-cell profiling",
+      "Spatial transcriptomics",
+      "Glioma-associated microglia state 분석",
+      "Interferon-γ 및 toll-like receptor signaling과 연관된 stage-specific DAM feature 분석"
+    ],
+    "key_results": [
+      {
+        "finding": "GL261 glioma에서 종양 구조와 연계된 구별되는 microglial state들이 확인되었다.",
+        "evidence": "초록은 single-cell profiling과 spatial transcriptomics를 통합하여 tumor architecture에 정렬되는 distinct microglial states를 확인했다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "Cst7-expressing disease-associated microglia (DAM)는 tumor invasive margin에 집적되었으며, 여러 CNS pathology에서 공유되는 conserved transcriptional signature를 보였다.",
+        "evidence": "초록에 Cst7-expressing DAM의 invasive-margin localization 및 conserved transcriptional signature가 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Interferon-γ와 toll-like receptor signaling은 stage-specific DAM feature를 순차적으로 조율했으며, 이 과정에는 transient MHC-II expression과 sustained PD-L1 upregulation이 포함되었다.",
+        "evidence": "초록은 두 signaling pathway가 DAM 특성을 sequentially tune하며, MHC-II와 PD-L1의 시간적으로 구분되는 발현 양상을 포함한다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "DAM의 상태 변화는 glioma progression 동안 bidirectional DAM-T cell interaction을 재구성하여 국소 면역 평형과 T cell fate를 조절하는 것으로 제시되었다.",
+        "evidence": "초록은 이러한 상호작용 재구성이 local immune equilibrium을 recalibrate하고 T cell fate를 형성한다고 서술한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 GL261 glioma에서 single-cell profiling 및 spatial transcriptomics를 이용해 glioma-associated microglia의 공간적·단계적 상태를 분석했다. 특히 Cst7-expressing DAM는 invasive margin에 위치했고 CNS pathology 간 보존된 transcriptional program을 보였다. Interferon-γ 및 toll-like receptor signaling은 transient MHC-II와 sustained PD-L1을 포함한 DAM phenotype을 단계적으로 조율하며, DAM-T cell 상호작용과 국소 면역 조절에 연결되었다.",
+    "conclusion": "Glioma-associated microglia의 state transition은 glioma에서 stage-specific immune regulation의 한 층위를 이루며, T cell fate 및 anti-tumor immunity에 영향을 줄 수 있다. 저자들은 microglial plasticity를 표적화하는 전략이 anti-tumor immunity의 균형을 재조정할 가능성을 제시한다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료는 abstract뿐이므로, 각 microglial state의 정의 기준, 표본 수, 시간점, 구체적 perturbation 설계, 통계 및 효과 크기를 평가할 수 없다.",
+      "[분석자 추론] GL261 model에서의 결과이므로, 다른 glioma model 또는 human glioma로의 일반화 가능성은 제공된 초록만으로 판단할 수 없다.",
+      "[분석자 추론] 초록은 DAM-T cell interaction의 재구성을 제시하지만, 개별 상호작용의 직접적 인과 검증 방식은 확인할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 초록에 명시된 내용으로 제한된다.",
+      "Main figure caption이 제공되지 않아 figure 기반 근거 및 figure-by-figure 분석은 수행할 수 없다.",
+      "초록의 서술만으로는 signaling의 세부 분자 기전이나 intervention의 치료 효과를 확정할 수 없다."
+    ]
+  }
+}

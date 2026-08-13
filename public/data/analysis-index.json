@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-13T10:09:40.642628Z",
+  "generatedAt": "2026-08-13T10:35:12.617431Z",
   "stats": {
     "total": 2688,
-    "complete": 0,
+    "complete": 40,
     "fullTextReady": 1305,
-    "abstractReady": 951,
+    "abstractReady": 911,
     "sourceUnavailable": 432,
     "pendingSource": 0
   },
@@ -195,12 +195,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1097/hep.0000000000001834": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.521846Z",
+      "analysisPath": "analysis/34/345bdcdc6e53e77466052f6515d38520.json"
     },
     "10.1038/s41467-026-75770-7": {
       "status": "source_unavailable",
@@ -227,20 +228,22 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci206334": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.522265Z",
+      "analysisPath": "analysis/97/973e0f57a75b5b005e853ba603994ac9.json"
     },
     "10.1097/hep.0000000000001833": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.522687Z",
+      "analysisPath": "analysis/bf/bfb6e2ffb84160cc9fef1eca078ba5c8.json"
     },
     "10.1038/s41467-026-75100-x": {
       "status": "source_unavailable",
@@ -267,36 +270,40 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci198215": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.523085Z",
+      "analysisPath": "analysis/f7/f7dd6d67c06d538683cc7ea84f8f8d08.json"
     },
     "10.1038/s41556-026-02025-4": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.523443Z",
+      "analysisPath": "analysis/e3/e328380b00da32fa1205e519560c301c.json"
     },
     "10.1126/science.adu6688": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.523810Z",
+      "analysisPath": "analysis/fc/fcbef9d52786a284c3962437a660f2ae.json"
     },
     "10.1038/s41556-026-02041-4": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.524142Z",
+      "analysisPath": "analysis/1a/1a073b81f85fa5283cddd1208992e185.json"
     },
     "10.1038/s41467-026-75426-6": {
       "status": "source_unavailable",
@@ -323,12 +330,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s42255-026-01582-0": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.524480Z",
+      "analysisPath": "analysis/e2/e2d820c5cb29838b735db09ac69c2fa6.json"
     },
     "10.1038/s41467-026-76327-4": {
       "status": "source_unavailable",
@@ -355,36 +363,40 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41586-026-10806-y": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.524969Z",
+      "analysisPath": "analysis/b9/b95a8ea7833fd429b7633be051440cb2.json"
     },
     "10.1172/jci201406": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.525334Z",
+      "analysisPath": "analysis/36/36038ed2de2193a44160d9307ab29a55.json"
     },
     "10.1097/hep.0000000000001830": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.525715Z",
+      "analysisPath": "analysis/b9/b9cab31549934b895f8d1299c1b786ad.json"
     },
     "10.1038/s41467-026-75853-5": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.526071Z",
+      "analysisPath": "analysis/6f/6f810dc07e4d4e79d2257df2168bda10.json"
     },
     "10.1038/s41467-026-76331-8": {
       "status": "source_unavailable",
@@ -411,28 +423,31 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci205962": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.526417Z",
+      "analysisPath": "analysis/c8/c85d4276bd90b4535b1bf073b6b47417.json"
     },
     "10.1097/hep.0000000000001825": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.526811Z",
+      "analysisPath": "analysis/05/05b93792aa83e34235dccec563a6f38d.json"
     },
     "10.1172/jci194449": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.527162Z",
+      "analysisPath": "analysis/59/592d60ad46388e45521f4b2bf093c5c6.json"
     },
     "10.1038/s41467-026-76237-5": {
       "status": "source_unavailable",
@@ -443,12 +458,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci193035": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.527513Z",
+      "analysisPath": "analysis/a6/a68c400721413034066b7430d125cccf.json"
     },
     "10.1172/jci208681": {
       "status": "source_unavailable",
@@ -459,52 +475,58 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci209808": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.527882Z",
+      "analysisPath": "analysis/fc/fc1c470f54f9d4b94683cfa80d8e6778.json"
     },
     "10.1172/jci193280": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.528203Z",
+      "analysisPath": "analysis/8d/8d139aae383509b4d4e775d102ac18d2.json"
     },
     "10.1172/jci206924": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.528554Z",
+      "analysisPath": "analysis/c3/c3db833a1866469670542828e26c2a16.json"
     },
     "10.1172/jci208767": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:02.528912Z",
+      "analysisPath": "analysis/ad/ad727e18603be7547f041080de0bc14f.json"
     },
     "10.1172/jci203162": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.133819Z",
+      "analysisPath": "analysis/a8/a8c8089adeab9a6d61796cfdfdeea52c.json"
     },
     "10.1172/jci209169": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.134247Z",
+      "analysisPath": "analysis/ec/ecd0ec5b53f0b2c2dba58585076cd7c4.json"
     },
     "10.1038/s41467-026-76209-9": {
       "status": "source_unavailable",
@@ -547,12 +569,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.cell.2026.07.013": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.134590Z",
+      "analysisPath": "analysis/81/81513c6453d8a550f61eb7dd2ba8dcf5.json"
     },
     "10.1038/s41467-026-76162-7": {
       "status": "source_unavailable",
@@ -563,12 +586,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.jhep.2026.07.023": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.134996Z",
+      "analysisPath": "analysis/39/391c1b7c371daa9e49c371869a7e3b70.json"
     },
     "10.1016/s0168-8278(26)02670-x": {
       "status": "source_unavailable",
@@ -603,28 +627,31 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.jhep.2026.07.029": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.135344Z",
+      "analysisPath": "analysis/d7/d7c4dac37a221dbf07c6504d7336e585.json"
     },
     "10.1016/j.cmet.2026.07.005": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.135790Z",
+      "analysisPath": "analysis/c1/c1a6ac9fc99506d127a853c44bc0a8f4.json"
     },
     "10.1016/j.immuni.2026.07.005": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.136125Z",
+      "analysisPath": "analysis/5b/5b3a168826bab9036ec69ae6693b62c9.json"
     },
     "10.1016/j.cmet.2026.07.011": {
       "status": "source_unavailable",
@@ -643,12 +670,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.immuni.2026.06.024": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.136476Z",
+      "analysisPath": "analysis/4b/4b6bc984952f135edb1636a039d982d2.json"
     },
     "10.1016/j.immuni.2026.07.010": {
       "status": "source_unavailable",
@@ -659,28 +687,31 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.immuni.2026.07.011": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.136835Z",
+      "analysisPath": "analysis/b6/b61a61a1324ef4f8196c864f7a9e47ab.json"
     },
     "10.1016/j.immuni.2026.07.004": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.137270Z",
+      "analysisPath": "analysis/a6/a6e7425ffdcf516321863e7023db709d.json"
     },
     "10.1016/j.immuni.2026.07.001": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.137592Z",
+      "analysisPath": "analysis/8c/8ca9e4c6675577f6e06694211ee7991e.json"
     },
     "10.1038/s41467-026-76285-x": {
       "status": "source_unavailable",
@@ -691,12 +722,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.cell.2026.07.031": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.137966Z",
+      "analysisPath": "analysis/76/7672f170d5b42df2c5dbcc3f3daea90e.json"
     },
     "10.1038/s41467-026-76175-2": {
       "status": "source_unavailable",
@@ -715,20 +747,22 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75291-3": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.138312Z",
+      "analysisPath": "analysis/b3/b3786b5c0c6c8dfcbc848817d6731b6c.json"
     },
     "10.1038/s41590-026-02604-5": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.138707Z",
+      "analysisPath": "analysis/f4/f46871c31a4f25efd9919474a00a8e65.json"
     },
     "10.1038/s41467-026-76230-y": {
       "status": "source_unavailable",
@@ -747,28 +781,31 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s43587-026-01183-2": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.139080Z",
+      "analysisPath": "analysis/27/27b96bdd13b0bf08efdbf2f97c8be514.json"
     },
     "10.1126/science.ady0832": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.139431Z",
+      "analysisPath": "analysis/8e/8e144fbdcece9e22ef4743fe6aedbc30.json"
     },
     "10.1038/s41467-026-75991-w": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.139791Z",
+      "analysisPath": "analysis/d6/d6e400ef79d12b0240ecd0cdbc290fd1.json"
     },
     "10.1038/s41467-026-76083-5": {
       "status": "source_unavailable",
@@ -787,12 +824,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1126/science.aej5901": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.140118Z",
+      "analysisPath": "analysis/54/5422ca21851b2d65a83c1801a20c6648.json"
     },
     "10.1038/s41467-026-76103-4": {
       "status": "source_unavailable",
@@ -811,12 +849,13 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s43587-026-01172-5": {
-      "status": "submitted",
+      "status": "complete",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
       "figureCount": 0,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
+      "updatedAt": "2026-08-13T10:35:03.140437Z",
+      "analysisPath": "analysis/d3/d3714bde6406ac38c1fbc8543fc35496.json"
     },
     "10.1038/s41586-026-10939-0": {
       "status": "source_unavailable",
@@ -835,6 +874,15 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci196689": {
+      "status": "complete",
+      "evidenceLevel": "abstract",
+      "sourceProvider": "Europe PMC",
+      "sourceUrl": "",
+      "figureCount": 0,
+      "updatedAt": "2026-08-13T10:35:03.140811Z",
+      "analysisPath": "analysis/48/4865458732157346e798634b5121c20b.json"
+    },
+    "10.1038/s42255-026-01555-3": {
       "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
@@ -842,172 +890,164 @@
       "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
-    "10.1038/s42255-026-01555-3": {
-      "status": "ready",
-      "evidenceLevel": "abstract",
-      "sourceProvider": "Europe PMC",
-      "sourceUrl": "",
-      "figureCount": null,
-      "updatedAt": "2026-08-13T05:38:00.227866Z"
-    },
     "10.1038/s41467-026-73485-3": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74599-4": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75425-7": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-72027-1": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75493-9": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75262-8": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75114-5": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75415-9": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75024-6": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75260-w": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s42255-026-01567-z": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1126/science.aea1200": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74904-1": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci205059": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci190646": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1126/science.aee9519": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1126/science.adv1219": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41586-026-10750-x": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75319-8": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-73683-z": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.jhep.2026.06.041": {
@@ -1019,91 +1059,91 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.jhep.2026.06.032": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.immuni.2026.06.012": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1016/j.cell.2026.06.018": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75112-7": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74675-9": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74858-4": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75214-2": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74104-x": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74782-7": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75308-x": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75231-1": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41590-026-02580-w": {
@@ -1115,35 +1155,35 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1172/jci197665": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74942-9": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41590-026-02578-4": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41590-026-02585-5": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41590-026-02583-7": {
@@ -1155,35 +1195,35 @@
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75237-9": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75276-2": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-74997-8": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75066-w": {
-      "status": "ready",
+      "status": "submitted",
       "evidenceLevel": "abstract",
       "sourceProvider": "Europe PMC",
       "sourceUrl": "",
-      "figureCount": null,
+      "figureCount": 0,
       "updatedAt": "2026-08-13T05:38:00.227866Z"
     },
     "10.1038/s41467-026-75208-0": {

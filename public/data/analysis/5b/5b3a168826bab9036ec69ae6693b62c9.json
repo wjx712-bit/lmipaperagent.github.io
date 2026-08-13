@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1016/j.immuni.2026.07.005",
+  "doi": "10.1016/j.immuni.2026.07.005",
+  "title": "The liver-secreted protein FGL1 restrains a subset of innate-like B cell responses via the receptor TACI",
+  "originalUrl": "https://doi.org/10.1016/j.immuni.2026.07.005",
+  "generatedAt": "2026-08-13T10:35:03.136125Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42532039",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "FGL1(fibrinogen-like protein 1)은 T cell에서 coinhibitory receptor LAG3의 ligand로 알려져 있다. 그러나 Fgl1 -/- mice의 autoimmune phenotype은 Lag3 -/- mice와 구별되어, FGL1이 LAG3 이외의 receptor를 통해 autoimmunity를 조절할 가능성이 제기되었다.",
+    "main_question": "FGL1이 LAG3 이외의 receptor, 특히 B cell 관련 경로를 통해 autoimmunity와 innate-like B cell response를 조절하는지 조사하였다.",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 직접적으로 뒷받침되는 연구 전제는 FGL1이 LAG3 외의 receptor를 통해 autoimmunity를 조절할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "B6/lpr lupus-like mice",
+        "details": "Recombinant FGL1 administration이 autoimmune symptom, antigen-specific IgM response, 및 B cell number에 미치는 영향을 평가하였다."
+      },
+      {
+        "model": "Taci -/- mice",
+        "details": "FGL1 administration에 의한 B cell number 및 autoimmune phenotype 변화가 TACI 의존적인지 평가하였다."
+      }
+    ],
+    "methods": [
+      "Recombinant FGL1 administration in mice",
+      "Genome-wide surface proteome screening",
+      "FGL1-TACI binding analysis",
+      "TACI internalization 평가(구체적 assay는 abstract에 명시되지 않음)",
+      "B cell number 및 antigen-specific IgM response 평가(구체적 assay는 abstract에 명시되지 않음)",
+      "Autoimmune phenotype/symptom 평가(구체적 readout은 abstract에 명시되지 않음)"
+    ],
+    "key_results": [
+      {
+        "finding": "Recombinant FGL1 administration은 B6/lpr lupus-like mice에서 autoimmune symptoms를 감소시켰다.",
+        "evidence": "Abstract는 recombinant FGL1 투여가 autoimmune symptoms를 reduced했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "FGL1 투여 효과는 antigen-specific IgM responses 및 B cell numbers 감소와 연관되었다.",
+        "evidence": "Abstract에서 B6/lpr mice의 autoimmune symptom 감소가 diminished antigen-specific IgM responses 및 B cell numbers와 associated되었다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "Genome-wide surface proteome screening으로 TNFR family member인 TACI가 FGL1 receptor로 확인되었다.",
+        "evidence": "Abstract는 TACI를 FGL1 receptor로 identified했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "TACI는 BAFF 및 APRIL과의 interaction에는 필요하지 않은 N-terminal site를 통해 FGL1과 결합하였다.",
+        "evidence": "Abstract에 TACI-FGL1 binding site의 특성이 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "FGL1 투여에 따른 B cell number 및 autoimmune phenotype 변화는 Taci -/- mice에서 소실되었다.",
+        "evidence": "Abstract는 FGL1 administration의 영향이 Taci -/- mice에서 lost되었다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "FGL1은 TACI internalization을 촉진하여 activating ligands에 대한 receptor availability를 조절하는 것으로 제시되었다.",
+        "evidence": "Abstract의 mechanistic statement에 근거한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 간 분비 단백질 FGL1이 기존 LAG3 ligand 역할 외에도 TACI의 ligand로 작용하여 일부 innate-like B cell response를 억제함을 제시한다. B6/lpr lupus-like mice에서 recombinant FGL1은 autoimmune symptoms, antigen-specific IgM response, 및 B cell number를 감소시켰으며, 이 효과는 Taci 결손 조건에서 사라졌다. 제시된 기전은 FGL1의 TACI internalization 촉진과 그에 따른 BAFF/APRIL 등 activating ligand에 이용 가능한 TACI 조절이다.",
+    "conclusion": "Abstract가 제시하는 결론은 FGL1이 TACI availability를 조절함으로써 innate-like B cell subset의 반응을 제한하고 autoimmunity 및 inflammation에 영향을 준다는 것이다.",
+    "limitations": [
+      "저자들이 명시적인 limitation을 abstract에서 제시하지 않았다.",
+      "[분석자 추론] Abstract만 제공되어 있으므로, 연구된 innate-like B cell subset의 정확한 정의, FGL1 투여 용량·기간, autoimmune phenotype의 세부 readout, TACI internalization의 실험적 측정 방식, 그리고 TACI-FGL1 결합의 정량적 특성을 평가할 수 없다.",
+      "[분석자 추론] B6/lpr 모델 및 Taci -/- mice 외의 질환 모델, 생리적 FGL1 농도 조건, 또는 사람 시료에서의 재현성은 제공된 abstract만으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 abstract에 명시된 정보로만 제한하였다.",
+      "Figure caption 또는 본문이 제공되지 않아 figure별 검토 및 세부 실험 설계·정량 결과의 검증은 수행할 수 없다.",
+      "‘innate-like subset of B cells’의 세부 phenotype 및 lineage 정의는 제공된 자료에 포함되지 않았다."
+    ]
+  }
+}

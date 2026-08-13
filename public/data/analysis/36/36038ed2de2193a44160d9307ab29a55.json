@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1172/jci201406",
+  "doi": "10.1172/jci201406",
+  "title": "S100A11 regulates hepatic cholesterol metabolism and promotes steatohepatitis via non-canonical SREBP2 signaling",
+  "originalUrl": "https://doi.org/10.1172/jci201406",
+  "generatedAt": "2026-08-13T10:35:02.525334Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42550612",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "간에서는 dietary cholesterol과 de novo cholesterol synthesis가 상호 조절되어 cholesterol homeostasis를 유지한다. 그러나 높은 dietary cholesterol은 간 내 cholesterol 축적과 metabolic dysfunction-associated steatohepatitis (MASH)를 촉진할 수 있으며, 그 기전은 충분히 규명되지 않았다고 제시된다.",
+    "main_question": "Hepatic S100A11이 dietary cholesterol에 반응하여 간 cholesterol metabolism 및 steatohepatitis를 조절하는지, 그리고 SREBP2 activation과 연관된 기전이 무엇인지 평가하고자 하였다.",
+    "hypothesis": "명시적인 가설 문장으로 제시되지는 않았다. 초록이 직접 지지하는 연구 전제는 hepatic S100A11이 dietary cholesterol-responsive regulator로서 SREBP2를 통해 hepatic cholesterol metabolism 및 steatohepatitis에 관여할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "In vivo models",
+        "details": "초록은 in vivo에서 hepatic S100A11 overexpression 및 S100A11 inactivation의 효과를 평가했다고만 기술하며, 동물 종, diet, 유전적 또는 전달 방식은 명시하지 않는다."
+      },
+      {
+        "model": "In vitro models",
+        "details": "초록은 in vitro에서 hepatic S100A11 overexpression의 효과를 평가했다고 기술하나, 사용한 세포 유형 또는 실험계는 명시하지 않는다."
+      }
+    ],
+    "methods": [
+      "Hepatic S100A11 expression 조절(overexpression 및 inactivation)",
+      "SREBP2 activation 및 nuclear entry 평가(구체적 assay 미기재)",
+      "Cholesterol synthesis, uptake, accumulation 평가(구체적 assay 미기재)",
+      "Steatohepatitis 평가(구체적 평가법 미기재)",
+      "S100A11의 endoplasmic reticulum localization 및 cholesterol binding 평가(구체적 방법 미기재)",
+      "S100A11-ANXA1-KPNB axis 관련 기전 분석(구체적 방법 미기재)"
+    ],
+    "key_results": [
+      {
+        "finding": "Hepatic S100A11은 dietary cholesterol level에 양성으로 반응하며 hepatic cholesterol metabolism에 관여한다.",
+        "evidence": "초록에서 S100A11이 dietary cholesterol level에 positively responds하고 hepatic cholesterol metabolism에 involved한다고 서술한다.",
+        "figures": []
+      },
+      {
+        "finding": "S100A11은 endoplasmic reticulum에 localize하며 cholesterol과 결합할 수 있다.",
+        "evidence": "초록에 직접 기술되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "In vivo 및 in vitro에서 hepatic S100A11 overexpression은 SREBP2 activation을 유도하고 cholesterol synthesis, uptake, accumulation을 촉진하며 steatohepatitis를 악화시켰다.",
+        "evidence": "초록에 직접 기술되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "S100A11 inactivation은 overexpression과 반대 효과를 보였고 steatohepatitis를 개선했다.",
+        "evidence": "초록에 직접 기술되어 있다. 다만 cholesterol metabolism 각 항목에 대한 효과의 세부 방향이나 크기는 초록에 제시되지 않는다.",
+        "figures": []
+      },
+      {
+        "finding": "S100A11은 S100A11-ANXA1-KPNB axis를 통해 SREBP2의 non-canonical nuclear entry를 유발하며, 이는 INSIG-SCAP pathway 및 Caspase2 pathway와 구별된다고 제시된다.",
+        "evidence": "초록의 mechanistic 설명에 직접 기술되어 있다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 hepatic S100A11을 dietary cholesterol-responsive cholesterol metabolism regulator로 제시한다. S100A11은 ER에 존재하고 cholesterol과 결합하며, S100A11 overexpression은 SREBP2 activation을 통해 cholesterol synthesis, uptake 및 hepatic accumulation을 증가시켜 steatohepatitis를 악화시켰다. 반대로 S100A11 inactivation은 steatohepatitis를 개선했다. 저자들은 S100A11-ANXA1-KPNB axis가 기존 INSIG-SCAP 또는 Caspase2 pathway와 다른 방식으로 SREBP2 nuclear entry를 매개한다고 제안한다.",
+    "conclusion": "초록의 결론에 따르면 S100A11은 non-canonical SREBP2 signaling을 통해 hepatic cholesterol metabolism과 steatohepatitis를 촉진하는 조절 인자이며, MASH 및 hypercholesterolemia 치료 표적으로서 잠재력을 가진다.",
+    "limitations": [
+      "초록에는 저자들이 명시적으로 기술한 limitations가 없다.",
+      "[분석자 추론] 제공 자료가 초록으로 제한되어 있어 사용한 in vivo/in vitro 모델, S100A11 조절 전략, 실험 조건, 표본 수, 효과 크기, 통계, 그리고 제안된 S100A11-ANXA1-KPNB axis의 실험적 검증 수준을 평가할 수 없다.",
+      "[분석자 추론] 초록만으로는 S100A11 targeting의 치료 효능, 안전성, 사람 MASH 또는 hypercholesterolemia에 대한 적용 가능성을 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 초록에 명시된 내용으로만 제한하였다.",
+      "MAIN_FIGURE_CAPTIONS가 제공되지 않아 figure 기반 근거 및 figure-by-figure 분석을 제시할 수 없다.",
+      "초록은 연구 결과를 요약한 자료이므로 세부 실험 설계와 인과성 검증의 강도는 확인할 수 없다."
+    ]
+  }
+}

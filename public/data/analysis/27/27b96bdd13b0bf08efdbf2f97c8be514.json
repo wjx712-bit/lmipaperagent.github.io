@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1038/s43587-026-01183-2",
+  "doi": "10.1038/s43587-026-01183-2",
+  "title": "Plasma proteomics framework predicts metabolic dysfunction-associated steatotic liver disease up to 16 years before onset",
+  "originalUrl": "https://doi.org/10.1038/s43587-026-01183-2",
+  "generatedAt": "2026-08-13T10:35:03.139080Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42533107",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "MASLD는 전 세계적 건강 문제이지만, 신뢰할 수 있는 예측 도구의 부족으로 임상 발병 전(preclinical) 식별이 어렵다.",
+    "main_question": "혈장 단백질 기반 signature가 임상적 MASLD 발생(incident MASLD)을 최대 약 16년 전에 예측할 수 있는가?",
+    "hypothesis": "명시적으로 가설이 서술되지는 않았다. 초록이 직접 뒷받침하는 연구 전제는 특정 plasma protein panel이 향후 MASLD 발생 위험을 장기간 전에 예측할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Southern UK cohort",
+        "details": "5개 plasma protein signature의 식별 및/또는 검증에 포함된 인구 코호트 중 하나로 언급되었다."
+      },
+      {
+        "model": "Northern UK cohort",
+        "details": "5개 plasma protein signature의 식별 및/또는 검증에 포함된 인구 코호트 중 하나로 언급되었다."
+      },
+      {
+        "model": "EPIC-Norfolk cohort",
+        "details": "종단적(longitudinal) 성능이 평가된 코호트로, 16.6년 AUC가 보고되었다."
+      },
+      {
+        "model": "Southern China cohort",
+        "details": "5개 plasma protein signature의 식별 및/또는 검증에 포함된 코호트로 언급되었다."
+      },
+      {
+        "model": "Southern China Inception Cohort",
+        "details": "모델 성능이 확인된 코호트로, AUC 0.912가 보고되었다."
+      }
+    ],
+    "methods": [
+      "Southern UK, Northern UK, EPIC-Norfolk 및 Southern China cohorts의 총 50,000명 초과 참가자를 대상으로 plasma proteomics 기반 단백질 panel을 식별 및 검증했다.",
+      "FUOM, ACY1, KRT18, CDHR2 및 GGT1로 구성된 5-protein model을 사용하여 incident MASLD 예측 성능을 AUC로 평가했다.",
+      "EPIC-Norfolk cohort에서 장기 종단 추적 성능을 평가했다.",
+      "5개 단백질 biomarker와 routine clinical data를 통합한 예측 모델의 성능을 평가했다."
+    ],
+    "key_results": [
+      {
+        "finding": "FUOM, ACY1, KRT18, CDHR2 및 GGT1의 5개 plasma protein panel이 incident MASLD 예측 signature로 식별되고, 50,000명 이상이 포함된 여러 지역 코호트에서 검증되었다.",
+        "evidence": "초록은 Southern UK, Northern UK, EPIC-Norfolk 및 Southern China cohorts 전반에서 해당 panel이 identified and validated되었다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "5-protein model의 예측 정확도는 5년 AUC 0.838 및 16.6년 AUC 0.756이었다.",
+        "evidence": "초록에 해당 AUC 값이 직접 보고되었다.",
+        "figures": []
+      },
+      {
+        "finding": "EPIC-Norfolk cohort에서 5-protein model의 장기 종단 성능은 16.6년 AUC 0.710으로 유지되었다.",
+        "evidence": "초록은 EPIC-Norfolk cohort에서 longitudinal performance가 sustained되었고 16.6년 AUC=0.710이라고 보고한다.",
+        "figures": []
+      },
+      {
+        "finding": "Southern China Inception Cohort에서 모델 성능은 AUC 0.912로 확인되었다.",
+        "evidence": "초록에 confirmed AUC=0.912로 직접 제시되었다.",
+        "figures": []
+      },
+      {
+        "finding": "5개 단백질 biomarker에 routine clinical data를 통합하면 예측 성능이 향상되어, 5년 AUC 0.904 및 16.6년 AUC 0.822를 보였다.",
+        "evidence": "초록은 routine clinical data 통합이 성능을 further enhance했다고 기술하며 해당 AUC를 제시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 50,000명 이상을 포함한 다기관 인구 코호트에서 FUOM, ACY1, KRT18, CDHR2 및 GGT1로 구성된 plasma proteomic signature를 개발·검증하여 incident MASLD를 장기간 전에 예측하고자 했다. 5-protein model은 5년 및 16.6년 시점에서 각각 AUC 0.838과 0.756을 보였으며, routine clinical data 통합 시 각각 0.904와 0.822로 향상되었다. EPIC-Norfolk의 장기 평가 및 Southern China Inception Cohort에서의 성능 확인이 보고되었다.",
+    "conclusion": "초록의 결론에 따르면, 5개 plasma protein 기반 모델은 MASLD 임상 발병 최대 약 16년 전의 ultra-early risk stratification 및 targeted intervention을 위한 확장 가능한(scalable) proteomic framework를 제공한다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료가 초록에 한정되어 있어 MASLD 정의, 단백질 측정 플랫폼, 모델 개발·검증의 정확한 분할 방식, 공변량 조정, calibration, 임상적 cutoff 및 subgroup 성능은 평가할 수 없다.",
+      "[분석자 추론] 초록은 예측 성능을 제시하지만, 5개 단백질이 MASLD 발생에 인과적으로 관여하는지 여부를 입증하는 기전 연구는 제공하지 않는다.",
+      "[분석자 추론] 초록만으로는 각 코호트의 인구학적 구성 및 외적 일반화 가능성을 충분히 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 초록에 명시된 정보만 사용했다.",
+      "Main figure captions 및 본문이 제공되지 않아 figure별 분석은 수행할 수 없다.",
+      "초록에 언급되지 않은 통계적 세부사항, 실험 절차 및 기전적 해석은 포함하지 않았다."
+    ]
+  }
+}

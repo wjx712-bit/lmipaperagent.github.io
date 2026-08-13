@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1172/jci198215",
+  "doi": "10.1172/jci198215",
+  "title": "Systems genetics approaches model the heritable architecture of polyendocrine metabolic ovarian syndrome",
+  "originalUrl": "https://doi.org/10.1172/jci198215",
+  "generatedAt": "2026-08-13T10:35:02.523085Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42560775",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Polyendocrine metabolic ovarian syndrome (PMOS; formerly PCOS)는 여성에서 가장 흔한 내분비 질환이며, cardiovascular disease 및 type 2 diabetes와 밀접하게 연관된다. 그러나 PMOS와 이러한 동반질환 사이의 기전적 연결은 충분히 규명되지 않았다.",
+    "main_question": "유전적으로 다양한 mouse 및 human 자료를 통합하는 systems genetics 접근이 PMOS의 유전·환경적 결정요인, 취약 세포/장기, 그리고 PMOS와 대사·심혈관·종양 관련 병태를 연결하는 기전을 규명할 수 있는가?",
+    "hypothesis": "명시적인 가설은 초록에 직접 서술되어 있지 않다. 직접적으로 뒷받침되는 연구 전제는 PMOS의 이질적 병태와 동반질환이 보존된 genetic/environmental factors 및 ovary 유래 분자 기전, 특히 SF3B1-mediated alternative splicing과 관련될 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Genetically diverse mice",
+        "details": "PMOS 및 연관 합병증의 driver를 분석하기 위한 integrative systems genetics platform에 활용되었다. 구체적 strain, PMOS induction 방법, 표본 수는 초록에 제시되지 않았다."
+      },
+      {
+        "model": "Humans / human genetic diversity",
+        "details": "mouse와 함께 PMOS 관련 driver 분석에 활용되었다고 서술되었으나, cohort 및 분석 방법은 초록에 제시되지 않았다."
+      },
+      {
+        "model": "Mouse ovaries",
+        "details": "Ovarian transcriptomics analysis가 수행되었고, SF3B1 pharmacologic inhibition의 전신 대사 지표 효과가 mouse에서 평가되었다."
+      },
+      {
+        "model": "Human cell lines",
+        "details": "SF3B1 관련 효과가 granulosa cells의 exon skipping events에 위치함을 뒷받침하는 실험에 사용되었다. 세포주 종류와 실험 세부사항은 제시되지 않았다."
+      }
+    ],
+    "methods": [
+      "Mouse와 human의 genetic diversity를 결합한 integrative systems genetics 분석",
+      "Ovary transcriptomics analysis",
+      "Human cell line experiments",
+      "Mouse에서 SF3B1의 pharmacologic inhibition 및 circulating testosterone, insulin, glucose, fat mass 평가"
+    ],
+    "key_results": [
+      {
+        "finding": "증가된 ovarian area는 PMOS susceptibility 및 ovarian cancer progression 모두에 기여하는 것으로 제시되었다.",
+        "evidence": "초록에서 저자들이 ovarian area 증가가 PMOS 감수성과 ovarian cancer 진행에 기여한다고 서술하였다.",
+        "figures": []
+      },
+      {
+        "finding": "특정 ovary-heart signaling circuits가 aging 동안 cardiac function을 조절하는 것으로 제시되었다.",
+        "evidence": "초록의 직접 서술에 근거한다. 관련 signaling circuit의 구성요소나 방향성은 제시되지 않았다.",
+        "figures": []
+      },
+      {
+        "finding": "Ovarian SF3B1-mediated alternative splicing이 PMOS와 metabolic traits를 연결하는 핵심 기전으로 제시되었다.",
+        "evidence": "초록에서 SF3B1-mediated alternative splicing을 PMOS와 metabolic traits 간 key mechanistic link로 명시하였다.",
+        "figures": []
+      },
+      {
+        "finding": "Mouse에서 SF3B1의 pharmacologic inhibition은 circulating testosterone, insulin, glucose 수준 및 fat mass expansion을 감소시켰다.",
+        "evidence": "초록의 직접 서술에 근거한다. 약물명, 용량, 투여 기간 및 효과 크기는 제시되지 않았다.",
+        "figures": []
+      },
+      {
+        "finding": "Ovary transcriptomics 및 human cell line experiments는 SF3B1 억제 관련 효과를 granulosa cells의 exon skipping events에 연결하였다.",
+        "evidence": "초록은 해당 분석 및 실험이 효과를 granulosa cell exon skipping events에 localized했다고 서술한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 genetically diverse mice와 human 데이터를 통합한 systems genetics framework를 사용하여 PMOS의 이질적 병태 및 동반질환을 설명하고자 했다. 초록상 핵심 발견은 ovarian area, ovary-heart signaling, 그리고 ovarian SF3B1-mediated alternative splicing이 PMOS 및 연관 대사·장기 병태와 연결된다는 것이다. 특히 mouse에서 SF3B1 pharmacologic inhibition은 testosterone, insulin, glucose 및 fat mass expansion을 낮췄으며, 관련 효과는 granulosa cell의 exon skipping과 연관되었다.",
+    "conclusion": "저자들은 PMOS 병태의 다양성과 전신 대사 이상을 이해하기 위한 systems genetics 기반 기전 프레임워크를 제시하며, ovarian SF3B1-mediated splicing을 ovary function과 systemic metabolism을 연결하는 후보 기전으로 결론지었다.",
+    "limitations": [
+      "초록에는 저자가 명시한 연구 제한점이 제시되지 않았다.",
+      "[분석자 추론] 제공된 자료가 초록에 한정되어 있어 genetic association의 세부 통계, 인과 추론 방법, 동물실험 설계, SF3B1 inhibitor의 선택성, 그리고 human validation의 범위를 평가할 수 없다.",
+      "[분석자 추론] SF3B1 inhibition으로 관찰된 대사 지표 개선이 PMOS 병태 자체의 개선인지, 혹은 broader pharmacologic effect를 포함하는지 초록만으로는 판정할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "분석 근거는 제공된 abstract에 한정된다.",
+      "Main figure captions 및 본문이 제공되지 않아 figure별 검토는 수행할 수 없다.",
+      "초록에 없는 실험 조건, 수치적 효과 크기, 세부 molecular pathway는 해석에 포함하지 않았다."
+    ]
+  }
+}

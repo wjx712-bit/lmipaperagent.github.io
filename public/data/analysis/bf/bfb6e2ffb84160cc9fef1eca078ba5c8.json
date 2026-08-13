@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1097/hep.0000000000001833",
+  "doi": "10.1097/hep.0000000000001833",
+  "title": "With no lysine kinase 1 in hepatic stellate cells promotes mouse and human liver fibrosis through glycolytic triosephosphate isomerase 1",
+  "originalUrl": "https://doi.org/10.1097/hep.0000000000001833",
+  "generatedAt": "2026-08-13T10:35:02.522687Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42560363",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Liver fibrosis와 cirrhosis는 치료 옵션이 제한적인 주요 질환 부담이다. Activated hepatic stellate cells (HSCs)는 proliferation, migration, collagen deposition 및 glycolysis 증가를 통해 fibrosis를 유도한다.",
+    "main_question": "PDGF에 의해 활성화된 HSC에서 glycolysis 증가, HSC activation 및 liver fibrosis를 유도하는 signaling event가 무엇인지, 특히 WNK1의 역할을 규명하는 것이다.",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 초록이 직접 지지하는 연구 전제는 PDGF-activated HSC에서 WNK1이 glycolysis 및 HSC activation을 촉진하고, TPI1을 매개로 liver fibrosis에 기여할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Primary human HSCs",
+        "details": "PDGF로 활성화된 primary human HSC에서 WNK1 활성화 및 glycolysis를 평가했다."
+      },
+      {
+        "model": "Engineered WNK1T301G system",
+        "details": "Modified ATP pocket을 가진 WNK1T301G mutant와 ATP-γ-S analogue를 이용한 chemical genetics로 WNK1 substrate를 탐색했다."
+      },
+      {
+        "model": "In vitro HSC assays",
+        "details": "Condensate disruption 및 TPI1 또는 WNK1 knockdown 후 HSC proliferation과 migration을 평가했다."
+      },
+      {
+        "model": "Carbon tetrachloride mouse model",
+        "details": "In vivo pharmacological 또는 genetic WNK1 inhibition이 liver fibrosis에 미치는 영향을 평가했다."
+      },
+      {
+        "model": "High-fat, choline-deficient, L-amino-acid diet mouse model",
+        "details": "Diet-induced liver fibrosis 모델에서 WNK1 inhibition의 효과를 평가했다."
+      },
+      {
+        "model": "Human precision-cut liver slices",
+        "details": "Ex vivo에서 WNK1 inhibition에 따른 fibrogenesis 변화를 평가했다."
+      }
+    ],
+    "methods": [
+      "Phospho-kinase array",
+      "WNK1 selective inhibitor WNK-IN-11 treatment",
+      "Live-cell metabolic assay",
+      "Glifon-300 fluorescence",
+      "Glucose-Glo assay",
+      "Glucose transporter 1 immunofluorescence",
+      "Chemical genetics using WNK1T301G and an ATP-γ-S analogue",
+      "Thio-phosphorylated protein mass spectrometry",
+      "Condensate disruption",
+      "TPI1 or WNK1 knockdown",
+      "Pharmacological and genetic WNK1 inhibition in mouse fibrosis models",
+      "Ex vivo human precision-cut liver slice analysis"
+    ],
+    "key_results": [
+      {
+        "finding": "Phospho-kinase array에서 PDGF에 의해 활성화된 primary human HSC의 새로운 kinase로 WNK1이 확인되었다.",
+        "evidence": "초록은 phospho-kinase array를 사용하여 pro-fibrotic PDGF에 의해 활성화된 primary human HSC에서 WNK1을 확인했다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "WNK-IN-11은 PDGF-mediated glycolysis를 감소시켰다.",
+        "evidence": "Live-cell metabolic assay, Glifon-300 fluorescence, Glucose-Glo assay 및 glucose transporter 1 immunofluorescence로 평가했을 때 WNK1 selective inhibitor WNK-IN-11이 PDGF-mediated glycolysis를 attenuate했다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "TPI1은 WNK1의 novel direct substrate로 확인되었다.",
+        "evidence": "WNK1T301G 기반 chemical genetics와 thio-phosphorylated protein mass spectrometry에서 TPI1이 확인되었다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "TPI1과 WNK1은 membrane-less phase separation structure인 condensate 내에서 상호작용했다.",
+        "evidence": "초록에서 TPI1이 WNK1과 condensates에서 interaction한다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Condensate disruption 및 TPI1 또는 WNK1 knockdown은 in vitro HSC proliferation과 migration을 감소시켰다.",
+        "evidence": "초록에 해당 조작들이 HSC proliferation 및 migration을 reduced했다고 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Pharmacological 또는 genetic WNK1 inhibition은 carbon tetrachloride 및 high-fat, choline-deficient, L-amino-acid diet mouse model에서 liver fibrosis를 유의하게 완화했다.",
+        "evidence": "초록에서 두 mouse model에서 fibrosis attenuation이 관찰되었다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "WNK1 inhibition은 human precision-cut liver slices에서 ex vivo fibrogenesis를 감소시켰다.",
+        "evidence": "초록에서 WNK1 inhibition이 ex vivo human precision-cut liver slices의 fibrogenesis를 reduced했다고 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 PDGF-activated primary human HSC에서 WNK1을 glycolysis 관련 kinase로 규명하고, WNK1 inhibition이 glycolysis, HSC proliferation/migration 및 여러 fibrosis 모델의 fibrogenesis를 낮춘다고 보고한다. Chemical genetics와 mass spectrometry는 glycolytic enzyme TPI1을 WNK1 direct substrate로 제시하며, 저자들은 WNK1-TPI1 axis가 HSC activation 및 liver fibrosis의 치료 표적이 될 수 있다고 결론짓는다.",
+    "conclusion": "저자들은 WNK1이 TPI1-mediated glycolysis를 통해 HSC activation과 liver fibrosis를 촉진하는 previously unrecognized kinase이며, WNK1-TPI1 axis가 잠재적 therapeutic target이라고 결론지었다.",
+    "limitations": [
+      "초록에는 저자들이 명시적으로 서술한 limitation이 없다.",
+      "[분석자 추론] 제공된 자료가 초록으로 제한되어 있어 각 실험의 표본 수, 대조군, 효과 크기, 통계 방법, WNK1-TPI1 phosphorylation의 세부 부위 및 fibrosis 개선의 조직학적 근거는 평가할 수 없다.",
+      "[분석자 추론] Human precision-cut liver slice 결과는 ex vivo 자료이므로, 사람에서의 임상적 유효성 및 안전성은 이 초록만으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 초록에 명시된 정보만 반영했다.",
+      "MAIN_FIGURE_CAPTIONS가 제공되지 않아 figure별 근거 연결 및 세부 figure 분석은 수행할 수 없다.",
+      "초록의 'significantly attenuated' 외에 정량적 효과 크기나 통계 세부사항은 제공되지 않았다."
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1038/s41467-026-75291-3",
+  "doi": "10.1038/s41467-026-75291-3",
+  "title": "Inhaled LTI-03 for idiopathic pulmonary fibrosis: a randomized dose escalation study",
+  "originalUrl": "https://doi.org/10.1038/s41467-026-75291-3",
+  "generatedAt": "2026-08-13T10:35:03.138312Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42538332",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Idiopathic pulmonary fibrosis (IPF)는 치료 선택지가 제한적인 치명적 interstitial lung disease이다. LTI-03는 IPF experimental models에서 alveolar epithelial cell survival을 촉진하고 profibrotic protein expression을 감소시키는 것으로 기술되어 있다.",
+    "main_question": "흡입 LTI-03를 14일간 투여했을 때 IPF 환자에서의 안전성 및 탐색적 pharmacokinetics/disease-related biomarker 효과는 어떠한가?",
+    "hypothesis": "명시적으로 가설이 제시되지는 않았다. 직접적으로 뒷받침되는 연구 전제는 LTI-03가 IPF에서 안전하게 투여될 수 있으며 disease-related biomarker를 감소시킬 가능성이 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "IPF 환자",
+        "details": "Phase 1b randomized, double-blind, placebo-controlled dose-escalation study. 총 24명이 무작위배정되었으며, LTI-03 5 mg/day (N=9), LTI-03 10 mg/day (N=9), placebo (N=6)를 14일간 흡입 투여받았다."
+      }
+    ],
+    "methods": [
+      "Phase 1b randomized, double-blind, placebo-controlled dose-escalation clinical study",
+      "3:1 randomization to inhaled LTI-03 or placebo",
+      "14-day dosing with LTI-03 5 mg/day or 10 mg/day",
+      "Primary endpoint: treatment-emergent adverse events (TEAEs) incidence",
+      "Exploratory pharmacokinetic and disease-related biomarker analyses",
+      "Deep bronchial brushing biomarker assessment",
+      "Spirometry 및 관련 증상 평가를 통한 airway obstruction 평가"
+    ],
+    "key_results": [
+      {
+        "finding": "LTI-03는 전반적으로 잘 내약되었다.",
+        "evidence": "치료 관련 투여중단은 없었고, severe TEAE도 없었다.",
+        "figures": []
+      },
+      {
+        "finding": "LTI-03 투여 후 spirometry 및 관련 증상에서 airway obstruction의 증거가 없었다.",
+        "evidence": "초록에서 두 용량군을 포함한 LTI-03의 안전성 결과로 보고되었다.",
+        "figures": []
+      },
+      {
+        "finding": "Deep bronchial brushings에서 두 LTI-03 용량 모두 IL-11 및 TSLP를 placebo 대비 유의하게 감소시켰다.",
+        "evidence": "IL-11: 5 mg/day p=0.0406, 10 mg/day p=0.044; TSLP: 5 mg/day p=0.0256, 10 mg/day p=0.0128.",
+        "figures": []
+      },
+      {
+        "finding": "10 mg/day LTI-03는 COL1A1, CXCL7 및 galectin-7을 placebo 대비 유의하게 억제했다.",
+        "evidence": "COL1A1 p=0.0248, CXCL7 p=0.0248, galectin-7 p=0.0332.",
+        "figures": []
+      },
+      {
+        "finding": "그 밖에 측정된 biomarker들은 유의하게 변화하지 않았다.",
+        "evidence": "초록에 'Other measured biomarkers were not significantly changed'라고 명시되어 있다.",
+        "figures": []
+      }
+    ],
+    "summary": "24명의 IPF 환자를 대상으로 한 14일간의 Phase 1b 시험에서 inhaled LTI-03 5 또는 10 mg/day는 중대한 안전성 신호 없이 잘 내약되었다. Deep bronchial brushings에서 두 용량은 IL-11과 TSLP를 감소시켰고, 10 mg/day는 COL1A1, CXCL7 및 galectin-7도 감소시켰다. 결과는 IPF에서 LTI-03의 추가 임상 평가를 지지하는 초기 안전성 및 biomarker 근거를 제공한다.",
+    "conclusion": "흡입 LTI-03는 본 14일 Phase 1b IPF 연구에서 양호한 안전성 프로파일을 보였으며, 일부 disease-related bronchial biomarkers를 감소시켰다. 초록의 저자 결론에 따르면, 이는 IPF에서 inhaled LTI-03의 추가 평가를 뒷받침한다.",
+    "limitations": [
+      "저자들이 초록에서 별도의 연구 제한점을 명시하지 않았다.",
+      "[분석자 추론] 표본 수가 24명이고 투여 기간이 14일이므로, 장기 안전성 및 임상적 효능을 판단하기에는 제한적이다.",
+      "[분석자 추론] Biomarker 분석은 exploratory endpoint이며, 제시된 초록 정보만으로 biomarker 변화가 임상적 질병 진행 또는 환자 중심 outcome 개선으로 이어진다고 결론낼 수 없다.",
+      "[분석자 추론] Pharmacokinetic analyses가 포함되었으나, 초록에는 구체적 pharmacokinetic 결과가 제시되지 않았다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "본 분석은 제공된 abstract에만 근거한다.",
+      "Main figure captions 또는 본문이 제공되지 않아 figure별 분석은 수행하지 않았다.",
+      "시험은 Rein Therapeutics, Inc.가 전액 지원했다."
+    ]
+  }
+}

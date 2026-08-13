@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1097/hep.0000000000001830",
+  "doi": "10.1097/hep.0000000000001830",
+  "title": "Hepatocyte MLKL drives obesity-driven hepatocellular carcinoma progression via mitochondrial dysfunction independent of necroptosis in MASLD",
+  "originalUrl": "https://doi.org/10.1097/hep.0000000000001830",
+  "generatedAt": "2026-08-13T10:35:02.525715Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42549799",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "MASLD는 특히 비만 상황에서 HCC의 주요 원인이나, hepatocyte dysfunction과 tumorigenesis를 연결하는 기전은 불명확하다. Necroptosis effector인 MLKL은 MASLD에서 증가하지만, obesity-driven MASLD-HCC에서 hepatocyte-intrinsic MLKL의 역할은 알려져 있지 않았다.",
+    "main_question": "Obesity-driven MASLD-HCC에서 hepatocyte MLKL이 necroptosis와 독립적으로 HCC 진행을 촉진하는지, 그리고 그와 연관된 mitochondrial mechanism은 무엇인지 평가하였다.",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 초록이 직접 뒷받침하는 연구 전제는 hepatocyte MLKL이 necroptosis 이외의 기능, 특히 mitochondrial dysfunction과 연관된 방식으로 obesity-driven MASLD-HCC 진행에 기여할 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Hepatocyte-specific MLKL knockout mice (MlklHepKO)",
+        "details": "Long-term Western diet (WD)-induced MASLD-HCC model에서 hepatocyte-intrinsic MLKL 기능을 평가하였다."
+      },
+      {
+        "model": "HCC cells",
+        "details": "MLKL deletion의 proliferation, mitochondrial respiration, glycolysis에 대한 영향을 평가하고, MFN2 deletion으로 효과의 의존성을 시험하였다."
+      },
+      {
+        "model": "HepG2 xenograft",
+        "details": "Human MLKL inhibitor necrosulfonamide (NSA)의 종양 성장 억제 효과를 평가하였다."
+      },
+      {
+        "model": "Human HCC data",
+        "details": "MLKL expression과 overall survival의 연관성을 분석하였다."
+      }
+    ],
+    "methods": [
+      "Long-term WD-induced MASLD-HCC mouse model",
+      "Hepatocyte-specific Mlkl knockout",
+      "Hepatic lipid accumulation 및 lipotoxic lipid species 평가",
+      "Mitochondrial function 평가",
+      "Tumor incidence, multiplicity, size, proliferation, stemness 평가",
+      "Transcriptomic analysis",
+      "MLKL 및 MFN2 발현/세포내 localization 평가",
+      "HCC cell에서 MLKL deletion 및 MFN2 deletion",
+      "Mitochondrial respiration 및 glycolysis 평가",
+      "HepG2 xenograft에서 NSA treatment",
+      "Human HCC survival association analysis"
+    ],
+    "key_results": [
+      {
+        "finding": "WD는 hepatocyte MLKL protein expression을 증가시켰지만 detectable necroptosis activation은 유발하지 않았다.",
+        "evidence": "초록은 이 결과가 MLKL의 necroptosis-independent 역할을 시사한다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "MlklHepKO는 WD-induced inflammation, fibrosis, liver injury를 변화시키지 않았으나, hepatic lipid accumulation을 증가시키고 lipotoxic lipid species를 감소시키며 mitochondrial function을 보존했다.",
+        "evidence": "WD-fed MlklHepKO mouse 결과로 초록에 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "WD-fed MlklHepKO mice는 tumor incidence, multiplicity, proliferation, stemness가 감소하면서 더 적고 작은 tumors를 형성했다.",
+        "evidence": "초록에 MlklHepKO mice의 종양 표현형으로 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Transcriptomic analysis에서 MlklHepKO livers는 mitochondrial oxidative phosphorylation pathways의 upregulation을 보였다.",
+        "evidence": "초록에 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "WD는 mitochondrial fusion protein이자 tumor suppressor인 MFN2를 억제했으며, MLKL deficiency는 MFN2 expression을 post-translationally 회복시켰다.",
+        "evidence": "초록에 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "HCC cells에서 MLKL deletion은 proliferation을 감소시키고 mitochondrial respiration을 개선하며 glycolysis를 감소시켰고, 이 효과들은 MFN2 deletion에 의해 reversed되었다.",
+        "evidence": "초록은 MLKL phenotype이 MFN2에 의존적임을 지지하는 결과로 제시한다.",
+        "figures": []
+      },
+      {
+        "finding": "MLKL은 nuclear 및 mitochondrial compartments에 localization되었다.",
+        "evidence": "초록은 이 관찰이 organelle-intrinsic functions와 일관된다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "NSA는 HepG2 xenograft growth를 억제했고, human HCC에서 높은 MLKL expression은 poorer overall survival과 상관되었다.",
+        "evidence": "초록에 명시되어 있다.",
+        "figures": []
+      }
+    ],
+    "summary": "장기 WD MASLD-HCC 모델에서 hepatocyte MLKL은 detectable necroptosis activation 없이 HCC 진행을 촉진했다. MlklHepKO는 염증·섬유화·간손상은 바꾸지 않았지만 lipotoxic lipid species와 mitochondrial dysfunction을 완화하고, MFN2 회복과 연관되어 종양 발생, 증식 및 stemness를 낮췄다. HCC cell 및 HepG2 xenograft 결과는 MLKL–MFN2 축과 NSA의 치료 표적 가능성을 지지한다.",
+    "conclusion": "초록의 결론에 따르면, hepatocyte MLKL은 MFN2 suppression, mitochondrial dysfunction, 그리고 tumor proliferation 및 stemness 증가를 포함하는 non-necroptotic mechanism을 통해 MASLD-associated HCC를 촉진한다. MLKL은 MASLD-associated HCC의 잠재적 therapeutic target으로 제시된다.",
+    "limitations": [
+      "저자에 의해 명시적 limitations는 초록에 제시되지 않았다.",
+      "[분석자 추론] 제공된 자료는 초록뿐이므로 각 assay의 세부 설계, 표본 수, 통계, sex/age 구성, WD exposure 기간, 그리고 결과의 재현성은 평가할 수 없다.",
+      "[분석자 추론] NSA의 in vivo 효과는 HepG2 xenograft에서 제시되었으므로, WD-induced MASLD-HCC 모델에서의 pharmacologic MLKL inhibition 효과는 이 초록만으로 확인할 수 없다.",
+      "[분석자 추론] Human HCC에서 MLKL expression과 overall survival의 연관성은 상관관계이며, 초록만으로 독립적 예후 인자 또는 인과관계를 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로, 본 분석은 초록에 명시된 정보만 사용했다.",
+      "Main figure captions와 full text가 제공되지 않아 figure-specific evidence, 실험 조건, 정량값 및 세부 방법은 확인할 수 없다."
+    ]
+  }
+}

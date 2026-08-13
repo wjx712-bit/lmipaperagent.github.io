@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1016/j.immuni.2026.07.011",
+  "doi": "10.1016/j.immuni.2026.07.011",
+  "title": "Group 2 innate lymphoid cells activate myelin-reactive T cells to augment neuroinflammation",
+  "originalUrl": "https://doi.org/10.1016/j.immuni.2026.07.011",
+  "generatedAt": "2026-08-13T10:35:03.136835Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42561936",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "수막(meninges)은 병원성 T cell의 CNS 유입 관문이며, 다양한 면역세포가 CNS inflammation 및 autoimmunity를 조절한다. 그러나 이러한 조절의 기전은 충분히 규명되지 않았다.",
+    "main_question": "EAE 진행 중 dura에 축적되는 group 2 innate lymphoid cell(ILC2)이 myelin-reactive T cell과 neuroinflammation을 어떻게 조절하는가?",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 초록이 직접 지지하는 연구 전제는 dura ILC2가 MHC class II를 통해 antigen-presenting cell(APC)처럼 myelin-reactive T cell을 활성화하여 EAE neuroinflammation을 증폭시킬 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Experimental autoimmune encephalomyelitis (EAE)",
+        "details": "CNS inflammation, neuroinflammation 및 demyelination을 평가하기 위한 질환 모델로 사용되었다."
+      },
+      {
+        "model": "ILC2 genetic ablation",
+        "details": "ILC2 결손이 EAE neuroinflammation 및 CNS demyelination에 미치는 영향을 평가했다."
+      },
+      {
+        "model": "ILC2-specific H2-Ab1 genetic ablation",
+        "details": "ILC2의 MHC class II 관련 antigen presentation 기능이 EAE 병리에 기여하는지 평가했다."
+      }
+    ],
+    "methods": [
+      "Single-cell RNA sequencing",
+      "Flow cytometry",
+      "ILC2 genetic ablation",
+      "ILC2에서의 H2-Ab1 genetic ablation",
+      "EAE에서 neuroinflammation 및 CNS demyelination 평가"
+    ],
+    "key_results": [
+      {
+        "finding": "ILC2는 EAE가 진행됨에 따라 dura에 축적되었다.",
+        "evidence": "초록에 'ILC2s accumulated in the dura as EAE progressed'라고 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Single-cell RNA sequencing 및 flow cytometry에서 ILC2의 구별되는 특성이 확인되었으며, 여기에는 MHC class II 발현이 포함되었다.",
+        "evidence": "초록이 두 분석법과 MHC class II expression을 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "ILC2는 MHC class II-dependent manner로 myelin-reactive T cell의 활성화와 expansion을 유도하는 APC로 작용했다.",
+        "evidence": "초록에 ILC2의 antigen-presenting function 및 MHC class II 의존성이 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "ILC2 매개 myelin-reactive T cell expansion은 IFN-γ 및 IL-17A cytokine expression 증가와 연관되었다.",
+        "evidence": "초록에 증가한 cytokine expression이 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "ILC2 또는 ILC2의 H2-Ab1을 genetic ablation하면 EAE 동안 neuroinflammation과 CNS demyelination이 완화되었다.",
+        "evidence": "초록이 두 유전학적 조작 및 병리 완화 결과를 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 EAE에서 dura ILC2가 축적되고 MHC class II를 발현하며, APC 기능을 통해 myelin-reactive T cell을 활성화·확장시킨다고 보고한다. 이 T cell expansion은 IFN-γ 및 IL-17A 발현 증가와 연관되었고, ILC2 자체 또는 ILC2의 H2-Ab1 결손은 neuroinflammation 및 CNS demyelination을 완화했다.",
+    "conclusion": "ILC2는 EAE에서 MHC class II-dependent antigen presentation을 통해 myelin-reactive T cell 반응을 증폭시키고 neuroinflammation에 기여하는 것으로 제시된다. 따라서 ILC2는 CNS inflammation 및 autoimmunity를 제한하기 위한 잠재적 표적일 수 있다.",
+    "limitations": [
+      "[분석자 추론] 제공된 자료가 초록에 한정되어 있어 EAE 유도 방식, ILC2/H2-Ab1 결손의 구체적 유전학적 설계, 표본 수, 효과 크기, 통계 분석, 세부 세포 표현형 및 시간 경과는 평가할 수 없다.",
+      "[분석자 추론] 초록만으로는 ILC2의 antigen presentation이 어떤 myelin antigen과 T cell subset에서 검증되었는지, 그리고 APC 기능의 직접성에 관한 실험적 세부사항을 판단할 수 없다.",
+      "[분석자 추론] EAE 모델에서의 결과이므로 인간 CNS autoimmunity에 대한 적용 가능성은 이 자료만으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 초록에 명시된 정보만 사용했다.",
+      "Figure caption 또는 본문이 제공되지 않아 figure별 평가와 정량적 결과 검증은 수행할 수 없다.",
+      "저자들이 명시적으로 기술한 limitations는 제공된 초록에 없다."
+    ]
+  }
+}

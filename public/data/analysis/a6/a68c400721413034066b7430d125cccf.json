@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1172/jci193035",
+  "doi": "10.1172/jci193035",
+  "title": "JNK and p53 cause human and mouse β cell death during excessive unfolded protein response",
+  "originalUrl": "https://doi.org/10.1172/jci193035",
+  "generatedAt": "2026-08-13T10:35:02.527513Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42544575",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "ER stress는 Type 1 diabetes (T1D) 및 Type 2 diabetes (T2D)에서 β cell death에 기여하지만, ER stress 동안 β cell death를 유발하는 분자 기전은 충분히 규명되지 않았다. GRP78은 unfolded protein response (UPR)의 master regulator인 ER chaperone으로, 비스트레스 상태에서는 UPR initiator를 억제하고 스트레스 시 이들을 해리하여 UPR activation을 허용한다.",
+    "main_question": "과도하거나 deregulated된 UPR 동안 β cell death를 유도하는 신호 경로는 무엇이며, 이 경로의 억제가 β cell survival을 보호할 수 있는가?",
+    "hypothesis": "명시적으로 가설 문장으로 제시되지는 않았다. 초록이 직접 뒷받침하는 연구 전제는 β cell의 GRP78 결손으로 발생하는 deregulated UPR, 특히 IRE1 signaling이 JNK-p53 axis를 통해 β cell death를 유도한다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "β cell-specific GRP78 knockout mice",
+        "details": "Pancreatic β cells에서 GRP78이 유전적으로 결손된 마우스를 제작하여 ER-stress response 관련 β cell decompensation을 분석했다."
+      },
+      {
+        "model": "2 distinct ER stress diabetes models",
+        "details": "In vivo JNK inhibition의 β cell 보호 효과를 평가한 두 가지 ER stress diabetes model. 각 모델의 구체적 종류는 초록에 제시되지 않았다."
+      },
+      {
+        "model": "Human β cells with GRP78 knockdown",
+        "details": "GRP78 knockdown으로 UPR를 유도한 human β cells에서 JNK 및 p53의 pharmacological inhibition 효과를 평가했다."
+      }
+    ],
+    "methods": [
+      "Pancreatic β cell-specific GRP78 genetic deletion in mice",
+      "β cell mass 및 apoptosis 평가",
+      "UPR 및 IRE1 activity 관련 molecular studies",
+      "Unbiased analyses",
+      "Targeted analyses",
+      "In vivo pharmacological JNK inhibition",
+      "Human β cells에서 GRP78 knockdown 유도 UPR 및 JNK/p53 pharmacological inhibition"
+    ],
+    "key_results": [
+      {
+        "finding": "β cell-specific GRP78 deletion은 이유 전 새끼 마우스에서 acute insulin-deficient diabetes를 유발했다.",
+        "evidence": "초록은 GRP78 deletion이 pups before weaning에서 acute insulin-deficient diabetes를 일으켰다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "GRP78 결손 마우스에서 β cell mass가 감소했으며, 이는 증가한 apoptosis와 연관되었다.",
+        "evidence": "초록은 reduced β cell mass due to increased apoptosis를 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Deregulated UPR, 특히 IRE1 activity가 β cell death를 구동하는 것으로 확인되었다.",
+        "evidence": "초록은 molecular studies가 deregulated UPR, specifically IRE1 activity를 cell death의 driver로 확인했다고 기술한다.",
+        "figures": []
+      },
+      {
+        "finding": "IRE1 kinase 하위의 JNK-p53 axis가 UPR activation 동안 β cell death의 핵심 매개체로 확인되었다.",
+        "evidence": "초록은 unbiased 및 targeted analyses를 통해 IRE1 kinase downstream JNK-p53 axis를 key mediator로 확인했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "In vivo JNK inhibition은 서로 다른 두 ER stress diabetes model에서 β cell death를 보호했다.",
+        "evidence": "초록에 직접 기술되어 있다. 다만 모델의 구체적 정체, 억제제, 효과 크기는 제공되지 않았다.",
+        "figures": []
+      },
+      {
+        "finding": "Human β cells에서 JNK와 p53을 모두 pharmacologically inhibit하면 GRP78 knockdown-induced UPR 상황에서 β cell survival이 개선되었다.",
+        "evidence": "초록에 직접 기술되어 있다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 β cell-specific GRP78 deletion을 이용해 과도한 UPR에 의한 β cell failure를 모델링했다. GRP78 결손은 증가한 apoptosis, β cell mass 감소, 그리고 이유 전 acute insulin-deficient diabetes를 유발했다. 초록에 따르면 deregulated IRE1 activity와 그 하위 JNK-p53 axis가 β cell death의 핵심 경로였으며, JNK inhibition은 두 in vivo ER stress diabetes model에서 β cell death를 줄였다. 또한 human β cells에서 JNK와 p53의 동시 pharmacological inhibition은 GRP78 knockdown-induced UPR 중 생존을 개선했다.",
+    "conclusion": "초록이 제시하는 결론은 excessive/deregulated UPR 상황에서 IRE1 kinase downstream JNK-p53 axis가 human 및 mouse β cell death를 매개하며, JNK 및 p53이 β cell 보존을 위한 잠재적 therapeutic target이라는 것이다.",
+    "limitations": [
+      "저자들이 초록에서 명시적으로 기술한 제한점은 없다.",
+      "[분석자 추론] 제공된 자료가 초록에 국한되어 있어, 각 ER stress diabetes model의 구체적 특성, 사용한 JNK/p53 inhibitor, 표본 수, 정량적 효과 크기, 통계 분석 및 장기적 효능·안전성은 평가할 수 없다.",
+      "[분석자 추론] Human β cell 실험은 GRP78 knockdown-induced UPR 조건에서의 pharmacological inhibition 결과이므로, 다른 원인의 ER stress 또는 임상 당뇨병 환경으로의 일반화 범위는 본 초록만으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 모든 내용은 초록에 명시된 정보로만 제한했다.",
+      "Main figure caption 및 본문이 제공되지 않아 figure-level evidence, 세부 실험 설계, 정량 결과 및 인과 기전의 추가 검증은 분석할 수 없다.",
+      "논문 출판일은 제공된 metadata에 따라 2026-08-03으로 기재되었으며, 본 분석에서는 해당 metadata의 사실성이나 외부 공개 상태를 검증하지 않았다."
+    ]
+  }
+}

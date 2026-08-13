@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1126/science.ady0832",
+  "doi": "10.1126/science.ady0832",
+  "title": "Atlas of lysosomal aging reveals a metabolite signature shared with lysosomal storage disorders",
+  "originalUrl": "https://doi.org/10.1126/science.ady0832",
+  "generatedAt": "2026-08-13T10:35:03.139431Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42531412",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Lysosomal dysfunction은 aging의 잘 알려진 특징이다. 또한 glycerophosphodiesters와 cystine은 각각 juvenile lysosomal storage disorders 중 Batten disease 및 cystinosis와 인과적으로 연결된 대사체로 서술된다.",
+    "main_question": "노화 과정에서 여러 조직의 lysosome이 보이는 metabolite 변화는 무엇이며, 이 변화가 lysosomal storage disorders와 어떤 공통성을 가지는지 평가하는 것이다.",
+    "hypothesis": "명시적인 가설은 초록에 제시되지 않았다. 직접적으로 뒷받침되는 연구 전제는 aging 동안 lysosomal metabolite composition이 변화하며, 이러한 변화가 lysosomal storage disorders에서 관찰되는 대사체 축적과 연결될 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Aged tissues",
+        "details": "Brain, heart, muscle, white adipose tissue에서 aging-associated lysosomal metabolite 변화를 분석했다."
+      },
+      {
+        "model": "Caloric restriction intervention",
+        "details": "Lifespan-extending intervention으로 기술된 caloric restriction이 heart, muscle, brain의 lysosomal metabolite 변화에 미치는 영향을 평가했다."
+      }
+    ],
+    "methods": [
+      "Rapid lysosomal isolation을 위한 도구 세트를 사용했다.",
+      "여러 조직(multitissue)에서 lysosomal metabolite 변화를 측정하여 atlas를 구축했다.",
+      "Aging에 따른 metabolite 수준의 시간적 변화를 평가했다.",
+      "Caloric restriction 조건에서 lysosomal metabolite 변화의 완화 여부를 평가했다."
+    ],
+    "key_results": [
+      {
+        "finding": "Aged lysosomes는 brain, heart, muscle, white adipose tissue에서 glycerophosphodiesters와 cystine을 축적했다.",
+        "evidence": "초록은 이 두 metabolite가 각각 Batten disease 및 cystinosis를 포함한 juvenile lysosomal storage disorders와 인과적으로 연결된다고 서술한다.",
+        "figures": []
+      },
+      {
+        "finding": "Glycerophosphodiesters와 cystine의 수준은 age에 따라 선형적으로 증가했으며 organismal decline보다 선행했다.",
+        "evidence": "초록에 'increased linearly with age, preceding organismal decline'이라고 명시되어 있다.",
+        "figures": []
+      },
+      {
+        "finding": "Caloric restriction은 heart와 muscle에서 이러한 lysosomal metabolite 변화를 완화했지만 brain에서는 완화하지 못했다.",
+        "evidence": "초록에 조직 특이적 효과가 명시되어 있다.",
+        "figures": []
+      }
+    ],
+    "summary": "본 연구는 rapid lysosomal isolation 기반의 multitissue lysosomal metabolite atlas를 구축하여, 노화된 brain, heart, muscle, white adipose tissue의 lysosome에서 glycerophosphodiesters 및 cystine 축적을 확인했다. 이 대사체들은 Batten disease와 cystinosis 등 lysosomal storage disorders와 연결되며, 연령에 따라 선형적으로 증가하고 organismal decline보다 앞섰다. Caloric restriction의 완화 효과는 heart와 muscle에 국한되고 brain에서는 관찰되지 않아 조직 특이성이 제시되었다.",
+    "conclusion": "Aging-associated lysosomal dysfunction은 lysosomal storage disorders와 공유되는 glycerophosphodiester 및 cystine 축적 signature를 포함한다. 이 signature는 organismal decline에 선행하며, caloric restriction에 대한 반응은 조직별로 다르다.",
+    "limitations": [
+      "저자들이 초록에서 명시적으로 제시한 제한점은 없다.",
+      "[분석자 추론] 제공된 자료가 초록뿐이므로, 각 조직의 표본 특성, 연령 범위, lysosomal isolation의 검증 방식, metabolite 정량 방법, 통계 분석, 그리고 caloric restriction의 구체적 조건은 평가할 수 없다.",
+      "[분석자 추론] 초록은 대사체 축적과 aging-related dysfunction의 연관성을 제시하지만, 해당 축적이 정상 노화에서 기능장애를 직접 유발한다는 기전적 인과성 실험 여부는 판단할 수 없다.",
+      "[분석자 추론] Caloric restriction의 효과는 heart와 muscle에서는 완화로 보고되었으나, brain에서 효과가 없는 이유 또는 조직 간 차이의 기전은 제공된 자료만으로 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 모든 평가는 초록에 명시된 내용으로 제한했다.",
+      "Main figure captions가 제공되지 않아 figure 수준의 분석이나 figure label 인용은 수행할 수 없다.",
+      "초록에서 사용된 'causally linked'는 glycerophosphodiesters/cystine과 해당 lysosomal storage disorders의 관계를 설명하는 표현이며, 본 연구가 정상 노화에서 이 대사체들의 인과성을 직접 검증했다는 뜻으로 확대 해석할 수 없다."
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "paperId": "10.1016/j.immuni.2026.07.001",
+  "doi": "10.1016/j.immuni.2026.07.001",
+  "title": "TCR origin and specificity to environmental or self-antigens on distinct antigen-presenting cells determine peripheral Treg cell differentiation",
+  "originalUrl": "https://doi.org/10.1016/j.immuni.2026.07.001",
+  "generatedAt": "2026-08-13T10:35:03.137592Z",
+  "model": "gpt-5.6-terra",
+  "source": {
+    "provider": "Europe PMC",
+    "evidenceLevel": "abstract",
+    "url": "https://europepmc.org/article/MED/42520795",
+    "pmcid": ""
+  },
+  "analysis": {
+    "evidence_level": "abstract",
+    "research_background": "Peripheral regulatory T (pTreg) cell differentiation은 food 및 symbiotic microbes와 같은 obligate non-self antigen에 대한 immunological tolerance에 중요하다. 본 연구는 pTreg 분화에서 TCR recognition과 environmental cues의 상대적 중요성을 평가했다.",
+    "main_question": "Self-, microbial-, dietary antigen에 대한 TCR specificity 및 해당 antigen의 presentation context가 CD4+ T cell의 pTreg differentiation과 phenotype을 어떻게 결정하는가?",
+    "hypothesis": "명시적으로 가설이 서술되지는 않았다. 초록이 직접 지지하는 연구 전제는 TCR origin, antigen specificity, 그리고 antigen-presenting cell (APC) context가 pTreg cell differentiation 및 phenotype의 주요 결정인자일 수 있다는 것이다.",
+    "experimental_models": [
+      {
+        "model": "Primary T cells with CRISPR-based TCR editing",
+        "details": "Large TCR panel을 primary T cells에 도입하여 self-, microbial-, dietary antigen에 의해 유도되는 pTreg differentiation을 평가했다."
+      }
+    ],
+    "methods": [
+      "Primary T cells의 CRISPR-based TCR editing",
+      "Large TCR panel을 이용한 TCR 기능 비교",
+      "Self-, microbial-, dietary antigen으로 유도된 pTreg cell differentiation 평가",
+      "pTreg phenotype 및 transcriptional program 비교",
+      "TCR-antigen pair별 APC dependence 평가"
+    ],
+    "key_results": [
+      {
+        "finding": "Self-, microbial-, dietary antigen의 모든 antigen class는 stable pTreg cell differentiation을 유도했다.",
+        "evidence": "초록은 모든 antigen class가 stable pTreg differentiation을 유도했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Treg cell 유래 TCR은 conventional T cell 유래 TCR보다 pTreg differentiation을 더 효과적으로 유도했다.",
+        "evidence": "초록은 pTreg 분화 효율이 TCR origin에 따라 달랐으며, Treg-derived TCR이 더 효과적이었다고 보고한다.",
+        "figures": []
+      },
+      {
+        "finding": "Antigen specificity에 따라 서로 다른 pTreg phenotype이 유도되었다: self-reactive, microbial-reactive, dietary-reactive TCR은 Helios+, RORγ+, 또는 두 marker를 함께 발현하는 phenotype과 연관되었다.",
+        "evidence": "초록은 self-, microbial-, dietary antigen-recognizing TCR들이 Helios+, RORγ+, 또는 both phenotype을 유도했다고 서술한다. 다만 각 antigen class와 특정 phenotype의 일대일 대응은 초록에 제시되지 않았다.",
+        "figures": []
+      },
+      {
+        "finding": "서로 다른 TCR-antigen pair는 서로 구별되는 transcriptional program을 형성했다.",
+        "evidence": "초록에서 distinct TCR-antigen pairs가 distinct transcriptional programs를 확립했다고 명시한다.",
+        "figures": []
+      },
+      {
+        "finding": "Food-reactive TCR에 의한 반응은 주로 RORγ+ APC에 의존한 반면, self-reactive TCR 반응은 conventional dendritic cells에 의존했다.",
+        "evidence": "초록은 이 차이가 관련 APC 유형으로 추적되었으며, food-reactive TCR과 self-reactive TCR의 APC dependence를 각각 명시한다.",
+        "figures": []
+      }
+    ],
+    "summary": "CRISPR-based TCR editing을 이용한 primary T-cell system에서 self-, microbial-, dietary antigen-reactive TCR을 비교한 결과, 모든 antigen class가 stable pTreg differentiation을 유도했다. 그러나 분화 효율은 TCR origin에 따라 달랐고 Treg-derived TCR에서 더 높았다. 또한 TCR specificity와 APC context는 Helios/RORγ phenotype, transcriptional program, 및 APC dependence를 구분하여 CD4+ T-cell fate를 결정하는 핵심 요소로 제시되었다.",
+    "conclusion": "초록의 결론에 따르면 TCR specificity는 antigen specificity와 antigen presentation context를 통합하여 CD4+ T cell의 pTreg fate 및 phenotype을 결정하는 primary determinant이다. 이 결과는 TCR-based tolerogenic immunotherapy 설계를 위한 개념적 틀을 제공한다.",
+    "limitations": [
+      "초록에는 저자들이 명시적으로 서술한 limitation이 없다.",
+      "[분석자 추론] 제공된 자료가 초록에 한정되어 있어 TCR panel의 구성, 실험 환경(in vivo 또는 ex vivo 여부), APC 정의 및 조작 방식, pTreg stability의 평가 기준, transcriptional program의 세부 내용은 확인할 수 없다.",
+      "[분석자 추론] 초록만으로는 각 antigen class가 어떤 Helios/RORγ phenotype에 대응하는지, 그리고 APC dependence가 직접적인 기전적 인과관계로 검증되었는지 판단할 수 없다."
+    ],
+    "figure_by_figure_analysis": [],
+    "source_caveats": [
+      "SOURCE_LEVEL이 abstract이므로 본 분석은 초록에 명시된 내용만 반영한다.",
+      "Main figure caption 또는 본문이 제공되지 않아 figure별 근거, 정량 결과, 세부 실험 설계 및 기전적 해석은 평가할 수 없다."
+    ]
+  }
+}
