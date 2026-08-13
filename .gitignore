@@ -4,3 +4,7 @@ dist/
 *.local
 vite.stdout.log
 vite.stderr.log
+preview.stdout.log
+preview.stderr.log
+__pycache__/
+*.py[cod]

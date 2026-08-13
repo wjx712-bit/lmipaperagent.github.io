@@ -9,6 +9,7 @@ import {
   Check,
   ChevronDown,
   CircleAlert,
+  ExternalLink,
   FileText,
   Filter,
   FlaskConical,
@@ -38,6 +39,7 @@ const TABS = [
 ];
 
 const STORAGE_KEY = 'lmi-paper-reviews-v1';
+const PAGE_SIZE = 50;
 
 function getStoredReviews() {
   try {
@@ -48,7 +50,9 @@ function getStoredReviews() {
 }
 
 function isWithinDays(date, days) {
-  const elapsed = Date.now() - new Date(date).getTime();
+  const timestamp = new Date(date).getTime();
+  if (Number.isNaN(timestamp)) return false;
+  const elapsed = Date.now() - timestamp;
   return elapsed >= 0 && elapsed <= days * 24 * 60 * 60 * 1000;
 }
 
@@ -76,7 +80,7 @@ function IconButton({ label, children, ...props }) {
 }
 
 function App() {
-  const [dataset, setDataset] = useState({ generatedAt: null, isDemo: false, papers: [] });
+  const [dataset, setDataset] = useState({ generatedAt: null, source: {}, papers: [] });
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [query, setQuery] = useState('');
@@ -88,6 +92,7 @@ function App() {
   const [reviews, setReviews] = useState(getStoredReviews);
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [theme, setTheme] = useState(() => localStorage.getItem('lmi-theme') || 'light');
 
   useEffect(() => {
@@ -141,6 +146,12 @@ function App() {
       return new Date(b.addedAt) - new Date(a.addedAt);
     });
   }, [papers, query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort]);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort]);
+
+  const visiblePapers = filteredPapers.slice(0, visibleCount);
 
   const stats = useMemo(() => {
     const labeled = papers.filter((paper) => paper.reviewScore != null).length;
@@ -200,7 +211,7 @@ function App() {
             <h1 id="archive-title">이번 주 연구 흐름을<br />한눈에 검토하세요.</h1>
             <p>지정 저널에서 수집한 논문을 연구 관련도와 연구실 평가로 선별합니다.</p>
           </div>
-          {dataset.isDemo && <span className="demo-badge">화면 검수용 샘플 데이터</span>}
+          <span className="data-badge"><Activity size={13} /> 실제 수집 데이터 · {papers.length.toLocaleString()}편</span>
         </section>
 
         <section className="stats-grid" aria-label="논문 통계">
@@ -268,16 +279,23 @@ function App() {
 
             <div className="paper-results">
               <div className="results-meta">
-                <span><strong>{filteredPapers.length}</strong>편 표시 중</span>
+                <span><strong>{filteredPapers.length.toLocaleString()}</strong>편 중 {visiblePapers.length.toLocaleString()}편 표시</span>
                 {activeFilterCount > 0 && <button type="button" onClick={resetFilters}>필터 초기화</button>}
               </div>
 
               {loading && <LoadingRows />}
               {loadError && <EmptyState icon={CircleAlert} title="논문 데이터를 불러오지 못했습니다" detail="data/papers.json 파일을 확인해 주세요." />}
               {!loading && !loadError && filteredPapers.length === 0 && <EmptyState icon={Search} title="조건에 맞는 논문이 없습니다" detail="검색어 또는 필터를 변경해 보세요." />}
-              {!loading && !loadError && filteredPapers.map((paper) => (
+              {!loading && !loadError && visiblePapers.map((paper) => (
                 <PaperRow key={paper.id} paper={paper} onOpen={() => setSelectedPaper(paper)} />
               ))}
+              {!loading && visiblePapers.length < filteredPapers.length && (
+                <div className="load-more-row">
+                  <button type="button" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
+                    더 보기 <span>{Math.min(PAGE_SIZE, filteredPapers.length - visiblePapers.length)}편</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -294,10 +312,11 @@ function App() {
 }
 
 function StatCard({ icon: Icon, label, value, meta, accent = 'navy', progress }) {
+  const formattedValue = typeof value === 'number' ? value.toLocaleString() : value;
   return (
     <article className={`stat-card ${accent}`}>
       <span className="stat-icon"><Icon size={18} aria-hidden="true" /></span>
-      <div><span>{label}</span><strong>{value}</strong><small>{meta}</small></div>
+      <div><span>{label}</span><strong>{formattedValue}</strong><small>{meta}</small></div>
       {progress != null && <span className="progress-track" aria-label={`라벨링 ${progress}%`}><span style={{ width: `${progress}%` }} /></span>}
     </article>
   );
@@ -342,7 +361,7 @@ function PaperRow({ paper, onOpen }) {
         </div>
         <h3>{paper.title}</h3>
         <p className="authors">{paper.authors.join(', ')}</p>
-        <p className="abstract">{paper.abstract}</p>
+        <p className="abstract">{paper.abstract || paper.aiReason}</p>
         <div className="topic-list">{paper.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
       </button>
       <div className="paper-metrics">
@@ -405,7 +424,7 @@ function ReviewDrawer({ paper, onClose, onSave }) {
           {paper.recommendedBy && (
             <section className="expert-recommendation">
               <Star size={18} />
-              <div><h4>전문가 추천</h4><p>{paper.recommendedBy.name} · {paper.recommendedBy.role}</p></div>
+              <div><h4>전문가 추천</h4><p>{paper.recommendedBy.name} · {paper.recommendedBy.role}{paper.recommendedBy.note ? ` · ${paper.recommendedBy.note}` : ''}</p></div>
             </section>
           )}
 
@@ -433,14 +452,20 @@ function ReviewDrawer({ paper, onClose, onSave }) {
             <dl>
               <div><dt>저널</dt><dd>{paper.journal}</dd></div>
               <div><dt>발행일</dt><dd>{formatDate(paper.publishedAt)}</dd></div>
-              <div><dt>서지 정보</dt><dd>Vol. {paper.volume}, Iss. {paper.issue}, {paper.pages}</dd></div>
+              <div><dt>서지 정보</dt><dd>{[
+                paper.volume && `Vol. ${paper.volume}`,
+                paper.issue && `Iss. ${paper.issue}`,
+                paper.pages,
+              ].filter(Boolean).join(', ') || 'Crossref 등록 정보 없음'}</dd></div>
               <div><dt>주제</dt><dd>{paper.topics.join(', ')}</dd></div>
+              <div><dt>DOI</dt><dd>{paper.doi || '등록 정보 없음'}</dd></div>
             </dl>
           </section>
         </div>
 
         <footer className="drawer-footer">
           <span className={saved ? 'save-status visible' : 'save-status'}><Check size={15} /> 저장되었습니다</span>
+          {paper.url && <a className="secondary-button" href={paper.url} target="_blank" rel="noreferrer"><ExternalLink size={16} /> 원문</a>}
           <button className="secondary-button" type="button" onClick={onClose}>닫기</button>
           <button className="primary-button" type="button" disabled={!score} onClick={handleSave}><Bookmark size={16} /> 평가 저장</button>
         </footer>

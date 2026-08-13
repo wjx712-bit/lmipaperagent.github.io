@@ -1,0 +1,103 @@
+name: Weekly Production Update
+
+on:
+  schedule:
+    # Sunday 09:00 KST = Sunday 00:00 UTC.
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  collect-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install collector dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Collect and score new papers
+        env:
+          LMI_CROSSREF_MAILTO: ${{ secrets.LMI_CROSSREF_MAILTO }}
+        run: >-
+          python -m paper_agent.run_weekly_update
+          --config-dir config
+          --catalog-file data/catalog/papers_table.csv
+          --reports-dir data/weekly_updates
+          --state-file data/weekly_collection_state.json
+          --web-labels-file data/reviews.csv
+          --lookback-days 14
+          --rows-per-query 1000
+          --max-pages 5
+          --pause-seconds 0.5
+
+      - name: Export website data
+        run: >-
+          python -m paper_agent.export_site_json
+          --catalog-file data/catalog/papers_table.csv
+          --state-file data/weekly_collection_state.json
+          --recommendations-file config/expert_recommendations.csv
+          --output public/data/papers.json
+          --since-days 365
+
+      - name: Commit collected data
+        run: |
+          git config user.name "lmi-paper-agent[bot]"
+          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
+          git add data/catalog data/weekly_updates data/weekly_collection_state.json public/data/papers.json
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "Update weekly paper catalog"
+            git push
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install website dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build website
+        run: pnpm build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: collect-and-build
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

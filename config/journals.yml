@@ -1,0 +1,128 @@
+journals:
+  - tier: "I"
+    priority_weight: 4
+    name: "Nature"
+    aliases: ["Nat"]
+    query_titles: ["Nature"]
+    issns: ["0028-0836", "1476-4687"]
+    start_year: 1869
+    active: true
+
+  - tier: "I"
+    priority_weight: 4
+    name: "Nature Immunology"
+    aliases: ["Nat Immunol"]
+    query_titles: ["Nature Immunology"]
+    issns: ["1529-2908", "1529-2916"]
+    start_year: 2000
+    active: true
+
+  - tier: "I"
+    priority_weight: 4
+    name: "Nature Communications"
+    aliases: ["Nat Comm"]
+    query_titles: ["Nature Communications"]
+    issns: ["2041-1723"]
+    start_year: 2010
+    active: true
+
+  - tier: "I"
+    priority_weight: 4
+    name: "Nature Aging"
+    aliases: ["Nat Aging"]
+    query_titles: ["Nature Aging"]
+    issns: ["2662-8465"]
+    start_year: 2021
+    active: true
+
+  - tier: "II"
+    priority_weight: 3
+    name: "Science"
+    aliases: ["Sci"]
+    query_titles: ["Science"]
+    issns: ["0036-8075", "1095-9203"]
+    start_year: 1880
+    active: true
+
+  - tier: "II"
+    priority_weight: 3
+    name: "Nature Metabolism"
+    aliases: ["Nat Meta"]
+    query_titles: ["Nature Metabolism"]
+    issns: ["2522-5812"]
+    start_year: 2019
+    active: true
+
+  - tier: "II"
+    priority_weight: 3
+    name: "Journal of Hepatology"
+    aliases: ["J Hepatol"]
+    query_titles: ["Journal of Hepatology"]
+    issns: ["0168-8278"]
+    start_year: 1985
+    active: true
+
+  - tier: "III"
+    priority_weight: 2
+    name: "Cell"
+    aliases: []
+    query_titles: ["Cell"]
+    issns: ["0092-8674"]
+    start_year: 1974
+    active: true
+
+  - tier: "III"
+    priority_weight: 2
+    name: "Cell Metabolism"
+    aliases: ["Cell Meta"]
+    query_titles: ["Cell Metabolism"]
+    issns: ["1550-4131"]
+    start_year: 2005
+    active: true
+
+  - tier: "III"
+    priority_weight: 2
+    name: "Journal of Clinical Investigation"
+    aliases: ["JCI"]
+    query_titles: ["Journal of Clinical Investigation", "JCI"]
+    issns: ["0021-9738", "1558-8238"]
+    start_year: 1924
+    active: true
+
+  - tier: "IV"
+    priority_weight: 1
+    name: "Nature Cell Biology"
+    aliases: ["Nat Cell Biol"]
+    query_titles: ["Nature Cell Biology"]
+    issns: ["1465-7392", "1476-4679"]
+    start_year: 1999
+    active: true
+
+  - tier: "IV"
+    priority_weight: 1
+    name: "Immunity"
+    aliases: ["Imm"]
+    query_titles: ["Immunity"]
+    issns: ["1074-7613"]
+    start_year: 1994
+    active: true
+
+  - tier: "IV"
+    priority_weight: 1
+    name: "Hepatology"
+    aliases: ["Hepatol"]
+    query_titles: ["Hepatology"]
+    issns: ["0270-9139", "1527-3350"]
+    start_year: 1981
+    active: true
+
+  - tier: "IV"
+    priority_weight: 1
+    name: "Nature Reviews Endocrinology"
+    aliases: ["Nat Endocrinol"]
+    query_titles: ["Nature Reviews Endocrinology"]
+    issns: ["1759-5029", "1759-5037"]
+    start_year: 2009
+    active: true
+    needs_confirmation: true
+    note: "Confirm whether Nat Endocrinol means Nature Reviews Endocrinology."

@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "data:export": "python -m paper_agent.export_site_json",
+    "test:collector": "python -m unittest discover -s tests -v"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

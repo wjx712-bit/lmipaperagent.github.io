@@ -1,0 +1,92 @@
+rubric:
+  name: "LMI paper relevance rubric"
+  version: "0.2"
+
+priority_levels:
+  - label: "must_read"
+    display: "Must read"
+    min_score: 18
+    lab_relevance: 3
+    meaning: "Lab meeting에서 바로 공유하거나 PI/구성원이 우선 검토할 논문"
+
+  - label: "worth_scanning"
+    display: "Worth scanning"
+    min_score: 10
+    lab_relevance: 2
+    meaning: "초록과 그림을 훑어볼 가치가 있는 논문"
+
+  - label: "archive_only"
+    display: "Archive only"
+    min_score: 5
+    lab_relevance: 1
+    meaning: "넓게 관련은 있지만 당장 읽을 우선순위는 낮은 논문"
+
+  - label: "not_relevant"
+    display: "Not relevant"
+    min_score: -999
+    lab_relevance: 0
+    meaning: "LMI 주제와 실질적으로 관련 없는 논문"
+
+feedback_labels:
+  must_read:
+    display: "Must read"
+    description: "직접 관련성이 높고 반드시 읽어야 함"
+  worth_scanning:
+    display: "Worth scanning"
+    description: "관련성이 있어 훑어볼 가치가 있음"
+  archive_only:
+    display: "Archive only"
+    description: "저장만 하고 우선순위는 낮음"
+  not_relevant:
+    display: "Not relevant"
+    description: "agent가 잘못 고른 논문"
+  exclude:
+    display: "Exclude"
+    description: "앞으로 같은 논문은 리포트에서 제외"
+
+themes:
+  liver_metabolism:
+    display: "Liver metabolism / MASLD"
+    keyword_groups: ["core_disease_context", "liver_axis", "lipid_metabolism"]
+
+  adipose_biology:
+    display: "Adipose tissue / adipocyte biology"
+    keyword_groups: ["adipose_axis", "lipid_metabolism"]
+
+  immune_inflammation:
+    display: "Inflammation / immune regulation"
+    keyword_groups: ["inflammation_immunity"]
+
+  aging_senescence:
+    display: "Aging / senescence"
+    keyword_groups: ["aging_senescence"]
+
+  omics_atlas:
+    display: "Single-cell / spatial / atlas"
+    keyword_groups: ["omics_and_atlas"]
+
+  therapy:
+    display: "Cell targeting / therapy"
+    keyword_groups: ["therapy_translation"]
+
+feedback_learning:
+  enabled: true
+
+  # Exact DOI/title feedback is intentionally strong.
+  exact_label_score_adjustment:
+    must_read: 100
+    worth_scanning: 20
+    archive_only: -4
+    not_relevant: -100
+    exclude: -1000
+
+  # These values nudge future papers sharing the same matched keyword groups.
+  label_group_delta:
+    must_read: 1.5
+    worth_scanning: 0.5
+    archive_only: -0.4
+    not_relevant: -1.2
+    exclude: -2.0
+
+  min_group_adjustment: -3
+  max_group_adjustment: 3

@@ -1,0 +1,137 @@
+lab:
+  name: "Lab of Metabolism and Inflammation"
+  short_name: "LMI"
+  institution: "Sogang University"
+  homepage: "https://lmi.sogang.ac.kr/"
+  mission: >
+    Understand dysregulated lipid metabolism and dysfunctional inflammatory
+    and immune responses in metabolic disease, obesity, diabetes, and MASLD/NAFLD.
+
+report:
+  title: "LMI Weekly Paper Digest"
+  language: "ko"
+  top_n: 15
+  include_threshold: 5
+  highlight_threshold: 11
+  include_uncertain_matches: true
+
+keyword_groups:
+  core_disease_context:
+    weight: 5
+    terms:
+      - "MASLD"
+      - "NAFLD"
+      - "NASH"
+      - "metabolic dysfunction-associated steatotic liver disease"
+      - "metabolic disease"
+      - "obesity"
+      - "diabetes"
+      - "insulin resistance"
+
+  liver_axis:
+    weight: 5
+    terms:
+      - "liver"
+      - "hepatic"
+      - "hepatocyte"
+      - "steatotic liver disease"
+      - "steatosis"
+      - "fibrosis"
+      - "stellate cell"
+      - "hepatic stellate cell"
+      - "liver macrophage"
+      - "Kupffer cell"
+
+  adipose_axis:
+    weight: 5
+    terms:
+      - "fat tissue"
+      - "adipose tissue"
+      - "white adipose tissue"
+      - "brown adipose tissue"
+      - "WAT"
+      - "BAT"
+      - "adipocyte"
+      - "adipocyte dysfunction"
+      - "adipose inflammation"
+      - "adipose tissue remodeling"
+      - "thermogenesis"
+      - "adipocyte mitochondria"
+      - "mitochondrial dysfunction"
+
+  lipid_metabolism:
+    weight: 4
+    terms:
+      - "lipid metabolism"
+      - "fatty acid metabolism"
+      - "fatty acid oxidation"
+      - "lipogenesis"
+      - "lipolysis"
+      - "hepatic lipid homeostasis"
+      - "ACSL1"
+      - "acyl-CoA synthetase long-chain family member 1"
+      - "TBK1"
+
+  inflammation_immunity:
+    weight: 4
+    terms:
+      - "inflammation"
+      - "chronic inflammation"
+      - "metabolic inflammation"
+      - "macrophage"
+      - "Treg"
+      - "regulatory T cell"
+      - "T cell"
+      - "immune response"
+      - "cell-to-cell interaction"
+      - "intercellular communication"
+
+  aging_senescence:
+    weight: 3
+    terms:
+      - "senescence"
+      - "cellular senescence"
+      - "hepatocyte senescence"
+      - "adipocyte senescence"
+      - "aging"
+      - "inflammaging"
+
+  omics_and_atlas:
+    weight: 3
+    terms:
+      - "single-cell RNA sequencing"
+      - "single cell RNA sequencing"
+      - "scRNA-seq"
+      - "snRNA-seq"
+      - "single-nucleus RNA sequencing"
+      - "spatial transcriptomics"
+      - "spatial sequencing"
+      - "spatial seq"
+      - "WATLAS"
+      - "WATLS"
+      - "white adipose tissue atlas"
+      - "adipose tissue atlas"
+      - "T cell WATLS"
+
+  therapy_translation:
+    weight: 2
+    terms:
+      - "therapeutic target"
+      - "cell targeting therapy"
+      - "cell-targeted therapy"
+      - "targeted delivery"
+      - "metabolic therapy"
+
+negative_keywords:
+  # 제목/초록에 아래 용어만 강하게 나타나면 낮은 우선순위로 내립니다.
+  - "plant"
+  - "crop"
+  - "bacteria only"
+  - "viral capsid"
+  - "structural astronomy"
+
+scoring:
+  title_multiplier: 2.0
+  abstract_multiplier: 1.0
+  journal_priority_multiplier: 1.0
+  require_at_least_one_core_group: false
