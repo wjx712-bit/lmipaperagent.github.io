@@ -1,0 +1,74 @@
+name: Paper Detail Analysis
+
+on:
+  schedule:
+    # Run every six hours; the job is skipped until OPENAI_API_KEY is configured.
+    - cron: "25 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      batch_count:
+        description: "Number of new batches to submit"
+        required: true
+        default: "2"
+      papers_per_batch:
+        description: "Papers in each batch"
+        required: true
+        default: "20"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-detail-analysis
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Discover, sync, and submit analysis batches
+        if: ${{ env.OPENAI_API_KEY != '' }}
+        env:
+          OPENAI_ANALYSIS_MODEL: ${{ vars.OPENAI_ANALYSIS_MODEL || 'gpt-5.6-terra' }}
+          BATCH_COUNT: ${{ inputs.batch_count || '2' }}
+          PAPERS_PER_BATCH: ${{ inputs.papers_per_batch || '20' }}
+        run: >-
+          python -m paper_agent.run_paper_analysis run-cycle
+          --batch-count "$BATCH_COUNT"
+          --papers-per-batch "$PAPERS_PER_BATCH"
+          --max-active-batches 8
+          --papers-file public/data/papers.json
+          --source-index data/paper_analysis/source_index.json
+          --batch-registry data/paper_analysis/batches.json
+          --analysis-dir public/data/analysis
+          --public-index public/data/analysis-index.json
+
+      - name: Commit analysis state and completed reports
+        run: |
+          git config user.name "lmi-paper-agent[bot]"
+          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
+          git add data/paper_analysis public/data/analysis-index.json public/data/analysis
+          if git diff --cached --quiet; then
+            echo "No analysis changes to commit."
+          else
+            git commit -m "Update structured paper analyses"
+            git push
+          fi
+
+      # The pushed commit triggers deploy-pages.yml.

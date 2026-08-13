@@ -8,3 +8,4 @@ preview.stdout.log
 preview.stderr.log
 __pycache__/
 *.py[cod]
+.cache/
