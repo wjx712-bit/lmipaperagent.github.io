@@ -8,15 +8,13 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: weekly-production-update
   cancel-in-progress: false
 
 jobs:
-  collect-and-build:
+  collect-and-publish-data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,18 +55,6 @@ jobs:
           --output public/data/papers.json
           --since-days 365
 
-      - name: Commit collected data
-        run: |
-          git config user.name "lmi-paper-agent[bot]"
-          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
-          git add data/catalog data/weekly_updates data/weekly_collection_state.json public/data/papers.json
-          if git diff --cached --quiet; then
-            echo "No data changes to commit."
-          else
-            git commit -m "Update weekly paper catalog"
-            git push
-          fi
-
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -83,21 +69,17 @@ jobs:
       - name: Build website
         run: pnpm build
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
+      - name: Commit collected data
+        run: |
+          git config user.name "lmi-paper-agent[bot]"
+          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
+          git add data/catalog data/weekly_updates data/weekly_collection_state.json public/data/papers.json
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "Update weekly paper catalog"
+            git push
+          fi
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: collect-and-build
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # The data commit above triggers deploy-pages.yml. Keeping collection and
+      # deployment in separate workflows avoids them cancelling one another.
