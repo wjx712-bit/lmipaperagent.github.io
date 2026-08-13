@@ -12,6 +12,7 @@
     "test:collector": "python -m unittest discover -s tests -v"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
     "react": "latest",

@@ -11,14 +11,15 @@ LMI 연구 주제 관련 논문을 14개 지정 저널에서 자동 수집하고
 - Ranking: `config/lab_profile.yml` 키워드 그룹과 `config/relevance_rubric.yml`
 - Schedule: `.github/workflows/weekly-production-update.yml`, Sunday 09:00 KST
 - Production data: rolling 365-day JSON, cumulative CSV catalog
-- Review persistence: browser `localStorage` only
+- Authentication: Supabase Google OAuth, administrator-approved membership
+- Review persistence: Supabase PostgreSQL with RLS; author and administrator only
 - Detail analysis: Europe PMC full text/abstract discovery, PMC OA figure packages, OpenAI Batch structured output
 - Analysis schedule: `.github/workflows/paper-analysis.yml`, resumable every six hours after `OPENAI_API_KEY` is configured
 - Current source inventory: 2,688 papers checked; 1,305 full text, 951 abstract, 432 public source unavailable
 
 ## Next milestone
 
-GitHub Secret `OPENAI_API_KEY`를 등록해 2,256편의 근거 기반 상세 분석 backfill을 시작합니다. 이후 Supabase를 연결해 로그인, 공동 리뷰 저장, 전문가 추천 관리, 리뷰 피드백의 다음 주 ranking 반영을 구현합니다. Service role key는 GitHub Secret에만 저장하고 프런트엔드에는 anon key만 사용해야 합니다.
+Supabase 프로젝트에 migration을 적용하고 Google provider 및 GitHub Repository variables를 등록해 인증을 활성화합니다. 이후 전문가 추천 관리와 리뷰 피드백의 다음 주 ranking 반영을 구현합니다. Service role key는 프런트엔드에 절대 포함하지 않습니다.
 
 ## Continue on another computer
 

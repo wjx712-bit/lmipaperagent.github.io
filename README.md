@@ -79,4 +79,29 @@ python -m paper_agent.run_paper_analysis run-cycle --batch-count 2 --papers-per-
 
 원문 XML과 figure 파일, Batch 입력은 `.cache/paper-analysis/`에만 저장되고 Git에는 올라가지 않습니다. 따라서 다른 컴퓨터에서도 저장소를 clone한 뒤 source index를 이용해 필요한 공개 원문만 다시 받아 이어갈 수 있습니다.
 
-현재 리뷰 점수와 노트는 브라우저별 `localStorage`에 저장됩니다. 여러 연구원이 같은 리뷰를 공유하는 운영 단계는 Supabase Auth와 PostgreSQL을 연결해 완성합니다.
+Supabase가 설정되기 전에는 리뷰가 브라우저별 `localStorage`에 임시 저장됩니다. 설정 후 승인된 계정으로 처음 로그인하면 해당 브라우저의 기존 리뷰가 본인 계정으로 한 번 이전됩니다.
+
+## Login and private reviews
+
+사이트는 Supabase Google Auth를 사용합니다. 신규 사용자는 `pending`으로 등록되고, 관리자가 승인한 뒤 본인 평가를 작성할 수 있습니다. 일반 사용자는 본인의 점수와 노트만 읽을 수 있으며, `wjx712@gmail.com` 관리자만 모든 개인 평가와 가입 요청을 볼 수 있습니다. 이 제한은 화면 코드가 아니라 PostgreSQL Row Level Security에서 강제됩니다.
+
+1. Supabase 프로젝트의 SQL Editor에서 `supabase/migrations/202608130001_auth_and_reviews.sql` 전체를 실행합니다.
+2. Supabase `Authentication > Providers > Google`에서 Google 로그인을 활성화합니다.
+3. Supabase `Authentication > URL Configuration`에 아래 주소를 등록합니다.
+
+```text
+Site URL: https://wjx712-bit.github.io/lmipaperagent.github.io/
+Redirect URL: https://wjx712-bit.github.io/lmipaperagent.github.io/
+Local redirect: http://localhost:5173/
+```
+
+4. GitHub `Settings > Secrets and variables > Actions > Variables`에 다음 두 Repository variable을 등록합니다.
+
+```text
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_OR_PUBLISHABLE_KEY
+```
+
+5. `Deploy GitHub Pages` workflow를 실행합니다. 관리자가 Google 로그인하면 자동 승인되며, 이후 `평가 관리` 화면에서 구성원을 승인하거나 차단할 수 있습니다.
+
+Supabase anon/publishable key는 브라우저에 포함되는 공개 키입니다. `service_role` key는 절대로 GitHub variable이나 프런트엔드에 등록하지 않습니다. 기존 브라우저 평가는 승인된 계정으로 첫 로그인할 때 한 번 자동 이전됩니다.

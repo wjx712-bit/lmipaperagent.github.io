@@ -15,14 +15,22 @@ import {
   FlaskConical,
   Layers3,
   LoaderCircle,
+  LogIn,
+  LogOut,
   Moon,
+  RefreshCw,
   Search,
+  ShieldCheck,
   Sparkles,
   Star,
   Sun,
+  UserRound,
   X,
 } from 'lucide-react';
 import './styles.css';
+import { AdminPanel } from './AdminPanel';
+import { supabase } from './supabase';
+import { useAuth } from './useAuth';
 
 const REVIEW_LABELS = {
   1: '제외',
@@ -82,6 +90,7 @@ function IconButton({ label, children, ...props }) {
 }
 
 function App() {
+  const auth = useAuth();
   const [dataset, setDataset] = useState({ generatedAt: null, source: {}, papers: [] });
   const [analysisIndex, setAnalysisIndex] = useState({ stats: {}, papers: {} });
   const [loading, setLoading] = useState(true);
@@ -94,6 +103,8 @@ function App() {
   const [sort, setSort] = useState('added');
   const [reviews, setReviews] = useState(getStoredReviews);
   const [selectedPaper, setSelectedPaper] = useState(null);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [reviewSyncError, setReviewSyncError] = useState('');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [theme, setTheme] = useState(() => localStorage.getItem('lmi-theme') || 'light');
@@ -120,6 +131,56 @@ function App() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('lmi-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (!auth.configured) {
+      setReviews(getStoredReviews());
+      return;
+    }
+    if (!auth.user || !auth.isApproved) {
+      setReviews({});
+      return;
+    }
+    let active = true;
+    async function loadAccountReviews() {
+      setReviewSyncError('');
+      const { data, error } = await supabase
+        .from('paper_reviews')
+        .select('paper_id,score,note,updated_at')
+        .eq('user_id', auth.user.id);
+      if (error) {
+        if (active) setReviewSyncError(error.message);
+        return;
+      }
+      const accountReviews = Object.fromEntries((data || []).map((review) => [
+        review.paper_id,
+        { score: review.score, note: review.note, updatedAt: review.updated_at },
+      ]));
+      const localReviews = getStoredReviews();
+      const missingLocalEntries = Object.entries(localReviews).filter(([paperId]) => !accountReviews[paperId]);
+      if (missingLocalEntries.length) {
+        const rows = missingLocalEntries.map(([paperId, review]) => ({
+          user_id: auth.user.id,
+          paper_id: paperId,
+          doi: dataset.papers.find((paper) => paper.id === paperId)?.doi || null,
+          score: review.score,
+          note: (review.note || '').slice(0, 2000),
+        }));
+        const { error: migrationError } = await supabase.from('paper_reviews').upsert(rows);
+        if (migrationError) {
+          if (active) setReviewSyncError(migrationError.message);
+          return;
+        }
+        missingLocalEntries.forEach(([paperId, review]) => {
+          accountReviews[paperId] = review;
+        });
+        localStorage.removeItem(STORAGE_KEY);
+      }
+      if (active) setReviews(accountReviews);
+    }
+    loadAccountReviews();
+    return () => { active = false; };
+  }, [auth.configured, auth.user?.id, auth.isApproved, dataset.papers]);
 
   const papers = useMemo(
     () => dataset.papers.map((paper) => ({
@@ -188,10 +249,23 @@ function App() {
     setMinimumAiScore(0);
   }
 
-  function saveReview(paperId, score, note) {
+  async function saveReview(paperId, score, note) {
     const next = { ...reviews, [paperId]: { score, note, updatedAt: new Date().toISOString() } };
+    if (auth.configured) {
+      if (!auth.user || !auth.isApproved) throw new Error('승인된 연구실 계정이 필요합니다.');
+      const paper = dataset.papers.find((item) => item.id === paperId);
+      const { error } = await supabase.from('paper_reviews').upsert({
+        user_id: auth.user.id,
+        paper_id: paperId,
+        doi: paper?.doi || null,
+        score,
+        note,
+      });
+      if (error) throw error;
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    }
     setReviews(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     setSelectedPaper((current) => current ? { ...current, reviewScore: score, reviewNote: note } : current);
   }
 
@@ -209,6 +283,7 @@ function App() {
         </nav>
         <div className="topbar-actions">
           <span className="sync-label"><Activity size={15} aria-hidden="true" /> {dataset.generatedAt ? `${formatDate(dataset.generatedAt)} 동기화` : '동기화 확인 중'}</span>
+          <AccountControl auth={auth} onAdmin={() => setAdminOpen(true)} />
           <IconButton label={theme === 'light' ? '다크 모드로 전환' : '라이트 모드로 전환'} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </IconButton>
@@ -291,6 +366,7 @@ function App() {
             <div className="paper-results">
               <div className="results-meta">
                 <span><strong>{filteredPapers.length.toLocaleString()}</strong>편 중 {visiblePapers.length.toLocaleString()}편 표시</span>
+                {reviewSyncError && <span className="review-sync-error">평가 동기화 오류</span>}
                 {activeFilterCount > 0 && <button type="button" onClick={resetFilters}>필터 초기화</button>}
               </div>
 
@@ -317,7 +393,8 @@ function App() {
         <span>GitHub Pages · 데이터 갱신 {dataset.generatedAt ? formatDate(dataset.generatedAt) : '확인 중'}</span>
       </footer>
 
-      {selectedPaper && <ReviewDrawer paper={selectedPaper} onClose={() => setSelectedPaper(null)} onSave={saveReview} />}
+      {selectedPaper && <ReviewDrawer paper={selectedPaper} auth={auth} onClose={() => setSelectedPaper(null)} onSave={saveReview} />}
+      {adminOpen && auth.isAdmin && <AdminPanel papers={papers} onClose={() => setAdminOpen(false)} />}
     </div>
   );
 }
@@ -391,11 +468,14 @@ function PaperRow({ paper, onOpen }) {
   );
 }
 
-function ReviewDrawer({ paper, onClose, onSave }) {
+function ReviewDrawer({ paper, auth, onClose, onSave }) {
   const [score, setScore] = useState(paper.reviewScore);
   const [note, setNote] = useState(paper.reviewNote || '');
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [activeView, setActiveView] = useState(paper.analysisMeta?.status === 'complete' ? 'analysis' : 'review');
+  const canReview = !auth.configured || auth.isApproved;
 
   useEffect(() => {
     function onKeyDown(event) {
@@ -409,11 +489,19 @@ function ReviewDrawer({ paper, onClose, onSave }) {
     };
   }, [onClose]);
 
-  function handleSave() {
+  async function handleSave() {
     if (!score) return;
-    onSave(paper.id, score, note.trim());
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1800);
+    setSaving(true);
+    setSaveError('');
+    try {
+      await onSave(paper.id, score, note.trim());
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 1800);
+    } catch (error) {
+      setSaveError(error.message || '평가를 저장하지 못했습니다.');
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -459,24 +547,30 @@ function ReviewDrawer({ paper, onClose, onSave }) {
                 </section>
               )}
 
-              <fieldset className="score-fieldset">
-                <legend>연구 관련성 점수</legend>
-                <p>1점은 제외, 5점은 필독입니다.</p>
-                <div className="score-options">
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <label key={value} className={score === value ? 'selected' : ''}>
-                      <input type="radio" name="review-score" value={value} checked={score === value} onChange={() => setScore(value)} />
-                      <strong>{value}</strong><span>{REVIEW_LABELS[value]}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
+              {canReview ? (
+                <>
+                  {!auth.configured && <p className="local-review-notice">현재 평가는 이 브라우저에만 저장됩니다.</p>}
+                  <fieldset className="score-fieldset">
+                    <legend>연구 관련성 점수</legend>
+                    <p>1점은 제외, 5점은 필독입니다.</p>
+                    <div className="score-options">
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <label key={value} className={score === value ? 'selected' : ''}>
+                          <input type="radio" name="review-score" value={value} checked={score === value} onChange={() => setScore(value)} />
+                          <strong>{value}</strong><span>{REVIEW_LABELS[value]}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
 
-              <div className="note-field">
-                <label htmlFor="review-note">리뷰 노트</label>
-                <textarea id="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength="800" placeholder="연구실에서 다시 볼 포인트, 실험 아이디어, 제외 근거를 기록하세요." />
-                <small>{note.length} / 800</small>
-              </div>
+                  <div className="note-field">
+                    <label htmlFor="review-note">리뷰 노트</label>
+                    <textarea id="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength="2000" placeholder="연구실에서 다시 볼 포인트, 실험 아이디어, 제외 근거를 기록하세요." />
+                    <small>{note.length} / 2000</small>
+                  </div>
+                </>
+              ) : <ReviewAccessMessage auth={auth} />}
+              {saveError && <p className="review-save-error"><CircleAlert size={15} /> {saveError}</p>}
             </>
           )}
 
@@ -497,12 +591,63 @@ function ReviewDrawer({ paper, onClose, onSave }) {
         </div>
 
         <footer className="drawer-footer">
-          {activeView === 'review' && <span className={saved ? 'save-status visible' : 'save-status'}><Check size={15} /> 저장되었습니다</span>}
+          {activeView === 'review' && canReview && <span className={saved ? 'save-status visible' : 'save-status'}><Check size={15} /> 저장되었습니다</span>}
           {paper.url && <a className="secondary-button" href={paper.url} target="_blank" rel="noreferrer"><ExternalLink size={16} /> 원문</a>}
           <button className="secondary-button" type="button" onClick={onClose}>닫기</button>
-          {activeView === 'review' && <button className="primary-button" type="button" disabled={!score} onClick={handleSave}><Bookmark size={16} /> 평가 저장</button>}
+          {activeView === 'review' && canReview && <button className="primary-button" type="button" disabled={!score || saving} onClick={handleSave}><Bookmark size={16} /> {saving ? '저장 중' : '평가 저장'}</button>}
         </footer>
       </section>
+    </div>
+  );
+}
+
+function ReviewAccessMessage({ auth }) {
+  if (!auth.user) {
+    return (
+      <section className="review-access-message">
+        <LogIn size={22} /><strong>평가하려면 연구실 계정으로 로그인하세요</strong>
+        <p>Google 로그인 후 관리자가 승인하면 개인 점수와 리뷰 노트를 저장할 수 있습니다.</p>
+        <button className="primary-button" type="button" onClick={auth.signInWithGoogle}>Google 로그인</button>
+      </section>
+    );
+  }
+  if (auth.profile?.status === 'blocked') {
+    return <section className="review-access-message blocked"><CircleAlert size={22} /><strong>사용이 제한된 계정입니다</strong><p>연구실 관리자에게 계정 상태를 문의해 주세요.</p></section>;
+  }
+  return (
+    <section className="review-access-message">
+      <UserRound size={22} /><strong>관리자 승인 대기 중입니다</strong>
+      <p>{auth.user.email} 계정의 가입 요청이 전달되었습니다.</p>
+      <button className="secondary-button" type="button" onClick={auth.refreshProfile}><RefreshCw size={15} /> 승인 상태 확인</button>
+    </section>
+  );
+}
+
+function AccountControl({ auth, onAdmin }) {
+  const [open, setOpen] = useState(false);
+  if (auth.loading) return <span className="account-loading"><LoaderCircle size={17} /></span>;
+  if (!auth.configured) return <span className="account-setup" title="Supabase 환경 변수를 설정하면 로그인이 활성화됩니다">로그인 준비 중</span>;
+  if (!auth.user) {
+    return <button className="login-button" type="button" onClick={auth.signInWithGoogle}><LogIn size={16} /> Google 로그인</button>;
+  }
+
+  const name = auth.profile?.display_name || auth.user.user_metadata?.full_name || auth.user.email;
+  const avatar = auth.profile?.avatar_url || auth.user.user_metadata?.avatar_url;
+  return (
+    <div className="account-control">
+      <button className="account-button" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+        {avatar ? <img src={avatar} alt="" referrerPolicy="no-referrer" /> : <UserRound size={17} />}
+        <span>{name}</span>
+        <small>{auth.isAdmin ? '관리자' : auth.profile?.status === 'approved' ? '승인됨' : auth.profile?.status === 'blocked' ? '차단됨' : '승인 대기'}</small>
+      </button>
+      {open && (
+        <div className="account-menu">
+          <div><strong>{name}</strong><span>{auth.user.email}</span></div>
+          {auth.isAdmin && <button type="button" onClick={() => { setOpen(false); onAdmin(); }}><ShieldCheck size={16} /> 평가 관리</button>}
+          {auth.profile?.status === 'pending' && <button type="button" onClick={auth.refreshProfile}><RefreshCw size={16} /> 승인 상태 확인</button>}
+          <button type="button" onClick={auth.signOut}><LogOut size={16} /> 로그아웃</button>
+        </div>
+      )}
     </div>
   );
 }
