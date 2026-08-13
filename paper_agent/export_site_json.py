@@ -36,17 +36,21 @@ def main() -> None:
     parser.add_argument("--catalog-file", default="data/catalog/papers_table.csv")
     parser.add_argument("--state-file", default="data/weekly_collection_state.json")
     parser.add_argument("--recommendations-file", default="config/expert_recommendations.csv")
+    parser.add_argument("--source-index", default="data/paper_analysis/source_index.json")
     parser.add_argument("--output", default="public/data/papers.json")
     parser.add_argument("--since-days", type=int, default=365)
     parser.add_argument("--as-of", type=date.fromisoformat, default=None)
+    parser.add_argument("--include-missing-abstracts", action="store_true")
     args = parser.parse_args()
 
     payload = build_site_payload(
         catalog_path=Path(args.catalog_file),
         state_path=Path(args.state_file),
         recommendations_path=Path(args.recommendations_file),
+        source_index_path=Path(args.source_index),
         since_days=args.since_days,
         as_of=args.as_of,
+        include_missing_abstracts=args.include_missing_abstracts,
     )
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -64,13 +68,16 @@ def build_site_payload(
     catalog_path: Path,
     state_path: Path | None = None,
     recommendations_path: Path | None = None,
+    source_index_path: Path | None = None,
     since_days: int = 365,
     as_of: date | None = None,
+    include_missing_abstracts: bool = False,
 ) -> dict:
     as_of = as_of or date.today()
     cutoff = as_of - timedelta(days=max(since_days, 1))
     state = _load_json(state_path)
     recommendations = _load_recommendations(recommendations_path)
+    source_index = _load_json(source_index_path).get("papers", {})
 
     with catalog_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -82,7 +89,9 @@ def build_site_payload(
             continue
         if is_excluded_publication(_clean(row.get("title", "")), _clean(row.get("doi", ""))):
             continue
-        papers.append(_paper_payload(row, published_at, recommendations))
+        paper = _paper_payload(row, published_at, recommendations, source_index)
+        if include_missing_abstracts or paper["abstract"]:
+            papers.append(paper)
 
     papers.sort(key=lambda paper: (paper["addedAt"], paper["publishedAt"], paper["aiScore"]), reverse=True)
     generated_at = state.get("completed_at") or datetime.now(timezone.utc).isoformat()
@@ -94,18 +103,26 @@ def build_site_payload(
             "lastRunStatus": state.get("status", "unknown"),
             "lastRunNewCount": state.get("new_count", 0),
             "monitoredJournalCount": len({paper["journal"] for paper in papers}),
+            "abstractCount": sum(1 for paper in papers if paper["abstract"]),
         },
         "papers": papers,
     }
 
 
-def _paper_payload(row: dict[str, str], published_at: date, recommendations: dict[str, dict]) -> dict:
+def _paper_payload(
+    row: dict[str, str],
+    published_at: date,
+    recommendations: dict[str, dict],
+    source_index: dict[str, dict],
+) -> dict:
     doi = _clean(row.get("doi", "")).lower()
     title = _clean(row.get("title", ""))
     stable_id = doi or hashlib.sha256(
         f"{row.get('journal', '')}|{published_at.isoformat()}|{title}".encode("utf-8")
     ).hexdigest()[:24]
     recommendation = recommendations.get(doi)
+    source = source_index.get(stable_id, {})
+    abstract = _clean(source.get("abstract", "")) or _clean(row.get("abstract", ""))
     raw_score = _float(row.get("score"))
     matched_terms = _clean(row.get("matched_terms", ""))
     topics = _split(row.get("themes", ""))
@@ -124,7 +141,8 @@ def _paper_payload(row: dict[str, str], published_at: date, recommendations: dic
         "volume": _clean(row.get("volume", "")),
         "issue": _clean(row.get("issue", "")),
         "pages": _clean(row.get("pages", "")),
-        "abstract": _clean(row.get("abstract", "")),
+        "abstract": abstract,
+        "abstractSourceUrl": _clean(source.get("sourceUrl", "")),
         "topics": topics,
         "aiScore": _display_score(raw_score),
         "relevanceRaw": raw_score,

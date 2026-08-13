@@ -46,24 +46,36 @@ jobs:
           --max-pages 5
           --pause-seconds 0.5
 
-      - name: Export website data
+      - name: Export abstract discovery candidates
         run: >-
           python -m paper_agent.export_site_json
           --catalog-file data/catalog/papers_table.csv
           --state-file data/weekly_collection_state.json
           --recommendations-file config/expert_recommendations.csv
+          --source-index data/paper_analysis/source_index.json
           --output public/data/papers.json
           --since-days 365
+          --include-missing-abstracts
 
-      - name: Discover analysis sources for new papers
+      - name: Collect abstracts for new papers
         run: >-
           python -m paper_agent.run_paper_analysis discover
           --papers-file public/data/papers.json
           --source-index data/paper_analysis/source_index.json
-          --public-index public/data/analysis-index.json
+          --skip-public-index
           --retry-days 14
           --batch-size 20
           --pause-seconds 0.1
+
+      - name: Publish papers with abstracts
+        run: >-
+          python -m paper_agent.export_site_json
+          --catalog-file data/catalog/papers_table.csv
+          --state-file data/weekly_collection_state.json
+          --recommendations-file config/expert_recommendations.csv
+          --source-index data/paper_analysis/source_index.json
+          --output public/data/papers.json
+          --since-days 365
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -83,7 +95,7 @@ jobs:
         run: |
           git config user.name "lmi-paper-agent[bot]"
           git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
-          git add data/catalog data/weekly_updates data/weekly_collection_state.json data/paper_analysis/source_index.json public/data/papers.json public/data/analysis-index.json
+          git add data/catalog data/weekly_updates data/weekly_collection_state.json data/paper_analysis/source_index.json public/data/papers.json
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else

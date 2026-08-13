@@ -13,7 +13,6 @@ import {
   FileText,
   Filter,
   FlaskConical,
-  Layers3,
   LoaderCircle,
   LogIn,
   LogOut,
@@ -92,7 +91,6 @@ function IconButton({ label, children, ...props }) {
 function App() {
   const auth = useAuth();
   const [dataset, setDataset] = useState({ generatedAt: null, source: {}, papers: [] });
-  const [analysisIndex, setAnalysisIndex] = useState({ stats: {}, papers: {} });
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [query, setQuery] = useState('');
@@ -110,19 +108,12 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('lmi-theme') || 'light');
 
   useEffect(() => {
-    Promise.all([
-      fetch('./data/papers.json').then((response) => {
+    fetch('./data/papers.json')
+      .then((response) => {
         if (!response.ok) throw new Error('Data request failed');
         return response.json();
-      }),
-      fetch('./data/analysis-index.json')
-        .then((response) => response.ok ? response.json() : { stats: {}, papers: {} })
-        .catch(() => ({ stats: {}, papers: {} })),
-    ])
-      .then(([paperData, analysisData]) => {
-        setDataset(paperData);
-        setAnalysisIndex(analysisData);
       })
+      .then(setDataset)
       .catch(() => setLoadError(true))
       .finally(() => setLoading(false));
   }, []);
@@ -187,9 +178,8 @@ function App() {
       ...paper,
       reviewScore: reviews[paper.id]?.score ?? paper.seedReviewScore ?? null,
       reviewNote: reviews[paper.id]?.note ?? '',
-      analysisMeta: analysisIndex.papers[paper.id] ?? { status: 'pending_source' },
     })),
-    [dataset.papers, reviews, analysisIndex.papers],
+    [dataset.papers, reviews],
   );
 
   const journals = useMemo(() => [...new Set(papers.map((paper) => paper.journalShort))].sort(), [papers]);
@@ -198,7 +188,7 @@ function App() {
   const filteredPapers = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const result = papers.filter((paper) => {
-      const haystack = [paper.title, paper.journal, paper.authors.join(' '), paper.topics.join(' ')].join(' ').toLowerCase();
+      const haystack = [paper.title, paper.journal, paper.authors.join(' '), paper.topics.join(' '), paper.abstract].join(' ').toLowerCase();
       const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
       const matchesJournal = !selectedJournals.length || selectedJournals.includes(paper.journalShort);
       const matchesTopic = !selectedTopics.length || selectedTopics.some((topic) => paper.topics.includes(topic));
@@ -297,7 +287,7 @@ function App() {
             <h1 id="archive-title">이번 주 연구 흐름을<br />한눈에 검토하세요.</h1>
             <p>지정 저널에서 수집한 논문을 연구 관련도와 연구실 평가로 선별합니다.</p>
           </div>
-          <span className="data-badge"><Activity size={13} /> 실제 수집 {papers.length.toLocaleString()}편 · 상세 분석 {(analysisIndex.stats.complete || 0).toLocaleString()}편</span>
+          <span className="data-badge"><Activity size={13} /> 초록 확보 {papers.length.toLocaleString()}편</span>
         </section>
 
         <section className="stats-grid" aria-label="논문 통계">
@@ -332,7 +322,7 @@ function App() {
               <select value={sort} onChange={(event) => setSort(event.target.value)}>
                 <option value="added">최근 수집순</option>
                 <option value="published">최신 발행순</option>
-                <option value="ai">AI 관련도순</option>
+                <option value="ai">주제 관련도순</option>
                 <option value="score">연구실 평가순</option>
               </select>
               <ChevronDown size={15} aria-hidden="true" />
@@ -420,9 +410,9 @@ function FilterPanel({ className, journals, topics, selectedJournals, selectedTo
       <FilterGroup title="연구 주제">
         {topics.map((topic) => <CheckOption key={topic} label={topic} checked={selectedTopics.includes(topic)} onChange={() => onTopic(topic)} />)}
       </FilterGroup>
-      <FilterGroup title="AI 관련도">
+      <FilterGroup title="주제 관련도">
         <div className="range-label"><span>최소 점수</span><strong>{minimumAiScore || '전체'}</strong></div>
-        <input className="range" type="range" min="0" max="100" step="5" value={minimumAiScore} onChange={(event) => onMinimumAiScore(Number(event.target.value))} aria-label="최소 AI 관련도" />
+        <input className="range" type="range" min="0" max="100" step="5" value={minimumAiScore} onChange={(event) => onMinimumAiScore(Number(event.target.value))} aria-label="최소 주제 관련도" />
       </FilterGroup>
       <button className="reset-button" type="button" onClick={onReset}>전체 필터 초기화</button>
     </aside>
@@ -452,11 +442,11 @@ function PaperRow({ paper, onOpen }) {
         <p className="abstract">{paper.abstract || paper.aiReason}</p>
         <div className="paper-tags">
           <div className="topic-list">{paper.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
-          <AnalysisStatus status={paper.analysisMeta?.status} evidenceLevel={paper.analysisMeta?.evidenceLevel} compact />
+          <span className="abstract-status">Abstract</span>
         </div>
       </button>
       <div className="paper-metrics">
-        <div className="metric ai"><span>AI 관련도</span><strong>{paper.aiScore}</strong><small>/ 100</small></div>
+        <div className="metric ai"><span>주제 관련도</span><strong>{paper.aiScore}</strong><small>/ 100</small></div>
         <div className={`metric human ${scoreTone(paper.reviewScore)}`}>
           <span>연구실 평가</span>
           <strong>{paper.reviewScore ?? '–'}</strong>
@@ -474,7 +464,7 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
-  const [activeView, setActiveView] = useState(paper.analysisMeta?.status === 'complete' ? 'analysis' : 'review');
+  const [activeView, setActiveView] = useState('abstract');
   const canReview = !auth.configured || auth.isApproved;
 
   useEffect(() => {
@@ -516,28 +506,28 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
           <div className="drawer-paper">
             <div className="drawer-paper-meta">
               <span className="journal-chip">{paper.journalShort}</span>
-              <AnalysisStatus status={paper.analysisMeta?.status} evidenceLevel={paper.analysisMeta?.evidenceLevel} compact />
+              <span className="abstract-status">Abstract 확보</span>
             </div>
             <h3>{paper.title}</h3>
             <p>{paper.authors.join(', ')}</p>
           </div>
 
           <div className="drawer-tabs" role="tablist" aria-label="논문 상세 보기">
-            <button type="button" role="tab" aria-selected={activeView === 'analysis'} className={activeView === 'analysis' ? 'active' : ''} onClick={() => setActiveView('analysis')}>
-              <Layers3 size={16} /> 상세 분석
+            <button type="button" role="tab" aria-selected={activeView === 'abstract'} className={activeView === 'abstract' ? 'active' : ''} onClick={() => setActiveView('abstract')}>
+              <BookOpen size={16} /> Abstract
             </button>
             <button type="button" role="tab" aria-selected={activeView === 'review'} className={activeView === 'review' ? 'active' : ''} onClick={() => setActiveView('review')}>
               <FileText size={16} /> 연구실 평가
             </button>
           </div>
 
-          {activeView === 'analysis' ? (
-            <PaperAnalysis paper={paper} />
+          {activeView === 'abstract' ? (
+            <PaperAbstract paper={paper} />
           ) : (
             <>
               <section className="ai-assessment">
                 <div className="ai-score"><Sparkles size={18} /><strong>{paper.aiScore}</strong><span>/ 100</span></div>
-                <div><h4>AI 선별 근거</h4><p>{paper.aiReason}</p></div>
+                <div><h4>주제 선별 근거</h4><p>{paper.aiReason}</p></div>
               </section>
 
               {paper.recommendedBy && (
@@ -652,144 +642,20 @@ function AccountControl({ auth, onAdmin }) {
   );
 }
 
-function AnalysisStatus({ status = 'pending_source', evidenceLevel, compact = false }) {
-  const labels = {
-    complete: evidenceLevel === 'full_text' ? '전문 분석 완료' : '초록 분석 완료',
-    submitted: 'AI 분석 중',
-    prepared: '배치 준비됨',
-    ready: evidenceLevel === 'full_text' ? '공개 전문 확보' : '초록 확보',
-    source_unavailable: '출처 확보 필요',
-    pending_source: '출처 확인 대기',
-  };
-  return <span className={`analysis-status ${status} ${compact ? 'compact' : ''}`}>{labels[status] || '분석 대기'}</span>;
-}
-
-function PaperAnalysis({ paper }) {
-  const meta = paper.analysisMeta || { status: 'pending_source' };
-  const [payload, setPayload] = useState(null);
-  const [state, setState] = useState(meta.status === 'complete' ? 'loading' : meta.status);
-
-  useEffect(() => {
-    let cancelled = false;
-    if (meta.status !== 'complete' || !meta.analysisPath) {
-      setPayload(null);
-      setState(meta.status);
-      return () => { cancelled = true; };
-    }
-    setState('loading');
-    fetch(`./data/${meta.analysisPath}`)
-      .then((response) => {
-        if (!response.ok) throw new Error('Analysis request failed');
-        return response.json();
-      })
-      .then((data) => {
-        if (!cancelled) {
-          setPayload(data);
-          setState('complete');
-        }
-      })
-      .catch(() => !cancelled && setState('error'));
-    return () => { cancelled = true; };
-  }, [paper.id, meta.analysisPath, meta.status]);
-
-  if (state === 'loading') {
-    return <div className="analysis-message"><LoaderCircle className="spin" size={22} /><strong>상세 분석을 불러오는 중입니다</strong></div>;
-  }
-
-  if (state !== 'complete' || !payload?.analysis) {
-    const messages = {
-      submitted: ['구조화 분석을 생성하고 있습니다', 'OpenAI Batch가 끝나면 이 화면에 자동으로 반영됩니다.'],
-      prepared: ['분석 배치가 준비되었습니다', '배치를 제출하면 전문 또는 초록을 근거로 분석을 시작합니다.'],
-      ready: ['분석 가능한 출처를 확보했습니다', `${meta.evidenceLevel === 'full_text' ? '공개 전문과 figure caption' : '초록'}을 기준으로 분석할 차례입니다.`],
-      source_unavailable: ['분석 출처를 추가로 확보해야 합니다', 'Europe PMC에서 공개 전문이나 초록을 찾지 못했습니다. 원문 링크에서 수동 확인할 수 있습니다.'],
-      pending_source: ['논문 출처 확인 대기 중입니다', 'DOI를 기준으로 공개 전문과 초록을 순차 확인합니다.'],
-      error: ['상세 분석을 불러오지 못했습니다', '분석 파일과 공개 인덱스의 경로를 확인해 주세요.'],
-    };
-    const [title, detail] = messages[state] || messages.pending_source;
-    return (
-      <div className="analysis-message">
-        <BookOpen size={24} />
-        <strong>{title}</strong>
-        <p>{detail}</p>
-        <AnalysisStatus status={state === 'error' ? 'pending_source' : state} evidenceLevel={meta.evidenceLevel} />
-      </div>
-    );
-  }
-
-  const analysis = payload.analysis;
+function PaperAbstract({ paper }) {
   return (
-    <div className="analysis-report">
-      <div className="analysis-provenance">
+    <article className="abstract-report">
+      <header>
         <div>
-          <AnalysisStatus status="complete" evidenceLevel={payload.source?.evidenceLevel} />
-          <span>{payload.source?.evidenceLevel === 'full_text' ? '본문·figure caption 근거' : '초록에서 확인 가능한 범위만 분석'}</span>
+          <span className="abstract-status">Published abstract</span>
+          <span>원문 제공 초록</span>
         </div>
-        {payload.source?.url && <a href={payload.source.url} target="_blank" rel="noreferrer">분석 출처 <ExternalLink size={13} /></a>}
-      </div>
-
-      <AnalysisSection number="01" title="Research background"><p>{analysis.research_background}</p></AnalysisSection>
-      <AnalysisSection number="02" title="Main question"><p>{analysis.main_question}</p></AnalysisSection>
-      <AnalysisSection number="03" title="Hypothesis"><p>{analysis.hypothesis}</p></AnalysisSection>
-      <AnalysisSection number="04" title="Experimental models">
-        <div className="model-list">
-          {analysis.experimental_models.length ? analysis.experimental_models.map((item, index) => (
-            <div key={`${item.model}-${index}`}><strong>{item.model}</strong><p>{item.details}</p></div>
-          )) : <p>제공된 출처에서 확인되지 않았습니다.</p>}
-        </div>
-      </AnalysisSection>
-      <AnalysisSection number="05" title="Methods"><TextList items={analysis.methods} /></AnalysisSection>
-      <AnalysisSection number="06" title="Key results">
-        <ol className="result-list">
-          {analysis.key_results.map((item, index) => (
-            <li key={`${item.finding}-${index}`}>
-              <strong>{item.finding}</strong>
-              <p>{item.evidence}</p>
-              {item.figures?.length > 0 && <span>{item.figures.join(', ')}</span>}
-            </li>
-          ))}
-        </ol>
-      </AnalysisSection>
-      <AnalysisSection number="07" title="Summary"><p className="lead-summary">{analysis.summary}</p></AnalysisSection>
-      <AnalysisSection number="08" title="Conclusion"><p>{analysis.conclusion}</p></AnalysisSection>
-      <AnalysisSection number="09" title="Limitations"><TextList items={analysis.limitations} /></AnalysisSection>
-      <AnalysisSection number="10" title="Figure-by-figure analysis">
-        {analysis.figure_by_figure_analysis.length ? (
-          <div className="figure-analysis-list">
-            {analysis.figure_by_figure_analysis.map((figure, index) => (
-              <details key={`${figure.figure}-${index}`} open={index === 0}>
-                <summary><span>{figure.figure}</span><small>근거 신뢰도 {confidenceLabel(figure.confidence)}</small><ChevronDown size={16} /></summary>
-                <dl>
-                  <div><dt>Question</dt><dd>{figure.question}</dd></div>
-                  <div><dt>Approach</dt><dd>{figure.approach}</dd></div>
-                  <div><dt>Result</dt><dd>{figure.result}</dd></div>
-                  <div><dt>Interpretation</dt><dd>{figure.interpretation}</dd></div>
-                </dl>
-              </details>
-            ))}
-          </div>
-        ) : <p>초록 기반 분석에서는 figure별 근거를 제공하지 않습니다.</p>}
-      </AnalysisSection>
-      {analysis.source_caveats?.length > 0 && (
-        <section className="source-caveats">
-          <h4>분석 시 주의사항</h4>
-          <TextList items={analysis.source_caveats} />
-        </section>
-      )}
-    </div>
+        {paper.abstractSourceUrl && <a href={paper.abstractSourceUrl} target="_blank" rel="noreferrer">초록 출처 <ExternalLink size={13} /></a>}
+      </header>
+      <h4>Abstract</h4>
+      <p>{paper.abstract}</p>
+    </article>
   );
-}
-
-function AnalysisSection({ number, title, children }) {
-  return <section className="analysis-section"><header><span>{number}</span><h4>{title}</h4></header>{children}</section>;
-}
-
-function TextList({ items = [] }) {
-  if (!items.length) return <p>제공된 출처에서 확인되지 않았습니다.</p>;
-  return <ul className="analysis-list">{items.map((item, index) => <li key={`${item}-${index}`}>{item}</li>)}</ul>;
-}
-
-function confidenceLabel(confidence) {
-  return { high: '높음', medium: '보통', low: '낮음' }[confidence] || '미확인';
 }
 
 function EmptyState({ icon: Icon, title, detail }) {

@@ -4,6 +4,7 @@ dist/
 *.local
 vite.stdout.log
 vite.stderr.log
+vite-abstract.*.log
 preview.stdout.log
 preview.stderr.log
 __pycache__/

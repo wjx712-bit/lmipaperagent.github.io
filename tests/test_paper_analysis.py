@@ -3,7 +3,10 @@ import unittest
 
 from paper_agent.analysis_schema import validate_analysis
 from paper_agent.europe_pmc import article_text, extract_article
-from paper_agent.openai_batch import make_batch_request, parse_batch_output_line
+from paper_agent.openai_batch import (
+    make_batch_request,
+    parse_batch_output_line,
+)
 
 
 ARTICLE_XML = """<?xml version="1.0" encoding="UTF-8"?>
@@ -109,7 +112,6 @@ class BatchFormattingTests(unittest.TestCase):
             "abstract-only analysis must not include figure analysis",
             validate_analysis(analysis),
         )
-
 
 def valid_analysis():
     return {

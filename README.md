@@ -8,7 +8,7 @@ LMI 연구 주제와 관련된 논문을 지정 저널에서 수집하고, 공�
 2. Crossref 메타데이터를 LMI rubric으로 평가하고 DOI 기준으로 중복을 제거합니다.
 3. 누적 카탈로그와 최근 1년 웹 데이터가 갱신됩니다.
 4. 데이터 커밋이 별도 Pages workflow를 호출해 사이트를 배포합니다.
-5. Europe PMC에서 공개 전문·초록 가능 여부를 판정하고 상세 분석 대기열을 갱신합니다.
+5. Europe PMC에서 초록을 보강하고, 실제 초록이 확보된 논문만 사이트에 게시합니다.
 
 감시 저널과 연구 키워드는 각각 `config/journals.yml`, `config/lab_profile.yml`에서 수정합니다. 교수·박사 추천은 `config/expert_recommendations.csv`에 DOI, 이름, 역할, 메모를 추가하면 사이트에 표시됩니다.
 
@@ -35,36 +35,23 @@ pnpm build
 
 GitHub의 `Actions > Weekly Production Update > Run workflow`에서 즉시 실행할 수 있습니다. Crossref polite pool 사용을 위해 저장소 Secret `LMI_CROSSREF_MAILTO`에 연락용 이메일을 등록하는 것을 권장합니다.
 
-## Structured paper analysis
+## Abstract publishing
 
-상세 분석은 원문 근거 수준을 숨기지 않습니다.
+사이트는 생성형 AI 상세 분석 대신 출판사가 제공한 원문 초록을 게시합니다. OpenAI API를 호출하지 않으므로 초록 수집과 게시에는 OpenAI 비용이 들지 않습니다.
 
-- `full_text`: Europe PMC 공개 본문, figure caption, PMC Open Access package의 figure 이미지를 사용합니다.
-- `abstract`: 초록에 명시된 범위만 분석하며 figure별 분석은 생성하지 않습니다.
-- `source_unavailable`: 현재 공개 전문이나 초록이 없어 분석을 보류합니다.
+- Crossref가 제공한 초록은 수집 시 운영 카탈로그에 보존합니다.
+- Europe PMC에서 DOI 기준으로 초록을 추가 확보합니다.
+- 두 출처 모두에서 초록을 확보하지 못한 논문은 공개 사이트에서 제외합니다.
+- DOI 원문 링크와 Europe PMC 초록 출처 링크를 함께 제공합니다.
 
-분석 결과에는 Research background, main question, hypothesis, experimental models, methods, key results, summary, conclusion, limitations, figure-by-figure analysis와 DOI 원문 링크가 포함됩니다. OpenAI Structured Outputs로 스키마를 고정하고, Batch API의 `custom_id`로 응답 순서와 관계없이 각 DOI에 결과를 연결합니다.
-
-GitHub 저장소의 `Settings > Secrets and variables > Actions`에서 Secret `OPENAI_API_KEY`를 등록하면 `Paper Detail Analysis` workflow가 6시간마다 미완료 논문을 재개합니다. 키는 코드, CSV, 채팅에 넣지 않습니다. 모델을 바꿀 때는 Repository variable `OPENAI_ANALYSIS_MODEL`을 설정합니다.
-
-로컬에서 단계별로 실행할 수도 있습니다.
+로컬에서 초록을 다시 수집하고 사이트 데이터를 내보낼 수 있습니다.
 
 ```powershell
 python -m paper_agent.run_paper_analysis discover
-python -m paper_agent.run_paper_analysis build-batch --limit 10 --evidence-level full_text
-$env:OPENAI_API_KEY = "your-key"
-python -m paper_agent.run_paper_analysis submit-batch --input .cache/paper-analysis/batch_inputs/<batch>.jsonl
-python -m paper_agent.run_paper_analysis sync-batches
-python -m paper_agent.run_paper_analysis status
+python -m paper_agent.export_site_json
 ```
 
-대규모 초기 적재는 `run-cycle`이 출처 재확인, 완료 Batch 회수, 새 Batch 제출을 한 번에 수행합니다.
-
-```powershell
-python -m paper_agent.run_paper_analysis run-cycle --batch-count 2 --papers-per-batch 20
-```
-
-공개 출처 검색은 [Europe PMC REST API](https://europepmc.org/RestfulWebService), figure package는 [PMC OA Web Service](https://pmc.ncbi.nlm.nih.gov/tools/oa-service/), 비동기 분석은 [OpenAI Batch API](https://developers.openai.com/api/docs/guides/batch)를 사용합니다.
+공개 초록 검색은 [Europe PMC REST API](https://europepmc.org/RestfulWebService)를 사용합니다.
 
 ## Data files
 
@@ -72,12 +59,9 @@ python -m paper_agent.run_paper_analysis run-cycle --batch-count 2 --papers-per-
 - `data/weekly_updates/`: 실행일별 신규 논문
 - `data/weekly_collection_state.json`: 마지막 실행 상태와 수집 건수
 - `public/data/papers.json`: 웹사이트가 읽는 최근 1년 데이터
-- `data/paper_analysis/source_index.json`: 2,688편의 출처·분석 진행 상태
-- `data/paper_analysis/batches.json`: 제출한 Batch와 회수 상태
-- `public/data/analysis-index.json`: 웹사이트용 상세 분석 상태 인덱스
-- `public/data/analysis/`: 완료된 논문별 구조화 분석 JSON
+- `data/paper_analysis/source_index.json`: DOI별 초록과 출처 정보
 
-원문 XML과 figure 파일, Batch 입력은 `.cache/paper-analysis/`에만 저장되고 Git에는 올라가지 않습니다. 따라서 다른 컴퓨터에서도 저장소를 clone한 뒤 source index를 이용해 필요한 공개 원문만 다시 받아 이어갈 수 있습니다.
+수집 캐시는 `.cache/paper-analysis/`에만 저장되며 Git에는 올라가지 않습니다. 게시에 필요한 초록은 source index에 보존되므로 다른 컴퓨터에서도 저장소를 clone해 그대로 이어갈 수 있습니다.
 
 Supabase가 설정되기 전에는 리뷰가 브라우저별 `localStorage`에 임시 저장됩니다. 설정 후 승인된 계정으로 처음 로그인하면 해당 브라우저의 기존 리뷰가 본인 계정으로 한 번 이전됩니다.
 

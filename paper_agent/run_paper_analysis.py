@@ -74,6 +74,7 @@ def build_parser() -> argparse.ArgumentParser:
     discover.add_argument("--retry-days", type=int, default=14)
     discover.add_argument("--refresh", action="store_true")
     discover.add_argument("--pause-seconds", type=float, default=0.1)
+    discover.add_argument("--skip-public-index", action="store_true")
 
     build = subparsers.add_parser("build-batch", help="Fetch source material and create an OpenAI Batch JSONL file.")
     add_common_paths(build)
@@ -129,18 +130,50 @@ def discover_sources(args: argparse.Namespace) -> None:
     now = utc_now()
     retry_before = datetime.now(timezone.utc) - timedelta(days=max(args.retry_days, 0))
     due: list[dict] = []
+    index_changed = False
     for paper in papers:
         doi = normalize_doi(paper.get("doi"))
         if not doi:
             continue
         existing = index["papers"].get(paper["id"])
-        if args.refresh or not existing or is_retry_due(existing, retry_before):
+        cached = load_json(source_cache_path(args.cache_dir, paper["id"]), {})
+        if (
+            not args.refresh
+            and existing
+            and existing.get("status") in {"not_found", "source_unavailable"}
+            and "abstractStatus" not in existing
+        ):
+            existing["abstract"] = ""
+            existing["abstractStatus"] = "unavailable"
+            index_changed = True
+        if (
+            not args.refresh
+            and cached
+            and (cached.get("abstract") or not existing or "abstractStatus" not in existing)
+        ):
+            index["papers"][paper["id"]] = source_metadata(
+                doi=doi,
+                source=cached,
+                checked_at=existing.get("checkedAt", now) if existing else now,
+            )
+            index_changed = True
+            continue
+        needs_abstract_backfill = bool(
+            existing
+            and existing.get("status") == "source_ready"
+            and "abstractStatus" not in existing
+        )
+        if args.refresh or not existing or needs_abstract_backfill or is_retry_due(existing, retry_before):
             due.append(paper)
     if args.limit > 0:
         due = due[: args.limit]
     if not due:
+        if index_changed:
+            index["generatedAt"] = utc_now()
+            write_json(args.source_index, index)
         print("No paper sources are due for discovery.")
-        export_public_index(args)
+        if not getattr(args, "skip_public_index", False):
+            export_public_index(args)
         return
 
     client = EuropePmcClient(pause_seconds=args.pause_seconds)
@@ -154,19 +187,7 @@ def discover_sources(args: argparse.Namespace) -> None:
             if record:
                 cache = record.to_dict()
                 write_json(source_cache_path(args.cache_dir, paper["id"]), cache)
-                index["papers"][paper["id"]] = {
-                    "doi": doi,
-                    "status": "source_ready" if record.evidence_level else "source_unavailable",
-                    "evidenceLevel": record.evidence_level,
-                    "provider": "Europe PMC",
-                    "pmid": record.pmid,
-                    "pmcid": record.pmcid,
-                    "sourceUrl": record.source_url,
-                    "abstractCharacters": len(record.abstract),
-                    "figureCount": None,
-                    "checkedAt": now,
-                    "lastError": "",
-                }
+                index["papers"][paper["id"]] = source_metadata(doi, cache, now)
             else:
                 index["papers"][paper["id"]] = {
                     "doi": doi,
@@ -176,6 +197,8 @@ def discover_sources(args: argparse.Namespace) -> None:
                     "pmid": "",
                     "pmcid": "",
                     "sourceUrl": "",
+                    "abstract": "",
+                    "abstractStatus": "unavailable",
                     "abstractCharacters": 0,
                     "figureCount": None,
                     "checkedAt": now,
@@ -185,7 +208,8 @@ def discover_sources(args: argparse.Namespace) -> None:
         write_json(args.source_index, index)
         done = min(offset + len(chunk), len(due))
         print(f"Source discovery: {done}/{len(due)}")
-    export_public_index(args)
+    if not getattr(args, "skip_public_index", False):
+        export_public_index(args)
 
 
 def build_batch(args: argparse.Namespace) -> None:
@@ -584,10 +608,30 @@ def prepare_source(
 
 
 def is_retry_due(meta: dict, retry_before: datetime) -> bool:
-    if meta.get("status") == "source_ready":
+    if meta.get("abstractStatus") == "available":
         return False
     checked_at = parse_datetime(meta.get("checkedAt"))
     return checked_at is None or checked_at <= retry_before
+
+
+def source_metadata(doi: str, source: dict, checked_at: str) -> dict:
+    abstract = str(source.get("abstract") or "").strip()
+    evidence_level = source.get("evidence_level") or source.get("evidenceLevel")
+    return {
+        "doi": doi,
+        "status": "source_ready" if evidence_level else "source_unavailable",
+        "evidenceLevel": evidence_level,
+        "provider": "Europe PMC",
+        "pmid": source.get("pmid", ""),
+        "pmcid": source.get("pmcid", ""),
+        "sourceUrl": source.get("source_url") or source.get("sourceUrl", ""),
+        "abstract": abstract,
+        "abstractStatus": "available" if abstract else "unavailable",
+        "abstractCharacters": len(abstract),
+        "figureCount": None,
+        "checkedAt": checked_at,
+        "lastError": "",
+    }
 
 
 def load_papers(path: Path) -> list[dict]:
