@@ -1,14 +1,14 @@
 {
   "status": "success",
-  "completed_at": "2026-08-13T04:38:36.037884+00:00",
-  "run_date": "2026-08-13",
-  "query_from": "2026-07-30",
-  "query_until": "2026-08-13",
-  "collected_count": 960,
-  "relevant_count": 131,
-  "new_count": 111,
-  "batch_count": 111,
-  "feedback_count": 1,
-  "batch_file": "reports\\weekly_updates\\weekly_update_table_2026-08-13.csv",
-  "catalog_file": "reports\\catalog\\papers_table.csv"
+  "completed_at": "2026-08-16T03:27:52.527659+00:00",
+  "run_date": "2026-08-16",
+  "query_from": "2026-08-02",
+  "query_until": "2026-08-16",
+  "collected_count": 836,
+  "relevant_count": 76,
+  "new_count": 15,
+  "batch_count": 15,
+  "feedback_count": 0,
+  "batch_file": "data/weekly_updates/weekly_update_table_2026-08-16.csv",
+  "catalog_file": "data/catalog/papers_table.csv"
 }
