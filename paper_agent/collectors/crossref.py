@@ -6,6 +6,7 @@ import time
 from calendar import monthrange
 from datetime import date
 from typing import Callable, Iterable
+from urllib.parse import quote
 
 import requests
 
@@ -51,6 +52,25 @@ class CrossrefCollector:
                     papers[paper.stable_id] = paper
                 time.sleep(self.pause_seconds)
         return list(papers.values())
+
+    def fetch_by_doi(self, doi: str, fallback_journal: str = "") -> Paper | None:
+        normalized_doi = _normalize_doi(doi)
+        if not normalized_doi:
+            return None
+        params = {"mailto": self.mailto} if self.mailto else None
+        try:
+            response = self._request_url_with_retries(
+                f"https://api.crossref.org/works/{quote(normalized_doi, safe='')}",
+                params=params,
+            )
+        except requests.HTTPError as exc:
+            if exc.response is not None and exc.response.status_code == 404:
+                return None
+            raise
+        item = response.json().get("message", {})
+        if not isinstance(item, dict) or not item:
+            return None
+        return self._parse_item(item, fallback_journal=fallback_journal)
 
     def fetch_all(
         self,
@@ -238,17 +258,33 @@ class CrossrefCollector:
         return papers
 
     def _request_with_retries(self, params: dict) -> requests.Response:
+        return self._request_url_with_retries("https://api.crossref.org/works", params=params)
+
+    def _request_url_with_retries(
+        self,
+        url: str,
+        params: dict | None = None,
+    ) -> requests.Response:
         last_error: requests.RequestException | None = None
         for attempt in range(3):
             try:
                 response = self.session.get(
-                    "https://api.crossref.org/works",
+                    url,
                     params=params,
                     timeout=45,
                     headers={"User-Agent": "lmi-paper-agent/0.1"},
                 )
                 response.raise_for_status()
                 return response
+            except requests.HTTPError as exc:
+                if (
+                    exc.response is not None
+                    and 400 <= exc.response.status_code < 500
+                    and exc.response.status_code not in {408, 429}
+                ):
+                    raise
+                last_error = exc
+                time.sleep(max(self.pause_seconds, 0.5) * (attempt + 1))
             except requests.RequestException as exc:
                 last_error = exc
                 time.sleep(max(self.pause_seconds, 0.5) * (attempt + 1))
@@ -307,6 +343,12 @@ def _clean_abstract(raw: str) -> str:
         return ""
     without_tags = _TAG_RE.sub(" ", raw)
     return " ".join(html.unescape(without_tags).split())
+
+
+def _normalize_doi(raw: str) -> str:
+    value = str(raw or "").strip().lower()
+    value = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", value)
+    return value.removeprefix("doi:").strip()
 
 
 def _is_matching_journal(container_title: str, journal: Journal) -> bool:

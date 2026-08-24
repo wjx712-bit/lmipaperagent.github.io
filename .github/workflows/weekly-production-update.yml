@@ -67,6 +67,16 @@ jobs:
           --batch-size 20
           --pause-seconds 0.1
 
+      - name: Backfill missing abstracts from Crossref
+        env:
+          LMI_CROSSREF_MAILTO: ${{ secrets.LMI_CROSSREF_MAILTO }}
+        run: >-
+          python -m paper_agent.backfill_abstracts
+          --papers-file public/data/papers.json
+          --source-index data/paper_analysis/source_index.json
+          --retry-days 30
+          --pause-seconds 0.25
+
       - name: Publish papers with abstracts
         run: >-
           python -m paper_agent.export_site_json

@@ -117,6 +117,7 @@ class SiteJsonExportTests(unittest.TestCase):
                         "10.1/indexed": {
                             "abstract": "Abstract from Europe PMC.",
                             "sourceUrl": "https://europepmc.org/article/MED/1",
+                            "abstractSourceUrl": "https://doi.org/10.1/indexed",
                         }
                     }
                 }),
@@ -131,7 +132,7 @@ class SiteJsonExportTests(unittest.TestCase):
 
             self.assertEqual("Abstract from Europe PMC.", payload["papers"][0]["abstract"])
             self.assertEqual(
-                "https://europepmc.org/article/MED/1",
+                "https://doi.org/10.1/indexed",
                 payload["papers"][0]["abstractSourceUrl"],
             )
 

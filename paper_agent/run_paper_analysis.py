@@ -187,23 +187,29 @@ def discover_sources(args: argparse.Namespace) -> None:
             if record:
                 cache = record.to_dict()
                 write_json(source_cache_path(args.cache_dir, paper["id"]), cache)
-                index["papers"][paper["id"]] = source_metadata(doi, cache, now)
+                index["papers"][paper["id"]] = merge_source_metadata(
+                    index["papers"].get(paper["id"], {}),
+                    source_metadata(doi, cache, now),
+                )
             else:
-                index["papers"][paper["id"]] = {
-                    "doi": doi,
-                    "status": "not_found",
-                    "evidenceLevel": None,
-                    "provider": "Europe PMC",
-                    "pmid": "",
-                    "pmcid": "",
-                    "sourceUrl": "",
-                    "abstract": "",
-                    "abstractStatus": "unavailable",
-                    "abstractCharacters": 0,
-                    "figureCount": None,
-                    "checkedAt": now,
-                    "lastError": "",
-                }
+                index["papers"][paper["id"]] = merge_source_metadata(
+                    index["papers"].get(paper["id"], {}),
+                    {
+                        "doi": doi,
+                        "status": "not_found",
+                        "evidenceLevel": None,
+                        "provider": "Europe PMC",
+                        "pmid": "",
+                        "pmcid": "",
+                        "sourceUrl": "",
+                        "abstract": "",
+                        "abstractStatus": "unavailable",
+                        "abstractCharacters": 0,
+                        "figureCount": None,
+                        "checkedAt": now,
+                        "lastError": "",
+                    },
+                )
         index["generatedAt"] = utc_now()
         write_json(args.source_index, index)
         done = min(offset + len(chunk), len(due))
@@ -632,6 +638,28 @@ def source_metadata(doi: str, source: dict, checked_at: str) -> dict:
         "checkedAt": checked_at,
         "lastError": "",
     }
+
+
+def merge_source_metadata(previous: dict, current: dict) -> dict:
+    merged = {**previous, **current}
+    for key, value in previous.items():
+        if key.startswith("crossref"):
+            merged[key] = value
+    if previous.get("abstract") and not current.get("abstract"):
+        for key in (
+            "abstract",
+            "abstractStatus",
+            "abstractCharacters",
+            "abstractProvider",
+            "abstractSourceUrl",
+        ):
+            if key in previous:
+                merged[key] = previous[key]
+        if not merged.get("evidenceLevel"):
+            merged["evidenceLevel"] = "abstract"
+        if merged.get("status") in {"not_found", "source_unavailable"}:
+            merged["status"] = "source_ready"
+    return merged
 
 
 def load_papers(path: Path) -> list[dict]:

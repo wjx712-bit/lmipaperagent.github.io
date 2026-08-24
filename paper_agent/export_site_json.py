@@ -77,7 +77,8 @@ def build_site_payload(
     cutoff = as_of - timedelta(days=max(since_days, 1))
     state = _load_json(state_path)
     recommendations = _load_recommendations(recommendations_path)
-    source_index = _load_json(source_index_path).get("papers", {})
+    source_index_payload = _load_json(source_index_path)
+    source_index = source_index_payload.get("papers", {})
 
     with catalog_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -94,7 +95,11 @@ def build_site_payload(
             papers.append(paper)
 
     papers.sort(key=lambda paper: (paper["addedAt"], paper["publishedAt"], paper["aiScore"]), reverse=True)
-    generated_at = state.get("completed_at") or datetime.now(timezone.utc).isoformat()
+    generated_at = (
+        source_index_payload.get("generatedAt")
+        or state.get("completed_at")
+        or datetime.now(timezone.utc).isoformat()
+    )
     return {
         "generatedAt": generated_at,
         "window": {"from": cutoff.isoformat(), "to": as_of.isoformat(), "days": since_days},
@@ -142,7 +147,9 @@ def _paper_payload(
         "issue": _clean(row.get("issue", "")),
         "pages": _clean(row.get("pages", "")),
         "abstract": abstract,
-        "abstractSourceUrl": _clean(source.get("sourceUrl", "")),
+        "abstractSourceUrl": _clean(
+            source.get("abstractSourceUrl", "") or source.get("sourceUrl", "")
+        ),
         "topics": topics,
         "aiScore": _display_score(raw_score),
         "relevanceRaw": raw_score,

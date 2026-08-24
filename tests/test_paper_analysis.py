@@ -7,6 +7,7 @@ from paper_agent.openai_batch import (
     make_batch_request,
     parse_batch_output_line,
 )
+from paper_agent.run_paper_analysis import merge_source_metadata
 
 
 ARTICLE_XML = """<?xml version="1.0" encoding="UTF-8"?>
@@ -43,6 +44,35 @@ class EuropePmcExtractionTests(unittest.TestCase):
             article["figures"][0]["image_url"],
             "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC123/bin/figure1.jpg",
         )
+
+    def test_preserves_crossref_abstract_during_europe_pmc_refresh(self):
+        previous = {
+            "status": "source_ready",
+            "evidenceLevel": "abstract",
+            "abstract": "Crossref abstract.",
+            "abstractStatus": "available",
+            "abstractCharacters": 18,
+            "abstractProvider": "Crossref",
+            "abstractSourceUrl": "https://doi.org/10.1/example",
+            "crossrefStatus": "available",
+            "crossrefCheckedAt": "2026-08-24T00:00:00Z",
+        }
+        refreshed = {
+            "status": "not_found",
+            "evidenceLevel": None,
+            "provider": "Europe PMC",
+            "abstract": "",
+            "abstractStatus": "unavailable",
+            "abstractCharacters": 0,
+        }
+
+        merged = merge_source_metadata(previous, refreshed)
+
+        self.assertEqual("Crossref abstract.", merged["abstract"])
+        self.assertEqual("available", merged["abstractStatus"])
+        self.assertEqual("available", merged["crossrefStatus"])
+        self.assertEqual("source_ready", merged["status"])
+        self.assertEqual("abstract", merged["evidenceLevel"])
 
 
 class BatchFormattingTests(unittest.TestCase):
