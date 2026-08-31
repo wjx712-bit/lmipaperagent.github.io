@@ -264,13 +264,8 @@ function App() {
       <header className="topbar">
         <a className="brand" href="#top" aria-label="LMI Paper Agent 홈">
           <span className="brand-mark"><FlaskConical size={20} aria-hidden="true" /></span>
-          <span><strong>LMI Paper Agent</strong><small>Metabolism & Immunology</small></span>
+          <span><strong>LMI Paper Agent</strong><small>Metabolism &amp; Inflammation</small></span>
         </a>
-        <nav className="desktop-nav" aria-label="주요 메뉴">
-          <a className="active" href="#overview">대시보드</a>
-          <a href="#papers">논문</a>
-          <button type="button" onClick={() => { setActiveTab('new'); document.getElementById('papers')?.scrollIntoView(); }}>주간 업데이트</button>
-        </nav>
         <div className="topbar-actions">
           <span className="sync-label"><Activity size={15} aria-hidden="true" /> {dataset.generatedAt ? `${formatDate(dataset.generatedAt)} 동기화` : '동기화 확인 중'}</span>
           <AccountControl auth={auth} onAdmin={() => setAdminOpen(true)} />
