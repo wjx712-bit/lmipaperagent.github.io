@@ -206,6 +206,11 @@ class CrossrefCollector:
 
         page_limit = None if max_pages <= 0 else max_pages
         if pagination == "cursor" and (page_limit is None or page_limit > 1):
+            # Crossref rejects publication-date sorting when cursor pagination is used.
+            # The date filters still constrain the result set, and callers sort parsed
+            # papers themselves when presentation order matters.
+            params.pop("sort", None)
+            params.pop("order", None)
             params["cursor"] = "*"
         elif pagination == "offset":
             params["offset"] = 0
