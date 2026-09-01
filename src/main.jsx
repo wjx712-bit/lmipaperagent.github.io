@@ -49,12 +49,30 @@ const TABS = [
 
 const STORAGE_KEY = 'lmi-paper-reviews-v1';
 const PAGE_SIZE = 50;
+const REVIEW_FETCH_PAGE_SIZE = 1000;
 
 function getStoredReviews() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
   } catch {
     return {};
+  }
+}
+
+async function fetchVisibleReviewRows(userId, isAdmin) {
+  const rows = [];
+  for (let from = 0; ; from += REVIEW_FETCH_PAGE_SIZE) {
+    let query = supabase
+      .from('paper_reviews')
+      .select('user_id,paper_id,score,note,updated_at')
+      .order('paper_id', { ascending: true })
+      .order('user_id', { ascending: true })
+      .range(from, from + REVIEW_FETCH_PAGE_SIZE - 1);
+    if (!isAdmin) query = query.eq('user_id', userId);
+    const { data, error } = await query;
+    if (error) throw error;
+    rows.push(...(data || []));
+    if (!data || data.length < REVIEW_FETCH_PAGE_SIZE) return rows;
   }
 }
 
@@ -100,6 +118,7 @@ function App() {
   const [minimumAiScore, setMinimumAiScore] = useState(0);
   const [sort, setSort] = useState('added');
   const [reviews, setReviews] = useState(getStoredReviews);
+  const [labReviewedPaperIds, setLabReviewedPaperIds] = useState([]);
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [adminOpen, setAdminOpen] = useState(false);
   const [reviewSyncError, setReviewSyncError] = useState('');
@@ -126,27 +145,30 @@ function App() {
   useEffect(() => {
     if (!auth.configured) {
       setReviews(getStoredReviews());
+      setLabReviewedPaperIds([]);
       return;
     }
     if (!auth.user || !auth.isApproved) {
       setReviews({});
+      setLabReviewedPaperIds([]);
       return;
     }
     let active = true;
     async function loadAccountReviews() {
       setReviewSyncError('');
-      const { data, error } = await supabase
-        .from('paper_reviews')
-        .select('paper_id,score,note,updated_at')
-        .eq('user_id', auth.user.id);
-      if (error) {
+      let data;
+      try {
+        data = await fetchVisibleReviewRows(auth.user.id, auth.isAdmin);
+      } catch (error) {
         if (active) setReviewSyncError(error.message);
         return;
       }
-      const accountReviews = Object.fromEntries((data || []).map((review) => [
+      const ownRows = (data || []).filter((review) => review.user_id === auth.user.id);
+      const accountReviews = Object.fromEntries(ownRows.map((review) => [
         review.paper_id,
         { score: review.score, note: review.note, updatedAt: review.updated_at },
       ]));
+      const reviewedPaperIds = new Set((data || []).map((review) => review.paper_id));
       const localReviews = getStoredReviews();
       const missingLocalEntries = Object.entries(localReviews).filter(([paperId]) => !accountReviews[paperId]);
       if (missingLocalEntries.length) {
@@ -164,14 +186,22 @@ function App() {
         }
         missingLocalEntries.forEach(([paperId, review]) => {
           accountReviews[paperId] = review;
+          reviewedPaperIds.add(paperId);
         });
         localStorage.removeItem(STORAGE_KEY);
       }
-      if (active) setReviews(accountReviews);
+      if (active) {
+        setReviews(accountReviews);
+        setLabReviewedPaperIds(auth.isAdmin ? [...reviewedPaperIds] : Object.keys(accountReviews));
+      }
     }
     loadAccountReviews();
-    return () => { active = false; };
-  }, [auth.configured, auth.user?.id, auth.isApproved, dataset.papers]);
+    window.addEventListener('focus', loadAccountReviews);
+    return () => {
+      active = false;
+      window.removeEventListener('focus', loadAccountReviews);
+    };
+  }, [auth.configured, auth.user?.id, auth.isApproved, auth.isAdmin, dataset.papers]);
 
   const papers = useMemo(
     () => dataset.papers.map((paper) => ({
@@ -216,7 +246,10 @@ function App() {
   const visiblePapers = filteredPapers.slice(0, visibleCount);
 
   const stats = useMemo(() => {
-    const labeled = papers.filter((paper) => paper.reviewScore != null).length;
+    const labReviewedSet = new Set(labReviewedPaperIds);
+    const labeled = auth.isAdmin
+      ? papers.filter((paper) => labReviewedSet.has(paper.id)).length
+      : papers.filter((paper) => paper.reviewScore != null).length;
     return {
       total: papers.length,
       weekly: papers.filter((paper) => isWithinDays(paper.addedAt, 7)).length,
@@ -225,7 +258,7 @@ function App() {
       progress: papers.length ? Math.round((labeled / papers.length) * 100) : 0,
       labeled,
     };
-  }, [papers]);
+  }, [papers, labReviewedPaperIds, auth.isAdmin]);
 
   const activeFilterCount = selectedJournals.length + selectedTopics.length + (minimumAiScore ? 1 : 0);
 
@@ -256,6 +289,9 @@ function App() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     }
     setReviews(next);
+    if (auth.isAdmin) {
+      setLabReviewedPaperIds((current) => current.includes(paperId) ? current : [...current, paperId]);
+    }
     setSelectedPaper((current) => current ? { ...current, reviewScore: score, reviewNote: note } : current);
   }
 
@@ -290,7 +326,13 @@ function App() {
           <StatCard icon={Star} label="필독 후보" value={stats.must} meta="평가 5점" accent="gold" />
           <StatCard icon={Sparkles} label="검토 후보" value={stats.review} meta="평가 3–4점" accent="teal" />
           <StatCard icon={CalendarDays} label="이번 주 신규" value={stats.weekly} meta="최근 7일" accent="coral" />
-          <StatCard icon={Check} label="라벨링 진행률" value={`${stats.progress}%`} meta={`${stats.labeled} / ${stats.total}편`} progress={stats.progress} />
+          <StatCard
+            icon={Check}
+            label="라벨링 진행률"
+            value={`${stats.progress}%`}
+            meta={`${stats.labeled} / ${stats.total}편 · ${auth.isAdmin ? '연구실 전체' : '내 평가'}`}
+            progress={stats.progress}
+          />
         </section>
 
         <section className="workspace" id="papers">
