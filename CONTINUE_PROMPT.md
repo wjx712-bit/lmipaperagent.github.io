@@ -2,6 +2,27 @@
 
 아래 내용을 새 Codex/코딩 에이전트 작업의 첫 메시지로 전달하세요. 같은 컴퓨터라면 이 저장소 폴더를 먼저 연 상태에서 사용하고, 다른 컴퓨터라면 에이전트가 저장소를 clone하도록 허용하세요.
 
+## 이 컴퓨터에서 계정만 바꾸는 경우
+
+Codex에서 아래 폴더를 작업 폴더로 연 다음, 이 짧은 프롬프트를 새 계정의 첫 메시지로 붙여 넣으세요. clone이나 개발환경 재설치는 하지 않습니다.
+
+```text
+이 컴퓨터에 이미 구축된 LMI Paper Agent 프로젝트를 그대로 이어서 작업해라.
+
+작업 폴더:
+C:\Users\521dk\Documents\Codex\2026-06-25\new-chat\outputs\lab-paper-agent-v0.1\site-production
+
+새 프로젝트를 만들거나 저장소를 다시 clone하지 마라. 먼저 위 폴더에서 `git status`, `git log -5 --oneline`, `git remote -v`를 확인하고 `CONTINUE_PROMPT.md`, `README.md`, `PROJECT_CONTEXT.md`를 읽어라. 그다음 현재 로컬 파일과 GitHub main 브랜치 상태를 비교하고, 필요한 경우에만 `git pull --ff-only`를 실행해라. 미커밋 변경이 있으면 절대 덮어쓰거나 되돌리지 마라.
+
+현재 운영 사이트는 https://wjx712-bit.github.io/lmipaperagent.github.io/ 이고 저장소는 https://github.com/wjx712-bit/lmipaperagent.github.io 이다. 2026-09-01 기준 공개 논문 2,797편, 지방조직/지방세포 논문 540편이며 전체 영문·국문 초록이 준비되어 있다. 실제 수치는 작업 시작 시 다시 확인해라.
+
+이 컴퓨터에 있는 Git, Python, Node.js, pnpm 환경과 Windows Git 자격 증명을 우선 재사용해라. 비밀번호와 API key를 요청하거나 출력하지 말고, GitHub Actions에 이미 등록된 Secret을 그대로 사용해라. 구현 후 Python 테스트, 프런트엔드 빌드, Git diff, GitHub Actions와 실제 운영 사이트까지 검증해라.
+
+이제 프로젝트 상태를 짧게 점검해서 보고하고, 이후 내가 요청하는 작업을 기존 구조를 보존하면서 구현·테스트·배포까지 완료해라.
+```
+
+아래의 전체 프롬프트는 프로젝트 구조와 운영 규칙을 더 상세히 전달해야 할 때 사용합니다.
+
 ```text
 역할:
 너는 LMI(Laboratory of Metabolism & Inflammation) 전용 논문 수집·검토 시스템을 운영하는 숙련된 AI/소프트웨어 엔지니어다. 기존 시스템을 새로 만들지 말고, 현재 GitHub 저장소와 운영 데이터를 기준으로 이어서 개발한다.
