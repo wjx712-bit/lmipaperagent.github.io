@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 from typing import Iterable
@@ -15,12 +16,48 @@ OPENAI_API_BASE = "https://api.openai.com/v1"
 
 
 class OpenAIBatchClient:
-    def __init__(self, api_key: str, timeout: float = 90) -> None:
+    def __init__(
+        self,
+        api_key: str,
+        timeout: float = 90,
+        organization: str | None = None,
+        project: str | None = None,
+    ) -> None:
         if not api_key:
             raise ValueError("OPENAI_API_KEY is required")
         self.timeout = timeout
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {api_key}"})
+        organization = organization or os.environ.get("OPENAI_ORGANIZATION")
+        project = project or os.environ.get("OPENAI_PROJECT")
+        self.request_scope: dict[str, str] = {}
+        if organization:
+            self.session.headers["OpenAI-Organization"] = organization
+            self.request_scope["organization"] = organization
+        if project:
+            self.session.headers["OpenAI-Project"] = project
+            self.request_scope["project"] = project
+
+    def _pin_response_scope(self, response: requests.Response) -> None:
+        response_headers = {
+            "organization": response.headers.get("openai-organization"),
+            "project": response.headers.get("openai-project"),
+        }
+        request_headers = {
+            "organization": "OpenAI-Organization",
+            "project": "OpenAI-Project",
+        }
+        for name, value in response_headers.items():
+            if not value:
+                continue
+            header = request_headers[name]
+            existing = self.session.headers.get(header)
+            if existing and existing != value:
+                raise RuntimeError(
+                    f"OpenAI request scope changed for {name}: {existing} -> {value}"
+                )
+            self.session.headers[header] = value
+            self.request_scope[name] = value
 
     def upload_batch_file(self, path: Path) -> dict:
         with path.open("rb") as handle:
@@ -31,11 +68,13 @@ class OpenAIBatchClient:
                 timeout=self.timeout,
             )
         response.raise_for_status()
+        self._pin_response_scope(response)
         return response.json()
 
     def retrieve_file(self, file_id: str) -> dict:
         response = self.session.get(f"{OPENAI_API_BASE}/files/{file_id}", timeout=self.timeout)
         response.raise_for_status()
+        self._pin_response_scope(response)
         return response.json()
 
     def wait_for_file_ready(
@@ -81,16 +120,19 @@ class OpenAIBatchClient:
             timeout=self.timeout,
         )
         response.raise_for_status()
+        self._pin_response_scope(response)
         return response.json()
 
     def retrieve_batch(self, batch_id: str) -> dict:
         response = self.session.get(f"{OPENAI_API_BASE}/batches/{batch_id}", timeout=self.timeout)
         response.raise_for_status()
+        self._pin_response_scope(response)
         return response.json()
 
     def download_file(self, file_id: str) -> str:
         response = self.session.get(f"{OPENAI_API_BASE}/files/{file_id}/content", timeout=self.timeout)
         response.raise_for_status()
+        self._pin_response_scope(response)
         return response.text
 
 

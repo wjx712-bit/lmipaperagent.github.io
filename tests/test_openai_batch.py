@@ -7,6 +7,23 @@ from paper_agent.openai_batch import OpenAIBatchClient
 
 
 class OpenAIBatchClientTests(unittest.TestCase):
+    def test_pins_scope_from_upload_response_for_following_requests(self) -> None:
+        client = OpenAIBatchClient("test-key")
+        response = Mock()
+        response.headers = {
+            "openai-organization": "org-test",
+            "openai-project": "proj-test",
+        }
+
+        client._pin_response_scope(response)
+
+        self.assertEqual("org-test", client.session.headers["OpenAI-Organization"])
+        self.assertEqual("proj-test", client.session.headers["OpenAI-Project"])
+        self.assertEqual(
+            {"organization": "org-test", "project": "proj-test"},
+            client.request_scope,
+        )
+
     def test_waits_until_uploaded_file_is_processed(self) -> None:
         client = OpenAIBatchClient("test-key")
         client.retrieve_file = Mock(

@@ -161,11 +161,13 @@ def submit_batch(args: argparse.Namespace) -> None:
             "checkedAt": utc_now(),
             "outputFileId": "",
             "errorFileId": "",
+            "requestScope": client.request_scope,
         }
     )
     write_json(args.registry_file, registry)
     print(f"Translation batch submitted: {batch['id']}")
     print(f"Abstracts in batch: {len(items)}")
+    print(f"OpenAI request scope: {json.dumps(client.request_scope, ensure_ascii=False)}")
 
 
 def sync_batches(args: argparse.Namespace) -> None:
