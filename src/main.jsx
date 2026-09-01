@@ -188,7 +188,7 @@ function App() {
   const filteredPapers = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const result = papers.filter((paper) => {
-      const haystack = [paper.title, paper.journal, paper.authors.join(' '), paper.topics.join(' '), paper.abstract].join(' ').toLowerCase();
+      const haystack = [paper.title, paper.journal, paper.authors.join(' '), paper.topics.join(' '), paper.abstract, paper.abstractKo].join(' ').toLowerCase();
       const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
       const matchesJournal = !selectedJournals.length || selectedJournals.includes(paper.journalShort);
       const matchesTopic = !selectedTopics.length || selectedTopics.some((topic) => paper.topics.includes(topic));
@@ -434,7 +434,8 @@ function PaperRow({ paper, onOpen }) {
         </div>
         <h3>{paper.title}</h3>
         <p className="authors">{paper.authors.join(', ')}</p>
-        <p className="abstract">{paper.abstract || paper.aiReason}</p>
+        <p className="abstract" lang="en">{paper.abstract || paper.aiReason}</p>
+        {paper.abstractKo && <p className="abstract abstract-ko" lang="ko">{paper.abstractKo}</p>}
         <div className="paper-tags">
           <div className="topic-list">{paper.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
           <span className="abstract-status">Abstract</span>
@@ -647,8 +648,16 @@ function PaperAbstract({ paper }) {
         </div>
         {paper.abstractSourceUrl && <a href={paper.abstractSourceUrl} target="_blank" rel="noreferrer">초록 출처 <ExternalLink size={13} /></a>}
       </header>
-      <h4>Abstract</h4>
-      <p>{paper.abstract}</p>
+      <section className="abstract-language">
+        <h4>Abstract <span>English</span></h4>
+        <p lang="en">{paper.abstract}</p>
+      </section>
+      <section className="abstract-language abstract-language-ko">
+        <h4>한국어 번역 <span>AI translation</span></h4>
+        {paper.abstractKo
+          ? <p lang="ko">{paper.abstractKo}</p>
+          : <p className="translation-pending">한국어 번역을 준비하고 있습니다.</p>}
+      </section>
     </article>
   );
 }

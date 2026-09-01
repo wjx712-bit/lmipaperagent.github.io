@@ -37,6 +37,7 @@ def main() -> None:
     parser.add_argument("--state-file", default="data/weekly_collection_state.json")
     parser.add_argument("--recommendations-file", default="config/expert_recommendations.csv")
     parser.add_argument("--source-index", default="data/paper_analysis/source_index.json")
+    parser.add_argument("--translations-file", default="data/abstract_translations/ko.json")
     parser.add_argument("--output", default="public/data/papers.json")
     parser.add_argument("--since-days", type=int, default=365)
     parser.add_argument("--as-of", type=date.fromisoformat, default=None)
@@ -48,6 +49,7 @@ def main() -> None:
         state_path=Path(args.state_file),
         recommendations_path=Path(args.recommendations_file),
         source_index_path=Path(args.source_index),
+        translations_path=Path(args.translations_file),
         since_days=args.since_days,
         as_of=args.as_of,
         include_missing_abstracts=args.include_missing_abstracts,
@@ -69,6 +71,7 @@ def build_site_payload(
     state_path: Path | None = None,
     recommendations_path: Path | None = None,
     source_index_path: Path | None = None,
+    translations_path: Path | None = None,
     since_days: int = 365,
     as_of: date | None = None,
     include_missing_abstracts: bool = False,
@@ -79,6 +82,7 @@ def build_site_payload(
     recommendations = _load_recommendations(recommendations_path)
     source_index_payload = _load_json(source_index_path)
     source_index = source_index_payload.get("papers", {})
+    translations = _load_json(translations_path).get("translations", {})
 
     with catalog_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -90,7 +94,7 @@ def build_site_payload(
             continue
         if is_excluded_publication(_clean(row.get("title", "")), _clean(row.get("doi", ""))):
             continue
-        paper = _paper_payload(row, published_at, recommendations, source_index)
+        paper = _paper_payload(row, published_at, recommendations, source_index, translations)
         if include_missing_abstracts or paper["abstract"]:
             papers.append(paper)
 
@@ -109,6 +113,7 @@ def build_site_payload(
             "lastRunNewCount": state.get("new_count", 0),
             "monitoredJournalCount": len({paper["journal"] for paper in papers}),
             "abstractCount": sum(1 for paper in papers if paper["abstract"]),
+            "translationCount": sum(1 for paper in papers if paper["abstractKo"]),
         },
         "papers": papers,
     }
@@ -119,6 +124,7 @@ def _paper_payload(
     published_at: date,
     recommendations: dict[str, dict],
     source_index: dict[str, dict],
+    translations: dict[str, dict],
 ) -> dict:
     doi = _clean(row.get("doi", "")).lower()
     title = _clean(row.get("title", ""))
@@ -128,6 +134,9 @@ def _paper_payload(
     recommendation = recommendations.get(doi)
     source = source_index.get(stable_id, {})
     abstract = _clean(source.get("abstract", "")) or _clean(row.get("abstract", ""))
+    translation = translations.get(stable_id, {})
+    abstract_hash = hashlib.sha256(abstract.encode("utf-8")).hexdigest()
+    abstract_ko = _clean(translation.get("textKo", "")) if translation.get("sourceHash") == abstract_hash else ""
     raw_score = _float(row.get("score"))
     matched_terms = _clean(row.get("matched_terms", ""))
     topics = _split(row.get("themes", ""))
@@ -147,6 +156,7 @@ def _paper_payload(
         "issue": _clean(row.get("issue", "")),
         "pages": _clean(row.get("pages", "")),
         "abstract": abstract,
+        "abstractKo": abstract_ko,
         "abstractSourceUrl": _clean(
             source.get("abstractSourceUrl", "") or source.get("sourceUrl", "")
         ),

@@ -1,0 +1,108 @@
+name: Abstract Korean Translations
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: paper-data-update
+  cancel-in-progress: false
+
+jobs:
+  translate-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync completed translation batches
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: >-
+          python -m paper_agent.translate_abstracts sync
+          --wait-seconds 0
+
+      - name: Prepare untranslated abstracts
+        run: >-
+          python -m paper_agent.translate_abstracts prepare
+          --model gpt-5.4-mini
+          --output .cache/abstract-translations/input.jsonl
+          --manifest .cache/abstract-translations/manifest.json
+
+      - name: Submit translation batch
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -s .cache/abstract-translations/input.jsonl ]; then
+            python -m paper_agent.translate_abstracts submit \
+              --input .cache/abstract-translations/input.jsonl \
+              --manifest .cache/abstract-translations/manifest.json
+          fi
+
+      - name: Persist submitted batch
+        run: |
+          git config user.name "lmi-paper-agent[bot]"
+          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
+          git add data/abstract_translations
+          if ! git diff --cached --quiet; then
+            git commit -m "Submit abstract translation batch"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Wait for translation results
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: >-
+          python -m paper_agent.translate_abstracts sync
+          --wait-seconds 3000
+          --poll-seconds 60
+
+      - name: Export bilingual website data
+        run: >-
+          python -m paper_agent.export_site_json
+          --catalog-file data/catalog/papers_table.csv
+          --state-file data/weekly_collection_state.json
+          --recommendations-file config/expert_recommendations.csv
+          --source-index data/paper_analysis/source_index.json
+          --translations-file data/abstract_translations/ko.json
+          --output public/data/papers.json
+          --since-days 365
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install website dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build website
+        run: pnpm build
+
+      - name: Publish translations
+        run: |
+          git add data/abstract_translations public/data/papers.json
+          if git diff --cached --quiet; then
+            echo "No completed translations to publish."
+          else
+            git commit -m "Publish Korean abstract translations"
+            git pull --rebase
+            git push
+          fi

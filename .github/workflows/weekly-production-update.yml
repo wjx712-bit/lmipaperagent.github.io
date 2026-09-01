@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: weekly-production-update
+  group: paper-data-update
   cancel-in-progress: false
 
 jobs:
