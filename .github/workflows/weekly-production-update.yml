@@ -54,7 +54,7 @@ jobs:
           --recommendations-file config/expert_recommendations.csv
           --source-index data/paper_analysis/source_index.json
           --output public/data/papers.json
-          --since-days 365
+          --since-days 1825
           --include-missing-abstracts
 
       - name: Collect abstracts for new papers
@@ -85,7 +85,7 @@ jobs:
           --recommendations-file config/expert_recommendations.csv
           --source-index data/paper_analysis/source_index.json
           --output public/data/papers.json
-          --since-days 365
+          --since-days 1825
 
       - name: Setup Node
         uses: actions/setup-node@v6

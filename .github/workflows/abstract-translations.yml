@@ -92,7 +92,7 @@ jobs:
           --source-index data/paper_analysis/source_index.json
           --translations-file data/abstract_translations/ko.json
           --output public/data/papers.json
-          --since-days 365
+          --since-days 1825
 
       - name: Setup Node
         uses: actions/setup-node@v6

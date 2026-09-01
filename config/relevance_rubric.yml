@@ -51,7 +51,7 @@ themes:
 
   adipose_biology:
     display: "Adipose tissue / adipocyte biology"
-    keyword_groups: ["adipose_axis", "lipid_metabolism"]
+    keyword_groups: ["adipose_axis"]
 
   immune_inflammation:
     display: "Inflammation / immune regulation"
