@@ -10,6 +10,7 @@ from urllib.parse import quote
 
 import requests
 
+from paper_agent.abstract_text import strip_leading_abstract_label
 from paper_agent.models import Journal, Paper
 
 
@@ -347,7 +348,7 @@ def _clean_abstract(raw: str) -> str:
     if not raw:
         return ""
     without_tags = _TAG_RE.sub(" ", raw)
-    return " ".join(html.unescape(without_tags).split())
+    return strip_leading_abstract_label(" ".join(html.unescape(without_tags).split()))
 
 
 def _normalize_doi(raw: str) -> str:

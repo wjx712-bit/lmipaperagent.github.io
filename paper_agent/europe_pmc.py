@@ -13,6 +13,7 @@ from typing import Iterable
 
 import requests
 
+from paper_agent.abstract_text import strip_leading_abstract_label
 
 SEARCH_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 FULL_TEXT_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
@@ -180,7 +181,7 @@ def source_record_from_result(item: dict) -> SourceRecord:
         pmid=pmid,
         pmcid=pmcid,
         title=clean_text(item.get("title", "")),
-        abstract=clean_text(item.get("abstractText", "")),
+        abstract=strip_leading_abstract_label(clean_text(item.get("abstractText", ""))),
         is_open_access=str(item.get("isOpenAccess", "")).upper() == "Y",
         has_full_text=str(item.get("inEPMC", "")).upper() == "Y",
         source_url=(
@@ -194,7 +195,7 @@ def source_record_from_result(item: dict) -> SourceRecord:
 def extract_article(xml_text: str, pmcid: str) -> dict:
     root = ET.fromstring(xml_text)
     title = element_text(root.find(".//article-title"))
-    abstract = element_text(root.find(".//abstract"))
+    abstract = strip_leading_abstract_label(element_text(root.find(".//abstract")))
     sections: list[dict[str, str]] = []
     body = root.find(".//body")
     if body is not None:

@@ -13,6 +13,7 @@ from pathlib import Path
 
 import requests
 
+from paper_agent.abstract_text import compatible_abstract_texts
 from paper_agent.openai_batch import OpenAIBatchClient, parse_batch_output_line, write_jsonl
 
 
@@ -485,7 +486,8 @@ def due_papers(papers: list[dict], translations: dict, registry: dict) -> list[d
 
 
 def valid_translation(record: dict, abstract: str) -> bool:
-    return bool(record.get("textKo")) and record.get("sourceHash") == source_hash(abstract)
+    compatible_hashes = {source_hash(text) for text in compatible_abstract_texts(abstract)}
+    return bool(record.get("textKo")) and record.get("sourceHash") in compatible_hashes
 
 
 def source_hash(abstract: str) -> str:

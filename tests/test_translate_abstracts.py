@@ -58,6 +58,18 @@ class AbstractTranslationTests(unittest.TestCase):
         }
         self.assertEqual([self.paper], due_papers([self.paper], stale, {"jobs": []}))
 
+    def test_heading_only_change_keeps_existing_translation_current(self) -> None:
+        current = {
+            "translations": {
+                self.paper["id"]: {
+                    "sourceHash": source_hash("Abstract " + self.paper["abstract"]),
+                    "textKo": "지방세포 염증은 조직 대사를 변화시킨다.",
+                }
+            }
+        }
+
+        self.assertEqual([], due_papers([self.paper], current, {"jobs": []}))
+
     def test_batch_request_uses_structured_translation_output(self) -> None:
         request = make_translation_request("abstract-ko-test", self.paper, "gpt-5.4-mini")
         body = request["body"]

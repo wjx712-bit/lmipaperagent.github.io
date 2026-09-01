@@ -9,6 +9,7 @@ import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from paper_agent.abstract_text import compatible_abstract_texts, strip_leading_abstract_label
 from paper_agent.paper_filters import is_excluded_publication
 
 
@@ -133,10 +134,18 @@ def _paper_payload(
     ).hexdigest()[:24]
     recommendation = recommendations.get(doi)
     source = source_index.get(stable_id, {})
-    abstract = _clean(source.get("abstract", "")) or _clean(row.get("abstract", ""))
+    abstract_source = _clean(source.get("abstract", "")) or _clean(row.get("abstract", ""))
+    abstract = strip_leading_abstract_label(abstract_source)
     translation = translations.get(stable_id, {})
-    abstract_hash = hashlib.sha256(abstract.encode("utf-8")).hexdigest()
-    abstract_ko = _clean(translation.get("textKo", "")) if translation.get("sourceHash") == abstract_hash else ""
+    compatible_hashes = {
+        hashlib.sha256(text.encode("utf-8")).hexdigest()
+        for text in compatible_abstract_texts(abstract_source)
+    }
+    abstract_ko = (
+        _clean(translation.get("textKo", ""))
+        if translation.get("sourceHash") in compatible_hashes
+        else ""
+    )
     raw_score = _float(row.get("score"))
     matched_terms = _clean(row.get("matched_terms", ""))
     topics = _split(row.get("themes", ""))

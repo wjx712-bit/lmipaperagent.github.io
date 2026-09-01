@@ -117,7 +117,7 @@ class SiteJsonExportTests(unittest.TestCase):
                 json.dumps({
                     "papers": {
                         "10.1/indexed": {
-                            "abstract": "Abstract from Europe PMC.",
+                            "abstract": "Abstract: Findings from Europe PMC.",
                             "sourceUrl": "https://europepmc.org/article/MED/1",
                             "abstractSourceUrl": "https://doi.org/10.1/indexed",
                         }
@@ -125,7 +125,7 @@ class SiteJsonExportTests(unittest.TestCase):
                 }),
                 encoding="utf-8",
             )
-            abstract = "Abstract from Europe PMC."
+            abstract = "Abstract: Findings from Europe PMC."
             translations.write_text(
                 json.dumps({
                     "translations": {
@@ -145,7 +145,7 @@ class SiteJsonExportTests(unittest.TestCase):
                 as_of=date(2026, 8, 13),
             )
 
-            self.assertEqual("Abstract from Europe PMC.", payload["papers"][0]["abstract"])
+            self.assertEqual("Findings from Europe PMC.", payload["papers"][0]["abstract"])
             self.assertEqual(
                 "https://doi.org/10.1/indexed",
                 payload["papers"][0]["abstractSourceUrl"],
