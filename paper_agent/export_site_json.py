@@ -9,7 +9,11 @@ import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from paper_agent.abstract_text import compatible_abstract_texts, strip_leading_abstract_label
+from paper_agent.abstract_text import (
+    compatible_abstract_texts,
+    strip_leading_abstract_label,
+    strip_leading_korean_abstract_label,
+)
 from paper_agent.paper_filters import is_excluded_publication
 
 
@@ -142,7 +146,7 @@ def _paper_payload(
         for text in compatible_abstract_texts(abstract_source)
     }
     abstract_ko = (
-        _clean(translation.get("textKo", ""))
+        strip_leading_korean_abstract_label(_clean(translation.get("textKo", "")))
         if translation.get("sourceHash") in compatible_hashes
         else ""
     )

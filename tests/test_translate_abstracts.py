@@ -174,3 +174,8 @@ class AbstractTranslationTests(unittest.TestCase):
     def test_keeps_normal_translation_unchanged(self) -> None:
         body = "이 초록: 표지는 문장 본문에 포함되지만 저널 메타데이터는 없다."
         self.assertEqual(body, normalize_translation(body))
+
+    def test_removes_leading_korean_abstract_heading(self) -> None:
+        body = "지방세포 염증은 조직 대사를 변화시킨다."
+        self.assertEqual(body, normalize_translation("초록 " + body))
+        self.assertEqual(body, normalize_translation("초록: " + body))

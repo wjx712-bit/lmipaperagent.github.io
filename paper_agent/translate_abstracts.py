@@ -13,7 +13,7 @@ from pathlib import Path
 
 import requests
 
-from paper_agent.abstract_text import compatible_abstract_texts
+from paper_agent.abstract_text import compatible_abstract_texts, strip_leading_korean_abstract_label
 from paper_agent.openai_batch import OpenAIBatchClient, parse_batch_output_line, write_jsonl
 
 
@@ -33,7 +33,8 @@ Translate the entire abstract faithfully without summarizing, omitting, or addin
 Use formal Korean scientific prose. Preserve gene and protein names, cell markers, pathways,
 drug names, abbreviations, symbols, statistical values, units, and established nomenclature.
 When a technical term is clearer in English, keep the English term in parentheses after its
-Korean translation. Return only the requested structured output."""
+Korean translation. Do not prefix the translation with 초록 or any heading. Return only the
+requested structured output."""
 
 
 def main() -> None:
@@ -332,13 +333,15 @@ def normalize_translation(text: str) -> str:
             re.search(r"(?:저널|학술지|JOURNAL)\s*[:：]", prefix, re.IGNORECASE)
         )
         if starts_with_title or has_journal_marker:
-            return normalized[abstract_marker.end() :].strip()
+            return strip_leading_korean_abstract_label(
+                normalized[abstract_marker.end() :].strip()
+            )
 
     if starts_with_title:
         separator = re.search(r"\s{2,}", normalized)
         if separator and separator.start() <= 1000:
-            return normalized[separator.end() :].strip()
-    return normalized
+            return strip_leading_korean_abstract_label(normalized[separator.end() :].strip())
+    return strip_leading_korean_abstract_label(normalized)
 
 
 def sync_batches(args: argparse.Namespace) -> None:

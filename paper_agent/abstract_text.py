@@ -7,12 +7,21 @@ LEADING_ABSTRACT_LABEL_RE = re.compile(
     r"^\s*abstract\b(?:\s*[:：.\-–—]\s*|\s+|$)",
     re.IGNORECASE,
 )
+LEADING_KOREAN_ABSTRACT_LABEL_RE = re.compile(
+    r"^\s*초록(?:\s*[:：.\-–—]\s*|\s+|$)",
+)
 
 
 def strip_leading_abstract_label(value: str) -> str:
     """Remove a publisher-supplied Abstract heading at the start of the text."""
     text = str(value or "").strip()
     return LEADING_ABSTRACT_LABEL_RE.sub("", text, count=1).strip()
+
+
+def strip_leading_korean_abstract_label(value: str) -> str:
+    """Remove a translated Korean abstract heading at the start of the text."""
+    text = str(value or "").strip()
+    return LEADING_KOREAN_ABSTRACT_LABEL_RE.sub("", text, count=1).strip()
 
 
 def compatible_abstract_texts(value: str) -> tuple[str, ...]:
