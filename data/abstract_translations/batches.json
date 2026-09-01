@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-01T01:46:52.197187Z",
+  "updatedAt": "2026-09-01T01:52:21.876286Z",
   "jobs": [
     {
       "batchId": "batch_6a962bc34444819091acea07c72b588d",
@@ -27333,15 +27333,28 @@
           "title": "Single-cell profiling identifies obesity-disrupted brain glucose sensing"
         }
       ],
-      "status": "validating",
+      "status": "failed",
       "submittedAt": "2026-09-01T01:51:16.916110Z",
-      "checkedAt": "2026-09-01T01:51:16.916133Z",
+      "checkedAt": "2026-09-01T01:52:21.876223Z",
       "outputFileId": "",
       "errorFileId": "",
       "requestScope": {
         "organization": "user-hlmardkul8k8bsisu4oapyov",
         "project": "proj_FJ6YUnw8LQHSuWBYei5SFAhI"
-      }
+      },
+      "requestCounts": {
+        "total": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "batchErrors": [
+        {
+          "code": "invalid_request",
+          "message": "Cannot find file file-MkmKEGp75kfNf6pcq9vVMD, or organization org-AR6apf1LCCBy6sNsGiwNLDGm does not have access to it.",
+          "param": "file_id",
+          "line": null
+        }
+      ]
     }
   ]
 }
