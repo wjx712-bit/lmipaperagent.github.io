@@ -7,6 +7,7 @@ from paper_agent.translate_abstracts import (
     apply_batch_output,
     due_papers,
     make_translation_request,
+    parse_direct_translation,
     source_hash,
 )
 
@@ -105,3 +106,21 @@ class AbstractTranslationTests(unittest.TestCase):
 
         self.assertEqual((1, 0), (imported, errors))
         self.assertEqual(translated, translations["translations"][self.paper["id"]]["textKo"])
+
+    def test_parses_direct_translation_response(self) -> None:
+        translated = "지방세포 염증은 조직 대사를 변화시킨다."
+        response = {
+            "output": [
+                {
+                    "type": "message",
+                    "content": [
+                        {
+                            "type": "output_text",
+                            "text": json.dumps({"translation_ko": translated}, ensure_ascii=False),
+                        }
+                    ],
+                }
+            ]
+        }
+
+        self.assertEqual(translated, parse_direct_translation(response))

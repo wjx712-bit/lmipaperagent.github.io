@@ -4,9 +4,13 @@ import argparse
 import hashlib
 import json
 import os
+import random
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
+
+import requests
 
 from paper_agent.openai_batch import OpenAIBatchClient, parse_batch_output_line, write_jsonl
 
@@ -38,6 +42,8 @@ def main() -> None:
         return
     if args.command == "prepare":
         prepare_batch(args)
+    elif args.command == "translate-direct":
+        translate_direct(args)
     elif args.command == "submit":
         submit_batch(args)
     elif args.command == "sync":
@@ -64,6 +70,17 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--limit", type=int, default=0, help="Maximum abstracts; 0 means all due abstracts.")
     prepare.add_argument("--output", type=Path, default=None)
     prepare.add_argument("--manifest", type=Path, default=None)
+
+    direct = subparsers.add_parser(
+        "translate-direct",
+        help="Translate abstracts with concurrent Responses API requests.",
+    )
+    add_common_paths(direct)
+    direct.add_argument("--model", default=os.environ.get("OPENAI_TRANSLATION_MODEL", "gpt-5.4-mini"))
+    direct.add_argument("--limit", type=int, default=0, help="Maximum abstracts; 0 means all due abstracts.")
+    direct.add_argument("--workers", type=int, default=8)
+    direct.add_argument("--max-attempts", type=int, default=7)
+    direct.add_argument("--checkpoint-every", type=int, default=10)
 
     submit = subparsers.add_parser("submit", help="Upload a prepared translation batch.")
     add_common_paths(submit)
@@ -168,6 +185,116 @@ def submit_batch(args: argparse.Namespace) -> None:
     print(f"Translation batch submitted: {batch['id']}")
     print(f"Abstracts in batch: {len(items)}")
     print(f"OpenAI request scope: {json.dumps(client.request_scope, ensure_ascii=False)}")
+
+
+def translate_direct(args: argparse.Namespace) -> None:
+    papers = load_papers(args.papers_file)
+    translations = load_json(args.translations_file, default_translations())
+    registry = load_json(args.registry_file, default_registry())
+    due = due_papers(papers, translations, registry)
+    if args.limit > 0:
+        due = due[: args.limit]
+    if not due:
+        print("No abstracts need Korean translation.")
+        return
+
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY is required")
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    if os.environ.get("OPENAI_ORGANIZATION"):
+        headers["OpenAI-Organization"] = os.environ["OPENAI_ORGANIZATION"]
+    if os.environ.get("OPENAI_PROJECT"):
+        headers["OpenAI-Project"] = os.environ["OPENAI_PROJECT"]
+
+    records = translations.setdefault("translations", {})
+    completed = 0
+    failures: list[tuple[str, str]] = []
+    workers = max(1, min(args.workers, 32))
+    print(f"Direct translations queued: {len(due)} (workers: {workers})", flush=True)
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(
+                request_direct_translation,
+                paper,
+                args.model,
+                headers,
+                args.max_attempts,
+            ): paper
+            for paper in due
+        }
+        for future in as_completed(futures):
+            paper = futures[future]
+            try:
+                translated = future.result()
+            except Exception as exc:  # Continue so successful translations can be published.
+                failures.append((paper["id"], str(exc)))
+                print(f"Translation failed [{paper['id']}]: {exc}", flush=True)
+                continue
+            records[paper["id"]] = {
+                "sourceHash": source_hash(paper["abstract"]),
+                "textKo": translated,
+                "model": args.model,
+                "translatedAt": utc_now(),
+            }
+            completed += 1
+            if completed % max(args.checkpoint_every, 1) == 0:
+                translations["generatedAt"] = utc_now()
+                write_json(args.translations_file, translations)
+                print(f"Translation checkpoint: {completed}/{len(due)}", flush=True)
+
+    translations["generatedAt"] = utc_now()
+    write_json(args.translations_file, translations)
+    print(f"Direct translations completed: {completed}/{len(due)}")
+    print(f"Direct translation failures: {len(failures)}")
+
+
+def request_direct_translation(
+    paper: dict,
+    model: str,
+    headers: dict[str, str],
+    max_attempts: int,
+) -> str:
+    body = make_translation_request("direct", paper, model)["body"]
+    last_error = "unknown error"
+    for attempt in range(max(1, max_attempts)):
+        try:
+            response = requests.post(
+                "https://api.openai.com/v1/responses",
+                headers=headers,
+                json=body,
+                timeout=180,
+            )
+            if response.status_code == 429 or response.status_code >= 500:
+                retry_after = response.headers.get("retry-after")
+                delay = float(retry_after) if retry_after else min(2**attempt, 60) + random.random()
+                last_error = f"HTTP {response.status_code}: {response.text[:300]}"
+                time.sleep(delay)
+                continue
+            response.raise_for_status()
+            translated = parse_direct_translation(response.json())
+            if not translated:
+                raise ValueError("response did not contain translation_ko")
+            return translated
+        except (requests.RequestException, ValueError, json.JSONDecodeError) as exc:
+            last_error = str(exc)
+            if attempt + 1 < max(1, max_attempts):
+                time.sleep(min(2**attempt, 60) + random.random())
+    raise RuntimeError(last_error)
+
+
+def parse_direct_translation(response_body: dict) -> str:
+    envelope = json.dumps(
+        {"custom_id": "direct", "response": {"status_code": 200, "body": response_body}},
+        ensure_ascii=False,
+    )
+    _, payload, error = parse_batch_output_line(envelope)
+    if error:
+        raise ValueError(error)
+    return str((payload or {}).get("translation_ko") or "").strip()
 
 
 def sync_batches(args: argparse.Namespace) -> None:

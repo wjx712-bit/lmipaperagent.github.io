@@ -70,49 +70,15 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Sync completed translation batches
+      - name: Translate abstracts to Korean
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: >-
-          python -m paper_agent.translate_abstracts sync
-          --wait-seconds 0
-
-      - name: Prepare untranslated abstracts
-        run: >-
-          python -m paper_agent.translate_abstracts prepare
+          python -m paper_agent.translate_abstracts translate-direct
           --model gpt-5.4-mini
           --limit "${{ github.event.inputs.limit || '0' }}"
-          --output .cache/abstract-translations/input.jsonl
-          --manifest .cache/abstract-translations/manifest.json
-
-      - name: Submit translation batch
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          if [ -s .cache/abstract-translations/input.jsonl ]; then
-            python -m paper_agent.translate_abstracts submit \
-              --input .cache/abstract-translations/input.jsonl \
-              --manifest .cache/abstract-translations/manifest.json
-          fi
-
-      - name: Persist submitted batch
-        run: |
-          git config user.name "lmi-paper-agent[bot]"
-          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
-          git add data/abstract_translations
-          if ! git diff --cached --quiet; then
-            git commit -m "Submit abstract translation batch"
-            git pull --rebase
-            git push
-          fi
-
-      - name: Wait for translation results
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: >-
-          python -m paper_agent.translate_abstracts sync
-          --wait-seconds 3000
-          --poll-seconds 60
+          --workers 8
+          --checkpoint-every 10
 
       - name: Export bilingual website data
         run: >-
@@ -141,6 +107,8 @@ jobs:
 
       - name: Publish translations
         run: |
+          git config user.name "lmi-paper-agent[bot]"
+          git config user.email "lmi-paper-agent[bot]@users.noreply.github.com"
           git add data/abstract_translations public/data/papers.json
           if git diff --cached --quiet; then
             echo "No completed translations to publish."
