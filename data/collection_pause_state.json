@@ -1,0 +1,8 @@
+{
+  "status": "paused",
+  "paused_at": "2026-09-01",
+  "last_successful_run_date": "2026-08-31",
+  "resume_from": "2026-09-01",
+  "reason": "Lab members are evaluating the current paper set.",
+  "resume_policy": "Collect every publication from resume_from through the resume date before returning to the weekly schedule."
+}

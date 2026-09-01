@@ -1,9 +1,8 @@
 name: Weekly Production Update
 
 on:
-  schedule:
-    # Sunday 09:00 KST = Sunday 00:00 UTC.
-    - cron: "0 0 * * 0"
+  # Scheduled collection is paused while lab members evaluate the current set.
+  # Keep manual dispatch available for a controlled resume from the recorded date.
   workflow_dispatch:
 
 permissions:
