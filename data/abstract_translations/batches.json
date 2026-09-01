@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-01T01:36:03.083075Z",
+  "updatedAt": "2026-09-01T01:46:52.197187Z",
   "jobs": [
     {
       "batchId": "batch_6a962bc34444819091acea07c72b588d",
@@ -27300,11 +27300,24 @@
           "title": "RIPPLY1 suppresses cancer cell stemness via targeting TBX19 in CTNNB1-mutated hepatocellular carcinoma"
         }
       ],
-      "status": "validating",
+      "status": "failed",
       "submittedAt": "2026-09-01T01:45:49.868666Z",
-      "checkedAt": "2026-09-01T01:45:49.868689Z",
+      "checkedAt": "2026-09-01T01:46:52.197144Z",
       "outputFileId": "",
-      "errorFileId": ""
+      "errorFileId": "",
+      "requestCounts": {
+        "total": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "batchErrors": [
+        {
+          "code": "invalid_request",
+          "message": "Cannot find file file-FnvQqM21LDgDbBxKJWQNfW, or organization org-AR6apf1LCCBy6sNsGiwNLDGm does not have access to it.",
+          "param": "file_id",
+          "line": null
+        }
+      ]
     }
   ]
 }
