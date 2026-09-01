@@ -1,5 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-01T01:56:19.007165Z",
-  "translations": {}
+  "generatedAt": "2026-09-01T02:00:39.980367Z",
+  "translations": {
+    "10.1038/s41467-026-77116-9": {
+      "sourceHash": "acac714dc04aecdd5f4a793e8f0aed13e5e815e2f64bd6d9c2e7f7cc83796d6f",
+      "textKo": "초록 시상하부와 뇌간의 뉴런 영양소 감지(neuronal nutrient sensing)는 에너지 및 포도당 항상성을 조절하는 것으로 여겨지지만, 이들 뇌 영역이 증가된 지방량(adiposity) 또는 혈당에 어떻게 반응하는지는 아직 명확하지 않다. 우리는 정맥 내 포도당 또는 식염수 주입 후 대조 식이 또는 고지방 식이(high-fat diet, HFD)를 섭취한 수컷 마우스의 궁상핵(arcuate nucleus), 복내측 시상하부(ventromedial hypothalamus), 및 배측 미주신경 복합체(dorsal vagal complex)에서 얻은 75,787개 세포에 대해 단일핵 RNA 시퀀싱(single-nucleus RNA-sequencing)을 수행하였다. HFD는 Th/Slc6a3, Agrp, Ghrh, 및 Trh/Cxcl12 뉴런을 포함한 여러 세포 유형 전반에서 유전자 발현을 광범위하게 변화시켰다. 대조 식이 섭취 마우스에서 고혈당증(hyperglycemia)은 성상교세포(astrocytes)와 희소돌기아교세포(oligodendrocytes)에서 뇌 영역 전반에 걸쳐 보존된 전사체 반응(transcriptional responses)과 Ghrh 뉴런에서의 반응을 유도하였으며, 이는 뉴런 활성 감소와 일치하였다. 고혈당증에 대한 전사체 반응은 HFD 후 대부분 소실되거나 역전되었다. 마우스와 인간 GHRH 뉴런 모두에서 풍부하게 발현되는 유전자들은 인간의 glycemic traits와 유전적으로 연관된 좌위(loci)에 위치하였다. 이러한 발견은 고혈당증을 감지하는 뇌의 고유한 능력을 시사하며, 이 감지 시스템이 비만에서 심각하게 손상된다는 점을 보여준다.",
+      "model": "gpt-5.4-mini",
+      "translatedAt": "2026-09-01T02:00:39.980234Z"
+    }
+  }
 }
