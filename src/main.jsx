@@ -108,7 +108,7 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('lmi-theme') || 'light');
 
   useEffect(() => {
-    fetch('./data/papers.json')
+    fetch('./data/papers.json', { cache: 'no-store' })
       .then((response) => {
         if (!response.ok) throw new Error('Data request failed');
         return response.json();
