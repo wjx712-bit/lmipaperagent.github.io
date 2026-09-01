@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
@@ -44,6 +45,8 @@ def main() -> None:
         prepare_batch(args)
     elif args.command == "translate-direct":
         translate_direct(args)
+    elif args.command == "normalize":
+        normalize_existing_translations(args)
     elif args.command == "submit":
         submit_batch(args)
     elif args.command == "sync":
@@ -81,6 +84,12 @@ def build_parser() -> argparse.ArgumentParser:
     direct.add_argument("--workers", type=int, default=8)
     direct.add_argument("--max-attempts", type=int, default=7)
     direct.add_argument("--checkpoint-every", type=int, default=10)
+
+    normalize = subparsers.add_parser(
+        "normalize",
+        help="Remove echoed title and journal metadata from stored translations.",
+    )
+    add_common_paths(normalize)
 
     submit = subparsers.add_parser("submit", help="Upload a prepared translation batch.")
     add_common_paths(submit)
@@ -252,6 +261,21 @@ def translate_direct(args: argparse.Namespace) -> None:
     print(f"Direct translation failures: {len(failures)}")
 
 
+def normalize_existing_translations(args: argparse.Namespace) -> None:
+    translations = load_json(args.translations_file, default_translations())
+    changed = 0
+    for record in translations.get("translations", {}).values():
+        original = str(record.get("textKo") or "")
+        normalized = normalize_translation(original)
+        if normalized != original:
+            record["textKo"] = normalized
+            changed += 1
+    if changed:
+        translations["generatedAt"] = utc_now()
+        write_json(args.translations_file, translations)
+    print(f"Normalized translation metadata prefixes: {changed}")
+
+
 def request_direct_translation(
     paper: dict,
     model: str,
@@ -278,7 +302,7 @@ def request_direct_translation(
             translated = parse_direct_translation(response.json())
             if not translated:
                 raise ValueError("response did not contain translation_ko")
-            return translated
+            return normalize_translation(translated)
         except (requests.RequestException, ValueError, json.JSONDecodeError) as exc:
             last_error = str(exc)
             if attempt + 1 < max(1, max_attempts):
@@ -295,6 +319,25 @@ def parse_direct_translation(response_body: dict) -> str:
     if error:
         raise ValueError(error)
     return str((payload or {}).get("translation_ko") or "").strip()
+
+
+def normalize_translation(text: str) -> str:
+    normalized = str(text or "").strip()
+    starts_with_title = bool(re.match(r"^(?:제목|표제|TITLE)\s*[:：]", normalized, re.IGNORECASE))
+    abstract_marker = re.search(r"(?:초록|ABSTRACT)\s*[:：]\s*", normalized, re.IGNORECASE)
+    if abstract_marker and abstract_marker.start() <= 1000:
+        prefix = normalized[: abstract_marker.start()]
+        has_journal_marker = bool(
+            re.search(r"(?:저널|학술지|JOURNAL)\s*[:：]", prefix, re.IGNORECASE)
+        )
+        if starts_with_title or has_journal_marker:
+            return normalized[abstract_marker.end() :].strip()
+
+    if starts_with_title:
+        separator = re.search(r"\s{2,}", normalized)
+        if separator and separator.start() <= 1000:
+            return normalized[separator.end() :].strip()
+    return normalized
 
 
 def sync_batches(args: argparse.Namespace) -> None:

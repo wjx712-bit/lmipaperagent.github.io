@@ -7,6 +7,7 @@ from paper_agent.translate_abstracts import (
     apply_batch_output,
     due_papers,
     make_translation_request,
+    normalize_translation,
     parse_direct_translation,
     source_hash,
 )
@@ -124,3 +125,40 @@ class AbstractTranslationTests(unittest.TestCase):
         }
 
         self.assertEqual(translated, parse_direct_translation(response))
+
+    def test_removes_echoed_title_and_journal_metadata(self) -> None:
+        body = "난소 노화는 여러 장기의 기능 저하보다 먼저 나타난다."
+        self.assertEqual(
+            body,
+            normalize_translation(
+                "제목: 난소 노화 연구 저널: Nature Aging 초록: " + body
+            ),
+        )
+        self.assertEqual(
+            body,
+            normalize_translation(
+                "TITLE: Ovarian aging JOURNAL: Nature Aging ABSTRACT: " + body
+            ),
+        )
+        self.assertEqual(
+            body,
+            normalize_translation(
+                "간세포 미토콘드리아 NAD+ 저널: Nature Metabolism 초록: " + body
+            ),
+        )
+        self.assertEqual(
+            body,
+            normalize_translation("제목: 난소 노화 연구  초록: " + body),
+        )
+        self.assertEqual(
+            body,
+            normalize_translation("제목: 난소 노화 연구 학술지: Nature Aging 초록: " + body),
+        )
+        self.assertEqual(
+            body,
+            normalize_translation("제목: 난소 노화 연구  " + body),
+        )
+
+    def test_keeps_normal_translation_unchanged(self) -> None:
+        body = "이 초록: 표지는 문장 본문에 포함되지만 저널 메타데이터는 없다."
+        self.assertEqual(body, normalize_translation(body))

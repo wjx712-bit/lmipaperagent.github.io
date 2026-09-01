@@ -80,6 +80,9 @@ jobs:
           --workers 8
           --checkpoint-every 10
 
+      - name: Normalize translated abstracts
+        run: python -m paper_agent.translate_abstracts normalize
+
       - name: Export bilingual website data
         run: >-
           python -m paper_agent.export_site_json
