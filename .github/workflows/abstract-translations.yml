@@ -2,6 +2,18 @@ name: Abstract Korean Translations
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Workflow mode
+        type: choice
+        options:
+          - translate
+          - inspect
+        default: translate
+      batch_id:
+        description: Batch ID for inspect mode
+        type: string
+        required: false
   schedule:
     - cron: "17 * * * *"
 
@@ -13,7 +25,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  inspect-batch:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'inspect' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Inspect translation batch
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python -m paper_agent.translate_abstracts inspect --batch-id "${{ inputs.batch_id }}"
+
   translate-and-publish:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.mode == 'translate' }}
     runs-on: ubuntu-latest
     timeout-minutes: 70
     steps:

@@ -44,6 +44,8 @@ def main() -> None:
         sync_batches(args)
     elif args.command == "status":
         print_status(args)
+    elif args.command == "inspect":
+        inspect_batch(args)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -75,6 +77,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     status = subparsers.add_parser("status", help="Show translation progress.")
     add_common_paths(status)
+
+    inspect = subparsers.add_parser("inspect", help="Print a Batch status and validation errors.")
+    inspect.add_argument("--batch-id", required=True)
     return parser
 
 
@@ -181,6 +186,9 @@ def sync_batches(args: argparse.Namespace) -> None:
             job["checkedAt"] = utc_now()
             job["outputFileId"] = batch.get("output_file_id") or ""
             job["errorFileId"] = batch.get("error_file_id") or ""
+            job["requestCounts"] = batch.get("request_counts") or {}
+            job["batchErrors"] = (batch.get("errors") or {}).get("data", [])
+            print(f"Translation batch {job['batchId']}: {job['status']}", flush=True)
             if job["status"] == "completed" and job["outputFileId"] and not job.get("importedAt"):
                 output_text = client.download_file(job["outputFileId"])
                 imported, errors = apply_batch_output(output_text, job, translations)
@@ -215,6 +223,20 @@ def print_status(args: argparse.Namespace) -> None:
     print(f"Current Korean translations: {translated}")
     print(f"Translations due: {len(papers) - translated}")
     print(f"Active batches: {active}")
+
+
+def inspect_batch(args: argparse.Namespace) -> None:
+    client = OpenAIBatchClient(os.environ.get("OPENAI_API_KEY", ""))
+    batch = client.retrieve_batch(args.batch_id)
+    summary = {
+        "id": batch.get("id", ""),
+        "status": batch.get("status", "unknown"),
+        "errors": (batch.get("errors") or {}).get("data", []),
+        "request_counts": batch.get("request_counts") or {},
+        "output_file_id": batch.get("output_file_id") or "",
+        "error_file_id": batch.get("error_file_id") or "",
+    }
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 
 def make_translation_request(custom_id: str, paper: dict, model: str) -> dict:
