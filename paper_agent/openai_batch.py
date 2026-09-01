@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 from typing import Iterable
 
@@ -31,6 +32,41 @@ class OpenAIBatchClient:
             )
         response.raise_for_status()
         return response.json()
+
+    def retrieve_file(self, file_id: str) -> dict:
+        response = self.session.get(f"{OPENAI_API_BASE}/files/{file_id}", timeout=self.timeout)
+        response.raise_for_status()
+        return response.json()
+
+    def wait_for_file_ready(
+        self,
+        file_id: str,
+        timeout_seconds: float = 300,
+        poll_seconds: float = 2,
+        settle_seconds: float = 5,
+    ) -> dict:
+        deadline = time.monotonic() + max(timeout_seconds, 0)
+        while True:
+            file = self.retrieve_file(file_id)
+            status = file.get("status")
+            purpose = file.get("purpose")
+            if purpose and purpose != "batch":
+                raise RuntimeError(f"OpenAI file {file_id} has unexpected purpose: {purpose}")
+            if status == "error":
+                details = file.get("status_details") or "unknown file processing error"
+                raise RuntimeError(f"OpenAI file {file_id} could not be processed: {details}")
+            # File status is deprecated in newer API responses. A successful retrieval
+            # without it means the file is available; older responses use `processed`.
+            if status in {None, "processed"}:
+                if settle_seconds > 0:
+                    time.sleep(settle_seconds)
+                return file
+            if time.monotonic() >= deadline:
+                raise TimeoutError(
+                    f"OpenAI file {file_id} was not ready after {timeout_seconds:g} seconds "
+                    f"(last status: {status or 'unknown'})"
+                )
+            time.sleep(max(poll_seconds, 0.1))
 
     def create_batch(self, input_file_id: str, metadata: dict[str, str] | None = None) -> dict:
         response = self.session.post(

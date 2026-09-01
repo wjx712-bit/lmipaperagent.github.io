@@ -142,6 +142,7 @@ def submit_batch(args: argparse.Namespace) -> None:
 
     client = OpenAIBatchClient(os.environ.get("OPENAI_API_KEY", ""))
     uploaded = client.upload_batch_file(args.input)
+    client.wait_for_file_ready(uploaded["id"])
     batch = client.create_batch(
         uploaded["id"],
         metadata={"job": "lmi-abstract-ko", "model": str(manifest.get("model", ""))},
