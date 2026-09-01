@@ -27355,6 +27355,30 @@
           "line": null
         }
       ]
+    },
+    {
+      "batchId": "batch_6a96308426488190a26c4d70c493be3a",
+      "inputFileId": "file-G7tpTxJAjwvuSAxUGgvSjQ",
+      "inputPath": ".cache/abstract-translations/input.jsonl",
+      "manifestPath": ".cache/abstract-translations/manifest.json",
+      "model": "gpt-5.4-mini",
+      "items": [
+        {
+          "customId": "abstract-ko-466eb870ede76b3c96cd945d",
+          "paperId": "10.1038/s41467-026-77116-9",
+          "sourceHash": "acac714dc04aecdd5f4a793e8f0aed13e5e815e2f64bd6d9c2e7f7cc83796d6f",
+          "title": "Single-cell profiling identifies obesity-disrupted brain glucose sensing"
+        }
+      ],
+      "status": "validating",
+      "submittedAt": "2026-09-01T01:55:16.303516Z",
+      "checkedAt": "2026-09-01T01:55:16.303541Z",
+      "outputFileId": "",
+      "errorFileId": "",
+      "requestScope": {
+        "organization": "org-AR6apf1LCCBy6sNsGiwNLDGm",
+        "project": "proj_FJ6YUnw8LQHSuWBYei5SFAhI"
+      }
     }
   ]
 }
