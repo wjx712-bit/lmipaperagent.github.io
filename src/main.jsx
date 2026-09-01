@@ -118,7 +118,7 @@ function App() {
   const [minimumAiScore, setMinimumAiScore] = useState(0);
   const [sort, setSort] = useState('added');
   const [reviews, setReviews] = useState(getStoredReviews);
-  const [labReviewedPaperIds, setLabReviewedPaperIds] = useState([]);
+  const [labReviewRows, setLabReviewRows] = useState([]);
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [adminOpen, setAdminOpen] = useState(false);
   const [reviewSyncError, setReviewSyncError] = useState('');
@@ -145,12 +145,12 @@ function App() {
   useEffect(() => {
     if (!auth.configured) {
       setReviews(getStoredReviews());
-      setLabReviewedPaperIds([]);
+      setLabReviewRows([]);
       return;
     }
     if (!auth.user || !auth.isApproved) {
       setReviews({});
-      setLabReviewedPaperIds([]);
+      setLabReviewRows([]);
       return;
     }
     let active = true;
@@ -168,7 +168,6 @@ function App() {
         review.paper_id,
         { score: review.score, note: review.note, updatedAt: review.updated_at },
       ]));
-      const reviewedPaperIds = new Set((data || []).map((review) => review.paper_id));
       const localReviews = getStoredReviews();
       const missingLocalEntries = Object.entries(localReviews).filter(([paperId]) => !accountReviews[paperId]);
       if (missingLocalEntries.length) {
@@ -186,13 +185,13 @@ function App() {
         }
         missingLocalEntries.forEach(([paperId, review]) => {
           accountReviews[paperId] = review;
-          reviewedPaperIds.add(paperId);
         });
+        data = [...data, ...rows];
         localStorage.removeItem(STORAGE_KEY);
       }
       if (active) {
         setReviews(accountReviews);
-        setLabReviewedPaperIds(auth.isAdmin ? [...reviewedPaperIds] : Object.keys(accountReviews));
+        setLabReviewRows(auth.isAdmin ? data : []);
       }
     }
     loadAccountReviews();
@@ -203,13 +202,30 @@ function App() {
     };
   }, [auth.configured, auth.user?.id, auth.isApproved, auth.isAdmin, dataset.papers]);
 
+  const labReviewSummary = useMemo(() => {
+    const summary = {};
+    labReviewRows.forEach((review) => {
+      const current = summary[review.paper_id] || { maxScore: 0, count: 0 };
+      current.maxScore = Math.max(current.maxScore, review.score);
+      current.count += 1;
+      summary[review.paper_id] = current;
+    });
+    return summary;
+  }, [labReviewRows]);
+
   const papers = useMemo(
-    () => dataset.papers.map((paper) => ({
-      ...paper,
-      reviewScore: reviews[paper.id]?.score ?? paper.seedReviewScore ?? null,
-      reviewNote: reviews[paper.id]?.note ?? '',
-    })),
-    [dataset.papers, reviews],
+    () => dataset.papers.map((paper) => {
+      const ownReviewScore = reviews[paper.id]?.score ?? paper.seedReviewScore ?? null;
+      const labReview = labReviewSummary[paper.id];
+      return {
+        ...paper,
+        ownReviewScore,
+        reviewScore: auth.isAdmin ? labReview?.maxScore ?? ownReviewScore : ownReviewScore,
+        reviewCount: auth.isAdmin ? labReview?.count ?? 0 : null,
+        reviewNote: reviews[paper.id]?.note ?? '',
+      };
+    }),
+    [dataset.papers, reviews, labReviewSummary, auth.isAdmin],
   );
 
   const journals = useMemo(() => [...new Set(papers.map((paper) => paper.journalShort))].sort(), [papers]);
@@ -246,9 +262,8 @@ function App() {
   const visiblePapers = filteredPapers.slice(0, visibleCount);
 
   const stats = useMemo(() => {
-    const labReviewedSet = new Set(labReviewedPaperIds);
     const labeled = auth.isAdmin
-      ? papers.filter((paper) => labReviewedSet.has(paper.id)).length
+      ? papers.filter((paper) => paper.reviewCount > 0).length
       : papers.filter((paper) => paper.reviewScore != null).length;
     return {
       total: papers.length,
@@ -258,7 +273,7 @@ function App() {
       progress: papers.length ? Math.round((labeled / papers.length) * 100) : 0,
       labeled,
     };
-  }, [papers, labReviewedPaperIds, auth.isAdmin]);
+  }, [papers, auth.isAdmin]);
 
   const activeFilterCount = selectedJournals.length + selectedTopics.length + (minimumAiScore ? 1 : 0);
 
@@ -290,9 +305,18 @@ function App() {
     }
     setReviews(next);
     if (auth.isAdmin) {
-      setLabReviewedPaperIds((current) => current.includes(paperId) ? current : [...current, paperId]);
+      setLabReviewRows((current) => [
+        ...current.filter((review) => !(review.user_id === auth.user.id && review.paper_id === paperId)),
+        {
+          user_id: auth.user.id,
+          paper_id: paperId,
+          score,
+          note,
+          updated_at: next[paperId].updatedAt,
+        },
+      ]);
     }
-    setSelectedPaper((current) => current ? { ...current, reviewScore: score, reviewNote: note } : current);
+    setSelectedPaper((current) => current ? { ...current, ownReviewScore: score, reviewNote: note } : current);
   }
 
   return (
@@ -323,8 +347,8 @@ function App() {
 
         <section className="stats-grid" aria-label="논문 통계">
           <StatCard icon={BookOpen} label="전체 논문" value={stats.total} meta="수집된 논문" />
-          <StatCard icon={Star} label="필독 후보" value={stats.must} meta="평가 5점" accent="gold" />
-          <StatCard icon={Sparkles} label="검토 후보" value={stats.review} meta="평가 3–4점" accent="teal" />
+          <StatCard icon={Star} label="필독 후보" value={stats.must} meta={auth.isAdmin ? '연구실 최고점 5' : '평가 5점'} accent="gold" />
+          <StatCard icon={Sparkles} label="검토 후보" value={stats.review} meta={auth.isAdmin ? '연구실 최고점 3–4' : '평가 3–4점'} accent="teal" />
           <StatCard icon={CalendarDays} label="이번 주 신규" value={stats.weekly} meta="최근 7일" accent="coral" />
           <StatCard
             icon={Check}
@@ -486,9 +510,12 @@ function PaperRow({ paper, onOpen }) {
       <div className="paper-metrics">
         <div className="metric ai"><span>주제 관련도</span><strong>{paper.aiScore}</strong><small>/ 100</small></div>
         <div className={`metric human ${scoreTone(paper.reviewScore)}`}>
-          <span>연구실 평가</span>
+          <span>{paper.reviewCount != null ? '연구실 최고점' : '연구실 평가'}</span>
           <strong>{paper.reviewScore ?? '–'}</strong>
-          <small>{paper.reviewScore ? REVIEW_LABELS[paper.reviewScore] : '평가 대기'}</small>
+          <small>
+            {paper.reviewScore ? REVIEW_LABELS[paper.reviewScore] : '평가 대기'}
+            {paper.reviewCount != null && paper.reviewCount > 0 ? ` · ${paper.reviewCount}명` : ''}
+          </small>
         </div>
         <button className="review-button" type="button" onClick={onOpen}><FileText size={15} /> 검토</button>
       </div>
@@ -497,7 +524,7 @@ function PaperRow({ paper, onOpen }) {
 }
 
 function ReviewDrawer({ paper, auth, onClose, onSave }) {
-  const [score, setScore] = useState(paper.reviewScore);
+  const [score, setScore] = useState(paper.ownReviewScore);
   const [note, setNote] = useState(paper.reviewNote || '');
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
