@@ -6,7 +6,7 @@ LMI 연구 주제와 관련된 논문을 지정 저널에서 수집하고, 공�
 
 1. 매주 일요일 09:00 KST에 GitHub Actions가 최근 14일을 겹쳐 조회합니다.
 2. Crossref 메타데이터를 LMI rubric으로 평가하고 DOI 기준으로 중복을 제거합니다.
-3. 누적 카탈로그와 최근 1년 웹 데이터가 갱신됩니다.
+3. 누적 카탈로그와 최근 5년 웹 데이터가 갱신됩니다.
 4. 데이터 커밋이 별도 Pages workflow를 호출해 사이트를 배포합니다.
 5. Europe PMC에서 초록을 보강하고, 실제 초록이 확보된 논문만 사이트에 게시합니다.
 
@@ -35,13 +35,14 @@ pnpm build
 
 GitHub의 `Actions > Weekly Production Update > Run workflow`에서 즉시 실행할 수 있습니다. Crossref polite pool 사용을 위해 저장소 Secret `LMI_CROSSREF_MAILTO`에 연락용 이메일을 등록하는 것을 권장합니다.
 
-## Abstract publishing
+## Abstract publishing and translation
 
-사이트는 생성형 AI 상세 분석 대신 출판사가 제공한 원문 초록을 게시합니다. OpenAI API를 호출하지 않으므로 초록 수집과 게시에는 OpenAI 비용이 들지 않습니다.
+사이트는 생성형 AI 상세 분석 대신 출판사가 제공한 원문 초록을 게시합니다. 영문 초록 수집과 게시에는 OpenAI 비용이 들지 않으며, 확보한 초록의 한국어 번역에만 OpenAI API를 사용합니다.
 
 - Crossref가 제공한 초록은 수집 시 운영 카탈로그에 보존합니다.
 - Europe PMC에서 DOI 기준으로 초록을 추가 확보합니다.
 - 두 출처 모두에서 초록을 확보하지 못한 논문은 공개 사이트에서 제외합니다.
+- 영문 초록은 `gpt-5.4-mini`로 한국어 번역하고 체크포인트 파일에 보존합니다.
 - DOI 원문 링크와 Europe PMC 초록 출처 링크를 함께 제공합니다.
 
 로컬에서 초록을 다시 수집하고 사이트 데이터를 내보낼 수 있습니다.
@@ -58,8 +59,11 @@ python -m paper_agent.export_site_json
 - `data/catalog/papers_table.csv`: DOI 중복 제거된 운영 카탈로그
 - `data/weekly_updates/`: 실행일별 신규 논문
 - `data/weekly_collection_state.json`: 마지막 실행 상태와 수집 건수
-- `public/data/papers.json`: 웹사이트가 읽는 최근 1년 데이터
+- `public/data/papers.json`: 웹사이트가 읽는 최근 5년 데이터
 - `data/paper_analysis/source_index.json`: DOI별 초록과 출처 정보
+- `data/abstract_translations/ko.json`: DOI별 한국어 초록 번역
+
+다른 계정이나 컴퓨터에서 이어서 작업할 때 사용할 전체 프롬프트는 [CONTINUE_PROMPT.md](CONTINUE_PROMPT.md)에 있습니다.
 
 수집 캐시는 `.cache/paper-analysis/`에만 저장되며 Git에는 올라가지 않습니다. 게시에 필요한 초록은 source index에 보존되므로 다른 컴퓨터에서도 저장소를 clone해 그대로 이어갈 수 있습니다.
 

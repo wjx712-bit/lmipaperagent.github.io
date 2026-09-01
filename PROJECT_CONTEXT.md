@@ -10,16 +10,16 @@ LMI 연구 주제 관련 논문을 14개 지정 저널에서 자동 수집하고
 - Collection: Python, Crossref REST API
 - Ranking: `config/lab_profile.yml` 키워드 그룹과 `config/relevance_rubric.yml`
 - Schedule: `.github/workflows/weekly-production-update.yml`, Sunday 09:00 KST
-- Production data: rolling 365-day JSON, cumulative CSV catalog
+- Production data: rolling 1,825-day public JSON, cumulative CSV catalog
 - Authentication: Supabase Google OAuth, administrator-approved membership
 - Review persistence: Supabase PostgreSQL with RLS; author and administrator only
-- Detail analysis: Europe PMC full text/abstract discovery, PMC OA figure packages, OpenAI Batch structured output
-- Analysis schedule: `.github/workflows/paper-analysis.yml`, resumable every six hours after `OPENAI_API_KEY` is configured
-- Current source inventory: 2,688 papers checked; 1,305 full text, 951 abstract, 432 public source unavailable
+- Abstracts: Crossref and Europe PMC discovery; papers without a public abstract are not published
+- Translation: hourly resumable English-to-Korean translation through `.github/workflows/abstract-translations.yml`
+- Current public inventory (2026-09-01): 2,797 bilingual papers, including 540 adipose tissue/adipocyte papers
 
 ## Next milestone
 
-Supabase 프로젝트에 migration을 적용하고 Google provider 및 GitHub Repository variables를 등록해 인증을 활성화합니다. 이후 전문가 추천 관리와 리뷰 피드백의 다음 주 ranking 반영을 구현합니다. Service role key는 프런트엔드에 절대 포함하지 않습니다.
+운영 사이트, Google 로그인, 관리자 승인, 개인 평가 RLS, 주간 수집, 한국어 초록 번역이 활성화되어 있습니다. 다음 변경은 실제 운영 데이터를 보존하면서 진행하고, Service role key는 프런트엔드에 절대 포함하지 않습니다.
 
 ## Continue on another computer
 
@@ -34,3 +34,5 @@ pip install -r requirements.txt
 ```
 
 새 Codex 작업에서 `README.md`, `PROJECT_CONTEXT.md`, 최근 `git log`, `git status`를 먼저 읽도록 요청하면 현재 맥락에서 바로 이어갈 수 있습니다.
+
+복사해서 사용할 전체 인수인계 프롬프트는 [CONTINUE_PROMPT.md](CONTINUE_PROMPT.md)에 있습니다.
