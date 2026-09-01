@@ -24,6 +24,14 @@ class OpenAIBatchClientTests(unittest.TestCase):
             client.request_scope,
         )
 
+        legacy_response = Mock()
+        legacy_response.headers = {
+            "openai-organization": "user-legacy-owner",
+            "openai-project": "proj-test",
+        }
+        client._pin_response_scope(legacy_response)
+        self.assertEqual("org-test", client.session.headers["OpenAI-Organization"])
+
     def test_waits_until_uploaded_file_is_processed(self) -> None:
         client = OpenAIBatchClient("test-key")
         client.retrieve_file = Mock(

@@ -25,6 +25,10 @@ on:
 permissions:
   contents: write
 
+env:
+  OPENAI_ORGANIZATION: org-AR6apf1LCCBy6sNsGiwNLDGm
+  OPENAI_PROJECT: proj_FJ6YUnw8LQHSuWBYei5SFAhI
+
 concurrency:
   group: paper-data-update
   cancel-in-progress: false

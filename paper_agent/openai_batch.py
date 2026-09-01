@@ -50,6 +50,8 @@ class OpenAIBatchClient:
         for name, value in response_headers.items():
             if not value:
                 continue
+            if name == "organization" and not value.startswith("org-"):
+                continue
             header = request_headers[name]
             existing = self.session.headers.get(header)
             if existing and existing != value:
