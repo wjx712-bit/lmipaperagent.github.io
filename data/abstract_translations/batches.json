@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "",
+  "updatedAt": "2026-09-01T01:36:03.083075Z",
   "jobs": [
     {
       "batchId": "batch_6a962bc34444819091acea07c72b588d",
@@ -13648,9 +13648,9 @@
           "title": "RIPPLY1 suppresses cancer cell stemness via targeting TBX19 in CTNNB1-mutated hepatocellular carcinoma"
         }
       ],
-      "status": "validating",
+      "status": "failed",
       "submittedAt": "2026-09-01T01:35:00.038776Z",
-      "checkedAt": "2026-09-01T01:35:00.038795Z",
+      "checkedAt": "2026-09-01T01:36:03.083054Z",
       "outputFileId": "",
       "errorFileId": ""
     }
