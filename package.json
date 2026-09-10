@@ -9,6 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:admin": "node --test tests/admin-analytics.test.mjs tests/admin-data.test.mjs tests/classification-audit.test.mjs",
+    "test:preview": "node --test tests/classification-preview.test.mjs tests/preview-snapshot.test.mjs",
+    "classification:preview": "node scripts/export_classification_preview.mjs",
     "data:export": "python -m paper_agent.export_site_json",
     "test:collector": "python -m unittest discover -s tests -v"
   },

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Component, lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Ban,
   Check,
@@ -15,6 +15,16 @@ import {
 import { supabase } from './supabase';
 import { fetchAdminData } from './adminData';
 import { AdminInsights } from './AdminInsights';
+
+const ClassificationPreviewPanel = lazy(() => import('./ClassificationPreviewPanel.jsx'));
+
+class PreviewBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() {
+    return this.state.failed ? <div className="admin-error" role="alert"><span>미리보기를 불러오지 못했습니다. 기존 운영 데이터는 변경되지 않았습니다.</span><button type="button" onClick={() => window.location.reload()}>페이지 새로고침</button></div> : this.props.children;
+  }
+}
 
 const ANALYTICS_TABS = [
   ['distribution', '저널·주제 분포'],
@@ -78,7 +88,7 @@ export function AdminPanel({ papers, isAdmin, onClose }) {
     function onKeyDown(event) {
       if (event.key === 'Escape') close.current();
       if (event.key !== 'Tab') return;
-      const focusable = [...(panel.current?.querySelectorAll('button:not(:disabled),input,select,a[href],[tabindex="0"]') || [])].filter((element) => element.getClientRects().length);
+      const focusable = [...(panel.current?.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),a[href],summary,[tabindex="0"]') || [])].filter((element) => element.getClientRects().length);
       const first = focusable[0];
       const last = focusable.at(-1);
       if (!first) { event.preventDefault(); return; }
@@ -145,6 +155,7 @@ export function AdminPanel({ papers, isAdmin, onClose }) {
 
         <div className="admin-tabs" role="tablist" aria-label="관리 항목">
           {ANALYTICS_TABS.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={activeTab === id} className={activeTab === id ? 'active' : ''} onClick={() => setActiveTab(id)}>{label}</button>)}
+          <button type="button" role="tab" aria-selected={activeTab === 'preview'} className={activeTab === 'preview' ? 'active' : ''} onClick={() => setActiveTab('preview')}>새 분류 미리보기</button>
           <button type="button" role="tab" aria-selected={activeTab === 'pending'} className={activeTab === 'pending' ? 'active' : ''} onClick={() => setActiveTab('pending')}>승인 대기 <span>{pending.length}</span></button>
           <button type="button" role="tab" aria-selected={activeTab === 'reviews'} className={activeTab === 'reviews' ? 'active' : ''} onClick={() => setActiveTab('reviews')}>개인별 평가 <span>{reviews.length}</span></button>
           <button type="button" role="tab" aria-selected={activeTab === 'members'} className={activeTab === 'members' ? 'active' : ''} onClick={() => setActiveTab('members')}>구성원 <span>{profiles.length}</span></button>
@@ -156,6 +167,8 @@ export function AdminPanel({ papers, isAdmin, onClose }) {
             <div className="admin-loading"><LoaderCircle size={24} /><span>관리 데이터를 불러오는 중입니다</span></div>
           ) : !fetchedAt ? (
             <AdminEmpty icon={CircleAlert} title="관리 데이터 조회가 완료되지 않았습니다" />
+          ) : activeTab === 'preview' ? (
+            <PreviewBoundary><Suspense fallback={<div className="admin-loading"><LoaderCircle size={24} /><span>미리보기를 불러오는 중입니다</span></div>}><ClassificationPreviewPanel papers={papers} /></Suspense></PreviewBoundary>
           ) : ANALYTICS_TABS.some(([id]) => activeTab === id) ? (
             <AdminInsights papers={papers} reviews={reviews} profiles={profiles} activeTab={activeTab} fetchedAt={fetchedAt} />
           ) : activeTab === 'pending' ? (
