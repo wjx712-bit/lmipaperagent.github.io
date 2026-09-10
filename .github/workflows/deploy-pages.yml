@@ -32,6 +32,8 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Check administrator analytics and classification audit
+        run: pnpm test:admin
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}

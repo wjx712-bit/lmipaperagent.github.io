@@ -507,7 +507,7 @@ function App() {
         onClose={() => setReviewSession(null)} onSave={saveReview} session={reviewSession}
         onView={(view) => setReviewSession((current) => ({ ...current, view }))}
         onNavigate={(index) => setReviewSession((current) => ({ ...current, index }))} onSavedNext={advanceReview} />}
-      {adminOpen && auth.isAdmin && <AdminPanel papers={papers} onClose={() => setAdminOpen(false)} />}
+      {adminOpen && auth.isAdmin && <AdminPanel key={auth.user.id} isAdmin={auth.isAdmin} papers={dataset.papers} onClose={() => setAdminOpen(false)} />}
     </div>
   );
 }
