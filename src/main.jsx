@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Activity,
+  ArrowLeft,
+  ArrowRight,
   ArrowDownUp,
   BookOpen,
   Bookmark,
@@ -16,6 +18,7 @@ import {
   LoaderCircle,
   LogIn,
   LogOut,
+  LockKeyhole,
   Moon,
   RefreshCw,
   Search,
@@ -119,12 +122,25 @@ function App() {
   const [sort, setSort] = useState('added');
   const [reviews, setReviews] = useState(getStoredReviews);
   const [labReviewRows, setLabReviewRows] = useState([]);
-  const [selectedPaper, setSelectedPaper] = useState(null);
+  const [reviewSession, setReviewSession] = useState(null);
+  const [reviewScope, setReviewScope] = useState('lab');
+  const [loadedReviewOwner, setLoadedReviewOwner] = useState(null);
+  const [sessionNotice, setSessionNotice] = useState('');
+  const reviewRequest = useRef(0);
+  const reviewWriting = useRef(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [reviewSyncError, setReviewSyncError] = useState('');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [theme, setTheme] = useState(() => localStorage.getItem('lmi-theme') || 'light');
+  const reviewOwner = auth.configured ? auth.user?.id : 'local';
+  const currentReviewOwner = useRef(reviewOwner);
+  currentReviewOwner.current = reviewOwner;
+  const reviewsVisible = (!auth.configured || auth.isApproved) && loadedReviewOwner === reviewOwner;
+  const labScope = auth.isAdmin && reviewScope === 'lab';
+  const reviewAccessLabel = auth.loading ? '확인 중' : !auth.configured ? '평가 불러오는 중'
+    : !auth.user ? '로그인 후 확인' : !auth.isApproved ? '승인 후 확인'
+      : reviewSyncError ? '평가 확인 필요' : '평가 불러오는 중';
 
   useEffect(() => {
     fetch('./data/papers.json', { cache: 'no-store' })
@@ -146,24 +162,29 @@ function App() {
     if (!auth.configured) {
       setReviews(getStoredReviews());
       setLabReviewRows([]);
+      setLoadedReviewOwner('local');
       return;
     }
     if (!auth.user || !auth.isApproved) {
       setReviews({});
       setLabReviewRows([]);
+      setLoadedReviewOwner(null);
       return;
     }
     let active = true;
     async function loadAccountReviews() {
+      if (reviewWriting.current === reviewOwner) return;
+      const request = ++reviewRequest.current;
       setReviewSyncError('');
       let data;
       try {
         data = await fetchVisibleReviewRows(auth.user.id, auth.isAdmin);
       } catch (error) {
-        if (active) setReviewSyncError(error.message);
+        if (active && request === reviewRequest.current) setReviewSyncError(error.message);
         return;
       }
       const ownRows = (data || []).filter((review) => review.user_id === auth.user.id);
+      if (!active || request !== reviewRequest.current) return;
       const accountReviews = Object.fromEntries(ownRows.map((review) => [
         review.paper_id,
         { score: review.score, note: review.note, updatedAt: review.updated_at },
@@ -189,9 +210,10 @@ function App() {
         data = [...data, ...rows];
         localStorage.removeItem(STORAGE_KEY);
       }
-      if (active) {
+      if (active && request === reviewRequest.current) {
         setReviews(accountReviews);
         setLabReviewRows(auth.isAdmin ? data : []);
+        setLoadedReviewOwner(auth.user.id);
       }
     }
     loadAccountReviews();
@@ -201,6 +223,11 @@ function App() {
       window.removeEventListener('focus', loadAccountReviews);
     };
   }, [auth.configured, auth.user?.id, auth.isApproved, auth.isAdmin, dataset.papers]);
+
+  useEffect(() => {
+    setReviewSession(null);
+    setSessionNotice('');
+  }, [reviewOwner, auth.isApproved]);
 
   const labReviewSummary = useMemo(() => {
     const summary = {};
@@ -215,17 +242,17 @@ function App() {
 
   const papers = useMemo(
     () => dataset.papers.map((paper) => {
-      const ownReviewScore = reviews[paper.id]?.score ?? paper.seedReviewScore ?? null;
+      const ownReviewScore = reviewsVisible ? reviews[paper.id]?.score ?? null : null;
       const labReview = labReviewSummary[paper.id];
       return {
         ...paper,
         ownReviewScore,
-        reviewScore: auth.isAdmin ? labReview?.maxScore ?? ownReviewScore : ownReviewScore,
-        reviewCount: auth.isAdmin ? labReview?.count ?? 0 : null,
-        reviewNote: reviews[paper.id]?.note ?? '',
+        reviewScore: labScope && reviewsVisible ? labReview?.maxScore ?? null : ownReviewScore,
+        reviewCount: labScope && reviewsVisible ? labReview?.count ?? 0 : null,
+        reviewNote: reviewsVisible ? reviews[paper.id]?.note ?? '' : '',
       };
     }),
-    [dataset.papers, reviews, labReviewSummary, auth.isAdmin],
+    [dataset.papers, reviews, labReviewSummary, labScope, reviewsVisible],
   );
 
   const journals = useMemo(() => [...new Set(papers.map((paper) => paper.journalShort))].sort(), [papers]);
@@ -260,9 +287,13 @@ function App() {
   }, [query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort]);
 
   const visiblePapers = filteredPapers.slice(0, visibleCount);
+  const ownPendingPapers = filteredPapers.filter((paper) => paper.ownReviewScore == null);
+  const selectedPaper = reviewSession && reviewSession.owner === reviewOwner
+    ? papers.find((paper) => paper.id === reviewSession.ids[reviewSession.index]) : null;
+  const selectedNeedsReviewAccess = ['must', 'review', 'unlabeled'].includes(activeTab) && !reviewsVisible;
 
   const stats = useMemo(() => {
-    const labeled = auth.isAdmin
+    const labeled = labScope
       ? papers.filter((paper) => paper.reviewCount > 0).length
       : papers.filter((paper) => paper.reviewScore != null).length;
     return {
@@ -273,7 +304,7 @@ function App() {
       progress: papers.length ? Math.round((labeled / papers.length) * 100) : 0,
       labeled,
     };
-  }, [papers, auth.isAdmin]);
+  }, [papers, labScope]);
 
   const activeFilterCount = selectedJournals.length + selectedTopics.length + (minimumAiScore ? 1 : 0);
 
@@ -288,35 +319,51 @@ function App() {
   }
 
   async function saveReview(paperId, score, note) {
-    const next = { ...reviews, [paperId]: { score, note, updatedAt: new Date().toISOString() } };
-    if (auth.configured) {
-      if (!auth.user || !auth.isApproved) throw new Error('승인된 연구실 계정이 필요합니다.');
-      const paper = dataset.papers.find((item) => item.id === paperId);
-      const { error } = await supabase.from('paper_reviews').upsert({
-        user_id: auth.user.id,
-        paper_id: paperId,
-        doi: paper?.doi || null,
-        score,
-        note,
-      });
-      if (error) throw error;
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    }
-    setReviews(next);
-    if (auth.isAdmin) {
-      setLabReviewRows((current) => [
-        ...current.filter((review) => !(review.user_id === auth.user.id && review.paper_id === paperId)),
-        {
+    const savedReview = { score, note, updatedAt: new Date().toISOString() };
+    reviewWriting.current = reviewOwner;
+    ++reviewRequest.current;
+    try {
+      if (auth.configured) {
+        if (!auth.user || !auth.isApproved || !reviewsVisible) throw new Error('승인된 연구실 계정이 필요합니다.');
+        const paper = dataset.papers.find((item) => item.id === paperId);
+        const { error } = await supabase.from('paper_reviews').upsert({
           user_id: auth.user.id,
           paper_id: paperId,
+          doi: paper?.doi || null,
           score,
           note,
-          updated_at: next[paperId].updatedAt,
-        },
-      ]);
+        });
+        if (error) throw error;
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...reviews, [paperId]: savedReview }));
+      }
+      if (currentReviewOwner.current !== reviewOwner) throw new Error('로그인 계정이 변경되었습니다.');
+      setReviews((current) => ({ ...current, [paperId]: savedReview }));
+      if (auth.isAdmin) {
+        setLabReviewRows((current) => [
+          ...current.filter((review) => !(review.user_id === auth.user.id && review.paper_id === paperId)),
+          { user_id: auth.user.id, paper_id: paperId, score, note, updated_at: savedReview.updatedAt },
+        ]);
+      }
+    } finally {
+      if (reviewWriting.current === reviewOwner) reviewWriting.current = false;
     }
-    setSelectedPaper((current) => current ? { ...current, ownReviewScore: score, reviewNote: note } : current);
+  }
+
+  function openReview(paper, pendingOnly = false) {
+    // Freeze the filtered queue so saving cannot reorder or remove the next paper.
+    const queue = pendingOnly ? ownPendingPapers : filteredPapers;
+    setSessionNotice('');
+    setReviewSession({ ids: queue.map((item) => item.id), index: queue.findIndex((item) => item.id === paper.id), owner: reviewOwner, view: 'abstract' });
+  }
+
+  function advanceReview() {
+    if (reviewSession.index < reviewSession.ids.length - 1) {
+      setReviewSession((current) => ({ ...current, index: current.index + 1, view: 'abstract' }));
+    } else {
+      setReviewSession(null);
+      setSessionNotice('마지막 논문의 평가를 저장했습니다.');
+    }
   }
 
   return (
@@ -347,15 +394,16 @@ function App() {
 
         <section className="stats-grid" aria-label="논문 통계">
           <StatCard icon={BookOpen} label="전체 논문" value={stats.total} meta="수집된 논문" />
-          <StatCard icon={Star} label="필독 후보" value={stats.must} meta={auth.isAdmin ? '연구실 최고점 5' : '평가 5점'} accent="gold" />
-          <StatCard icon={Sparkles} label="검토 후보" value={stats.review} meta={auth.isAdmin ? '연구실 최고점 3–4' : '평가 3–4점'} accent="teal" />
+          <StatCard icon={Star} label="필독 후보" value={reviewsVisible ? stats.must : reviewAccessLabel} meta={labScope ? '연구실 최고점 5 · 후보 집계' : '내 평가 5점'} accent="gold" locked={!reviewsVisible} />
+          <StatCard icon={Sparkles} label="검토 후보" value={reviewsVisible ? stats.review : reviewAccessLabel} meta={labScope ? '연구실 최고점 3–4 · 후보 집계' : '내 평가 3–4점'} accent="teal" locked={!reviewsVisible} />
           <StatCard icon={CalendarDays} label="이번 주 신규" value={stats.weekly} meta="최근 7일" accent="coral" />
           <StatCard
             icon={Check}
             label="라벨링 진행률"
-            value={`${stats.progress}%`}
-            meta={`${stats.labeled} / ${stats.total}편 · ${auth.isAdmin ? '연구실 전체' : '내 평가'}`}
-            progress={stats.progress}
+            value={reviewsVisible ? `${stats.progress}%` : reviewAccessLabel}
+            meta={reviewsVisible ? `${stats.labeled} / ${stats.total}편 · ${labScope ? '연구실 전체' : '내 평가'}` : '개인별 평가 기록'}
+            progress={reviewsVisible ? stats.progress : null}
+            locked={!reviewsVisible}
           />
         </section>
 
@@ -384,17 +432,21 @@ function App() {
                 <option value="added">최근 수집순</option>
                 <option value="published">최신 발행순</option>
                 <option value="ai">주제 관련도순</option>
-                <option value="score">연구실 평가순</option>
+                <option value="score" disabled={!reviewsVisible}>{labScope ? '연구실 최고점순' : '내 평가순'}</option>
               </select>
               <ChevronDown size={15} aria-hidden="true" />
             </label>
           </div>
 
+          {auth.isAdmin && <div className="review-scope" role="group" aria-label="평가 집계 범위">
+            <button type="button" aria-pressed={reviewScope === 'own'} onClick={() => setReviewScope('own')}>내 평가</button>
+            <button type="button" aria-pressed={reviewScope === 'lab'} onClick={() => setReviewScope('lab')}>연구실 전체</button>
+          </div>}
           <div className="review-tabs" role="tablist" aria-label="논문 분류">
             {TABS.map((tab) => (
-              <button key={tab.id} role="tab" aria-selected={activeTab === tab.id} className={activeTab === tab.id ? 'active' : ''} onClick={() => setActiveTab(tab.id)}>
+              <button key={tab.id} role="tab" aria-selected={activeTab === tab.id} className={activeTab === tab.id ? 'active' : ''} onClick={() => setActiveTab(tab.id)} disabled={!reviewsVisible && ['must', 'review', 'unlabeled'].includes(tab.id)} title={!reviewsVisible && ['must', 'review', 'unlabeled'].includes(tab.id) ? reviewAccessLabel : undefined}>
                 {tab.label}
-                <span>{tabCount(tab.id, papers)}</span>
+                <span>{!reviewsVisible && ['must', 'review', 'unlabeled'].includes(tab.id) ? <LockKeyhole size={12} aria-label={reviewAccessLabel} /> : tabCount(tab.id, papers)}</span>
               </button>
             ))}
           </div>
@@ -420,12 +472,19 @@ function App() {
                 {reviewSyncError && <span className="review-sync-error">평가 동기화 오류</span>}
                 {activeFilterCount > 0 && <button type="button" onClick={resetFilters}>필터 초기화</button>}
               </div>
+              {reviewsVisible && <div className="review-queue-bar">
+                <span>현재 목록 · 내 미평가 <strong>{ownPendingPapers.length.toLocaleString()}</strong>편</span>
+                <button className="primary-button" type="button" disabled={loading || !ownPendingPapers.length || Boolean(reviewSyncError)} onClick={() => openReview(ownPendingPapers[0], true)}><BookOpen size={15} /> 미평가 연속 검토</button>
+              </div>}
+              {sessionNotice && <p className="session-notice" role="status">{sessionNotice}</p>}
+              {auth.error && <p className="review-save-error" role="alert">{auth.error}</p>}
 
               {loading && <LoadingRows />}
               {loadError && <EmptyState icon={CircleAlert} title="논문 데이터를 불러오지 못했습니다" detail="data/papers.json 파일을 확인해 주세요." />}
-              {!loading && !loadError && filteredPapers.length === 0 && <EmptyState icon={Search} title="조건에 맞는 논문이 없습니다" detail="검색어 또는 필터를 변경해 보세요." />}
-              {!loading && !loadError && visiblePapers.map((paper) => (
-                <PaperRow key={paper.id} paper={paper} onOpen={() => setSelectedPaper(paper)} />
+              {!loading && selectedNeedsReviewAccess && <EmptyState icon={LockKeyhole} title={reviewAccessLabel} detail="개인별 평가 기록" />}
+              {!loading && !loadError && !selectedNeedsReviewAccess && filteredPapers.length === 0 && <EmptyState icon={Search} title="조건에 맞는 논문이 없습니다" detail="검색어 또는 필터를 변경해 보세요." />}
+              {!loading && !loadError && !selectedNeedsReviewAccess && visiblePapers.map((paper) => (
+                <PaperRow key={paper.id} paper={paper} onOpen={() => openReview(paper)} reviewsVisible={reviewsVisible} reviewAccessLabel={reviewAccessLabel} />
               ))}
               {!loading && visiblePapers.length < filteredPapers.length && (
                 <div className="load-more-row">
@@ -444,16 +503,19 @@ function App() {
         <span>GitHub Pages · 데이터 갱신 {dataset.generatedAt ? formatDate(dataset.generatedAt) : '확인 중'}</span>
       </footer>
 
-      {selectedPaper && <ReviewDrawer paper={selectedPaper} auth={auth} onClose={() => setSelectedPaper(null)} onSave={saveReview} />}
+      {selectedPaper && <ReviewDrawer key={`${reviewOwner}:${selectedPaper.id}:${reviewsVisible}`} paper={selectedPaper} auth={auth} reviewsVisible={reviewsVisible}
+        onClose={() => setReviewSession(null)} onSave={saveReview} session={reviewSession}
+        onView={(view) => setReviewSession((current) => ({ ...current, view }))}
+        onNavigate={(index) => setReviewSession((current) => ({ ...current, index }))} onSavedNext={advanceReview} />}
       {adminOpen && auth.isAdmin && <AdminPanel papers={papers} onClose={() => setAdminOpen(false)} />}
     </div>
   );
 }
 
-function StatCard({ icon: Icon, label, value, meta, accent = 'navy', progress }) {
+function StatCard({ icon: Icon, label, value, meta, accent = 'navy', progress, locked = false }) {
   const formattedValue = typeof value === 'number' ? value.toLocaleString() : value;
   return (
-    <article className={`stat-card ${accent}`}>
+    <article className={`stat-card ${accent}${locked ? ' locked' : ''}`}>
       <span className="stat-icon"><Icon size={18} aria-hidden="true" /></span>
       <div><span>{label}</span><strong>{formattedValue}</strong><small>{meta}</small></div>
       {progress != null && <span className="progress-track" aria-label={`라벨링 ${progress}%`}><span style={{ width: `${progress}%` }} /></span>}
@@ -488,7 +550,7 @@ function CheckOption({ label, checked, onChange }) {
   return <label className="check-option"><input type="checkbox" checked={checked} onChange={onChange} /><span><Check size={13} /></span>{label}</label>;
 }
 
-function PaperRow({ paper, onOpen }) {
+function PaperRow({ paper, onOpen, reviewsVisible, reviewAccessLabel }) {
   return (
     <article className="paper-row">
       <button className="paper-main" type="button" onClick={onOpen} aria-label={`${paper.title} 검토 열기`}>
@@ -500,20 +562,18 @@ function PaperRow({ paper, onOpen }) {
         </div>
         <h3>{paper.title}</h3>
         <p className="authors">{paper.authors.join(', ')}</p>
-        <p className="abstract" lang="en">{paper.abstract || paper.aiReason}</p>
-        {paper.abstractKo && <p className="abstract abstract-ko" lang="ko">{paper.abstractKo}</p>}
+        <p className="abstract" lang={paper.abstractKo ? 'ko' : 'en'}>{paper.abstractKo || paper.abstract || paper.aiReason}</p>
         <div className="paper-tags">
           <div className="topic-list">{paper.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
-          <span className="abstract-status">Abstract</span>
         </div>
       </button>
       <div className="paper-metrics">
         <div className="metric ai"><span>주제 관련도</span><strong>{paper.aiScore}</strong><small>/ 100</small></div>
         <div className={`metric human ${scoreTone(paper.reviewScore)}`}>
-          <span>{paper.reviewCount != null ? '연구실 최고점' : '연구실 평가'}</span>
-          <strong>{paper.reviewScore ?? '–'}</strong>
+          <span>{paper.reviewCount != null ? '연구실 최고점' : '내 평가'}</span>
+          <strong>{reviewsVisible ? paper.reviewScore ?? '–' : <LockKeyhole size={17} />}</strong>
           <small>
-            {paper.reviewScore ? REVIEW_LABELS[paper.reviewScore] : '평가 대기'}
+            {!reviewsVisible ? reviewAccessLabel : paper.reviewScore ? REVIEW_LABELS[paper.reviewScore] : '미평가'}
             {paper.reviewCount != null && paper.reviewCount > 0 ? ` · ${paper.reviewCount}명` : ''}
           </small>
         </div>
@@ -523,48 +583,101 @@ function PaperRow({ paper, onOpen }) {
   );
 }
 
-function ReviewDrawer({ paper, auth, onClose, onSave }) {
+function ReviewDrawer({ paper, auth, onClose, onSave, reviewsVisible, session, onView, onNavigate, onSavedNext }) {
   const [score, setScore] = useState(paper.ownReviewScore);
   const [note, setNote] = useState(paper.reviewNote || '');
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
-  const [activeView, setActiveView] = useState('abstract');
-  const canReview = !auth.configured || auth.isApproved;
+  const [baseline, setBaseline] = useState({ score: paper.ownReviewScore, note: paper.reviewNote || '' });
+  const [pendingMove, setPendingMove] = useState(null);
+  const drawerRef = useRef(null);
+  const saveBusy = useRef(false);
+  const activeView = session.view;
+  const canReview = reviewsVisible && (!auth.configured || auth.isApproved);
+  const dirty = score !== baseline.score || note !== baseline.note;
+
+  function move(target) {
+    if (target.close) onClose();
+    else onNavigate(target.index);
+  }
+
+  function requestMove(target) {
+    if (saveBusy.current) return;
+    if (dirty) setPendingMove(target);
+    else move(target);
+  }
+
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    drawerRef.current?.focus();
+    document.body.classList.add('modal-open');
+    return () => {
+      document.body.classList.remove('modal-open');
+      if (previousFocus?.isConnected) previousFocus.focus();
+    };
+  }, []);
 
   useEffect(() => {
     function onKeyDown(event) {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') {
+        if (pendingMove && !saving) setPendingMove(null);
+        else requestMove({ close: true });
+      }
+      if (event.key === 'Tab') {
+        const focusable = [...drawerRef.current.querySelectorAll('button:not(:disabled), a[href], input:not(:disabled), textarea:not(:disabled)')].filter((element) => element.getClientRects().length);
+        const first = focusable[0];
+        const last = focusable.at(-1);
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === drawerRef.current)) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    }
+    function beforeUnload(event) {
+      if (dirty || saving) { event.preventDefault(); event.returnValue = ''; }
     }
     document.addEventListener('keydown', onKeyDown);
-    document.body.classList.add('modal-open');
+    window.addEventListener('beforeunload', beforeUnload);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      document.body.classList.remove('modal-open');
+      window.removeEventListener('beforeunload', beforeUnload);
     };
-  }, [onClose]);
+  }, [dirty, saving, pendingMove, onClose, onNavigate]);
 
-  async function handleSave() {
-    if (!score) return;
+  async function handleSave(afterSave) {
+    if (!score || !canReview || saveBusy.current) return;
+    saveBusy.current = true;
     setSaving(true);
     setSaveError('');
     try {
       await onSave(paper.id, score, note.trim());
+      setBaseline({ score, note: note.trim() });
+      setNote(note.trim());
       setSaved(true);
-      window.setTimeout(() => setSaved(false), 1800);
+      if (afterSave) afterSave();
     } catch (error) {
       setSaveError(error.message || '평가를 저장하지 못했습니다.');
     } finally {
+      saveBusy.current = false;
       setSaving(false);
     }
   }
 
   return (
-    <div className="drawer-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="review-drawer" role="dialog" aria-modal="true" aria-labelledby="review-title">
+    <div className="drawer-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && requestMove({ close: true })}>
+      <section ref={drawerRef} tabIndex={-1} className="review-drawer" role="dialog" aria-modal="true" aria-labelledby="review-title">
         <header className="drawer-header">
           <div><span className="eyebrow">PAPER INTELLIGENCE</span><h2 id="review-title">논문 상세</h2></div>
-          <IconButton label="검토창 닫기" onClick={onClose}><X size={20} /></IconButton>
+          <div className="drawer-navigation">
+            <span aria-live="polite">{session.index + 1} / {session.ids.length}</span>
+            <IconButton label="이전 논문" disabled={session.index === 0 || saving} onClick={() => requestMove({ index: session.index - 1 })}><ArrowLeft size={18} /></IconButton>
+            <IconButton label="다음 논문" disabled={session.index === session.ids.length - 1 || saving} onClick={() => requestMove({ index: session.index + 1 })}><ArrowRight size={18} /></IconButton>
+            <IconButton label="검토창 닫기" disabled={saving} onClick={() => requestMove({ close: true })}><X size={20} /></IconButton>
+          </div>
         </header>
 
         <div className="drawer-body">
@@ -578,11 +691,11 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
           </div>
 
           <div className="drawer-tabs" role="tablist" aria-label="논문 상세 보기">
-            <button type="button" role="tab" aria-selected={activeView === 'abstract'} className={activeView === 'abstract' ? 'active' : ''} onClick={() => setActiveView('abstract')}>
+            <button type="button" role="tab" aria-selected={activeView === 'abstract'} className={activeView === 'abstract' ? 'active' : ''} onClick={() => onView('abstract')}>
               <BookOpen size={16} /> Abstract
             </button>
-            <button type="button" role="tab" aria-selected={activeView === 'review'} className={activeView === 'review' ? 'active' : ''} onClick={() => setActiveView('review')}>
-              <FileText size={16} /> 연구실 평가
+            <button type="button" role="tab" aria-selected={activeView === 'review'} className={activeView === 'review' ? 'active' : ''} onClick={() => onView('review')}>
+              <FileText size={16} /> 내 평가
             </button>
           </div>
 
@@ -605,13 +718,12 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
               {canReview ? (
                 <>
                   {!auth.configured && <p className="local-review-notice">현재 평가는 이 브라우저에만 저장됩니다.</p>}
-                  <fieldset className="score-fieldset">
-                    <legend>연구 관련성 점수</legend>
-                    <p>1점은 제외, 5점은 필독입니다.</p>
+                  <fieldset className="score-fieldset" disabled={saving}>
+                    <legend>내 연구 관련성 평가</legend>
                     <div className="score-options">
                       {[1, 2, 3, 4, 5].map((value) => (
                         <label key={value} className={score === value ? 'selected' : ''}>
-                          <input type="radio" name="review-score" value={value} checked={score === value} onChange={() => setScore(value)} />
+                          <input type="radio" name="review-score" value={value} checked={score === value} onChange={() => { setScore(value); setSaved(false); }} />
                           <strong>{value}</strong><span>{REVIEW_LABELS[value]}</span>
                         </label>
                       ))}
@@ -620,12 +732,11 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
 
                   <div className="note-field">
                     <label htmlFor="review-note">리뷰 노트</label>
-                    <textarea id="review-note" value={note} onChange={(event) => setNote(event.target.value)} maxLength="2000" placeholder="연구실에서 다시 볼 포인트, 실험 아이디어, 제외 근거를 기록하세요." />
+                    <textarea id="review-note" disabled={saving} value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} maxLength="2000" placeholder="관련 연구 주제, 다시 볼 포인트, 실험 아이디어, 제외 근거" />
                     <small>{note.length} / 2000</small>
                   </div>
                 </>
-              ) : <ReviewAccessMessage auth={auth} />}
-              {saveError && <p className="review-save-error"><CircleAlert size={15} /> {saveError}</p>}
+              ) : auth.isApproved ? <p role="status">평가 기록을 불러오는 중입니다.</p> : <ReviewAccessMessage auth={auth} />}
             </>
           )}
 
@@ -646,10 +757,27 @@ function ReviewDrawer({ paper, auth, onClose, onSave }) {
         </div>
 
         <footer className="drawer-footer">
-          {activeView === 'review' && canReview && <span className={saved ? 'save-status visible' : 'save-status'}><Check size={15} /> 저장되었습니다</span>}
-          {paper.url && <a className="secondary-button" href={paper.url} target="_blank" rel="noreferrer"><ExternalLink size={16} /> 원문</a>}
-          <button className="secondary-button" type="button" onClick={onClose}>닫기</button>
-          {activeView === 'review' && canReview && <button className="primary-button" type="button" disabled={!score || saving} onClick={handleSave}><Bookmark size={16} /> {saving ? '저장 중' : '평가 저장'}</button>}
+          {saveError && <p className="review-save-error" role="alert"><CircleAlert size={15} /> {saveError}</p>}
+          {pendingMove ? <div className="unsaved-prompt" role="alert">
+            <strong>저장하지 않은 평가가 있습니다.</strong>
+            <div>
+              <button className="secondary-button" disabled={saving} onClick={() => setPendingMove(null)}>취소</button>
+              <button className="secondary-button" disabled={saving} onClick={() => move(pendingMove)}>변경 버리고 이동</button>
+              <button className="primary-button" disabled={!score || saving} onClick={() => handleSave(() => move(pendingMove))}>저장 후 이동</button>
+            </div>
+          </div> : <>
+            <div className="drawer-footer-links">
+              <span className="save-status visible" role="status">{saving ? '저장 중' : dirty ? '미저장 변경' : saved ? '저장되었습니다' : ''}</span>
+              {paper.url && <a className="secondary-button" href={paper.url} target="_blank" rel="noreferrer"><ExternalLink size={16} /> 원문</a>}
+            </div>
+            <div className="drawer-save-actions">
+              {activeView === 'abstract' && canReview && <button className="primary-button" onClick={() => onView('review')}><FileText size={16} /> 평가하기</button>}
+              {activeView === 'review' && canReview && <>
+                <button className="secondary-button" disabled={!score || saving} onClick={() => handleSave()}><Bookmark size={16} /> 평가 저장</button>
+                <button className="primary-button" disabled={!score || saving} onClick={() => handleSave(onSavedNext)}>{session.index === session.ids.length - 1 ? '저장 후 완료' : '저장 후 다음'}<ArrowRight size={16} /></button>
+              </>}
+            </div>
+          </>}
         </footer>
       </section>
     </div>

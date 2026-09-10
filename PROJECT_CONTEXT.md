@@ -9,7 +9,7 @@ LMI 연구 주제 관련 논문을 14개 지정 저널에서 자동 수집하고
 - Frontend: Vite, React, GitHub Pages
 - Collection: Python, Crossref REST API
 - Ranking: `config/lab_profile.yml` 키워드 그룹과 `config/relevance_rubric.yml`
-- Schedule: `.github/workflows/weekly-production-update.yml`, Sunday 09:00 KST
+- Schedule: `.github/workflows/weekly-production-update.yml`; Sunday collection is currently paused during member evaluation (manual dispatch remains available)
 - Production data: rolling 1,825-day public JSON, cumulative CSV catalog
 - Authentication: Supabase Google OAuth, administrator-approved membership
 - Review persistence: Supabase PostgreSQL with RLS; author and administrator only
@@ -19,7 +19,9 @@ LMI 연구 주제 관련 논문을 14개 지정 저널에서 자동 수집하고
 
 ## Next milestone
 
-운영 사이트, Google 로그인, 관리자 승인, 개인 평가 RLS, 주간 수집, 한국어 초록 번역이 활성화되어 있습니다. 다음 변경은 실제 운영 데이터를 보존하면서 진행하고, Service role key는 프런트엔드에 절대 포함하지 않습니다.
+2026-09-10: 주제별 멤버 평가를 진행 중입니다. 모바일/목록 밀도 개선, 비로그인 통계 안내, 관리자 집계 범위 전환, 미평가 연속 검토를 추가했습니다. 기존 개인 원점수, 리뷰 노트, 최고점 후보 집계와 전문가 추천은 보존합니다. 평가 데이터 추합과 학습은 아직 구현하지 않았습니다. 운영 기준과 남은 개선 항목은 `REVIEW_WORKFLOW_AND_BACKLOG.md`를 참고합니다.
+
+운영 사이트, Google 로그인, 관리자 승인, 개인 평가 RLS, 한국어 초록 번역이 활성화되어 있습니다. 주간 자동 수집은 멤버 평가 기간 동안 일시정지되어 있습니다. 다음 변경은 실제 운영 데이터를 보존하면서 진행하고, Service role key는 프런트엔드에 절대 포함하지 않습니다.
 
 ## Continue on another computer
 
