@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildAnalytics, reviewExportRows, toCsv } from '../src/adminAnalytics.js';
+import { UNCLASSIFIED_TOPIC } from '../src/paperTopics.js';
 
 function paper(id, topics = ['Metabolism'], fields = {}) {
   return {
@@ -67,7 +68,7 @@ test('multi-topic groups overlap while paper coverage and review counts stay uni
       reviewerCount: 2, progress: 100, scoreCounts: [1, 0, 0, 0, 1], disagreements: 1,
     },
     {
-      name: 'Unclassified', total: 1, reviewed: 0, pending: 1, reviewCount: 0,
+      name: UNCLASSIFIED_TOPIC, total: 1, reviewed: 0, pending: 1, reviewCount: 0,
       reviewerCount: 0, progress: 0, scoreCounts: [0, 0, 0, 0, 0], disagreements: 0,
     },
   ]);
@@ -119,7 +120,7 @@ test('missing, empty, and malformed topics are Unclassified; journal falls back 
     { name, total, reviewed, progress }
   )), [
     { name: 'Aging', total: 1, reviewed: 0, progress: 0 },
-    { name: 'Unclassified', total: 4, reviewed: 1, progress: 25 },
+    { name: UNCLASSIFIED_TOPIC, total: 4, reviewed: 1, progress: 25 },
   ]);
   assert.deepEqual(result.journals.map(({ name, total }) => ({ name, total })), [
     { name: 'Full Journal', total: 1 },

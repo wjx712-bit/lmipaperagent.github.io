@@ -116,6 +116,39 @@ try {
   await anonymous.context.close();
   console.log('PASS: logged-out stats, bilingual detail, mobile/desktop widths');
 
+  const unclassifiedPapers = dataset.papers.filter(paper => paper.topics.includes('미분류'));
+  assert.equal(unclassifiedPapers.length, 17);
+  const unclassified = await setup('member', { fullData: true });
+  await unclassified.page.locator('.check-option').filter({ hasText: '미분류' }).click();
+  await waitFor(unclassified.page, count => document.querySelectorAll('.paper-row').length === count, unclassifiedPapers.length);
+  const expectedTitles = unclassifiedPapers.map(paper => paper.title).sort();
+  assert.deepEqual((await unclassified.page.locator('.paper-row h3').allTextContents()).sort(), expectedTitles);
+  const priorRows = await unclassified.page.evaluate(() => JSON.stringify(window.__rows));
+  for (const width of [390, 1440]) {
+    await unclassified.page.setViewportSize({ width, height: 950 });
+    await checkWidth(unclassified.page, `unclassified ${width}`);
+    await unclassified.page.screenshot({ path: `${artifacts}/unclassified-${width}.png` });
+  }
+  await unclassified.page.getByRole('button', { name: '미평가 연속 검토' }).click();
+  assert.equal(await unclassified.page.locator('.drawer-navigation > span').innerText(), '1 / 17');
+  const unclassifiedTitle = await drawerTitle(unclassified.page);
+  const reviewedPaper = unclassifiedPapers.find(paper => paper.title === unclassifiedTitle);
+  assert.ok(reviewedPaper);
+  await unclassified.page.getByRole('button', { name: '평가하기', exact: true }).click();
+  await selectScore(unclassified.page, 1);
+  await unclassified.page.getByLabel('리뷰 노트', { exact: true }).fill('Lab relevance reviewed for an unclassified paper');
+  await unclassified.page.getByRole('button', { name: '평가 저장', exact: true }).click();
+  await unclassified.page.getByText('저장되었습니다', { exact: true }).waitFor();
+  const unclassifiedWrites = await unclassified.page.evaluate(() => window.__reviewWrites);
+  assert.equal(unclassifiedWrites.length, 1);
+  assert.equal(unclassifiedWrites[0].paper_id, reviewedPaper.id);
+  assert.equal(unclassifiedWrites[0].user_id, 'member');
+  assert.equal(unclassifiedWrites[0].score, 1);
+  const preservedRows = await unclassified.page.evaluate(id => JSON.stringify(window.__rows.filter(row => row.paper_id !== id)), reviewedPaper.id);
+  assert.equal(preservedRows, priorRows);
+  await unclassified.context.close();
+  console.log('PASS: actual 17 unclassified papers filter, mobile layout, continuous review and isolated score/note save');
+
   const { page, context } = await setup('member');
   assert.equal(await page.locator('.review-scope').count(), 0);
   assert.ok((await page.locator('.stat-card').filter({ hasText: '필독 후보' }).innerText()).includes('0'));

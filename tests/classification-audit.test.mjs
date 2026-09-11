@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { auditClassification } from '../src/classificationAudit.js';
+import { UNCLASSIFIED_TOPIC } from '../src/paperTopics.js';
 
 const LIVER = 'Liver metabolism / MASLD';
 const ADIPOSE = 'Adipose tissue / adipocyte biology';
@@ -25,6 +26,16 @@ test('empty input preserves a stable issue schema and zero totals', () => {
   assert.equal(new Set(result.issues.map(({ id }) => id)).size, result.issues.length);
   assert.ok(result.issues.every(({ label, description, papers }) => label && description && papers.length === 0));
   assert.deepEqual(auditClassification(), result);
+});
+
+test('explicit unclassified is a review bucket, not a scientific topic assignment', () => {
+  const a = paper({ id: 'a', topics: [UNCLASSIFIED_TOPIC] });
+  const b = paper({ id: 'b', topics: [' Unclassified '] });
+  const c = paper({ id: 'c', topics: [UNCLASSIFIED_TOPIC, LIVER] });
+  const result = auditClassification([a, b, c]);
+  assert.deepEqual(issue(result, 'unclassified'), [a, b]);
+  assert.equal(result.topicAssignments, 1);
+  assert.equal(result.multiTopicCount, 0);
 });
 
 test('missing metadata is separate from content correctness and topic classification', () => {
@@ -163,7 +174,8 @@ test('real public export has coherent audit totals and no mutation', () => {
   const before = JSON.stringify(payload);
   const result = auditClassification(payload.papers);
   assert.equal(result.total, payload.papers.length);
-  assert.equal(result.topicAssignments, payload.papers.reduce((sum, p) => sum + new Set(p.topics.map((t) => t.trim().toLowerCase())).size, 0));
+  const substantiveTopics = (p) => new Set(p.topics.map((t) => t.trim().toLowerCase()).filter((t) => t && t !== UNCLASSIFIED_TOPIC && t !== 'unclassified'));
+  assert.equal(result.topicAssignments, payload.papers.reduce((sum, p) => sum + substantiveTopics(p).size, 0));
   assert.equal(result.multiTopicCount, payload.papers.filter((p) => new Set(p.topics).size > 1).length);
   assert.equal(result.scoreSaturationCount, payload.papers.filter((p) => p.aiScore === 99).length);
   assert.equal(JSON.stringify(payload), before);

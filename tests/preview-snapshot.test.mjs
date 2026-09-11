@@ -2,8 +2,24 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { makePreviewSnapshot, previewExportRows, previewInputs, previewSummary } from '../src/previewSnapshot.js';
+import { UNCLASSIFIED_TOPIC, topicNames } from '../src/paperTopics.js';
+import { buildAnalytics } from '../src/adminAnalytics.js';
 
 const paper = (id, overrides = {}) => ({ id, doi: id, title: 'Adipocyte function in obesity', abstract: 'We measured adipocyte mitochondrial function in mice.', journal: 'Example', publishedAt: '2026-09-10', topics: ['Liver metabolism / MASLD'], ...overrides });
+
+test('explicit unclassified stays a distinct review bucket without becoming a core topic', async () => {
+  const source = paper('p1', { topics: [UNCLASSIFIED_TOPIC], title: 'No subject', abstract: '' });
+  const snapshot = await makePreviewSnapshot([source]);
+  assert.equal(snapshot.summary.oldUnclassified, 1);
+  assert.deepEqual(snapshot.records[0].oldTopics, [UNCLASSIFIED_TOPIC]);
+  assert.deepEqual(snapshot.records[0].removedTopics, []);
+  assert.equal(snapshot.records[0].changed, false);
+  assert.ok(!snapshot.records[0].reviewReasons.some(reason => reason.includes('Unknown old topic')));
+  assert.deepEqual(topicNames({ topics: ['Unclassified', '', UNCLASSIFIED_TOPIC] }), [UNCLASSIFIED_TOPIC]);
+  const result = buildAnalytics([source], [{ user_id: 'member', paper_id: 'p1', score: 1 }]);
+  assert.equal(result.topics[0].name, UNCLASSIFIED_TOPIC);
+  assert.equal(result.topics[0].progress, 100);
+});
 
 test('preview inputs whitelist public text and never include member ratings or notes', async () => {
   const papers = [paper('p1', { reviewNote: 'PRIVATE_REVIEW', ownReviewScore: 5, user_id: 'PRIVATE_ID', reviewerEmail: 'PRIVATE_EMAIL' })];

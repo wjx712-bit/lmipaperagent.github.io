@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { PREVIEW_VERSION, PREVIEW_TOPICS, buildClassificationPreview } from '../src/classificationPreview.js';
+import { UNCLASSIFIED_TOPIC } from '../src/paperTopics.js';
 
 const label = (id) => PREVIEW_TOPICS.find((t) => t.id === id).label;
 const preview = (values = {}) => buildClassificationPreview([{ id: 'p', title: '', abstract: '', topics: [], ...values }])[0];
@@ -298,7 +299,7 @@ test('real export: all spans align, totals cohere, six prior-audit examples are 
     assert.ok(r.relatedTopics.every((t) => r.evidence.some((e) => e.label === t && e.level === 'related')));
     assert.ok(r.methodTags.every((tag) => r.evidence.some((e) => e.level === 'core' && e.methodTags?.includes(tag))));
     assert.deepEqual(r.addedTopics, r.coreTopics.filter((topic) => !r.oldTopics.includes(topic)));
-    assert.deepEqual(r.removedTopics, [...new Set(r.oldTopics.filter((topic) => !r.coreTopics.includes(topic)))]);
+    assert.deepEqual(r.removedTopics, [...new Set(r.oldTopics.filter((topic) => topic !== UNCLASSIFIED_TOPIC && topic.toLowerCase() !== 'unclassified' && !r.coreTopics.includes(topic)))]);
     assert.equal(r.changed, r.addedTopics.length > 0 || r.removedTopics.length > 0);
   });
   const get = (doi) => {

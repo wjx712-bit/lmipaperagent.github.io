@@ -1,3 +1,5 @@
+import { topicNames } from './paperTopics.js';
+
 const REVIEW_EXPORT_HEADERS = [
   'paper_id',
   'doi',
@@ -69,13 +71,6 @@ function normalizeScope(papers, reviews) {
     reviews: [...latestByPaper.values()].flatMap((byUser) => [...byUser.values()]),
     excluded,
   };
-}
-
-function topicNames(paper) {
-  const names = Array.isArray(paper.topics)
-    ? [...new Set(paper.topics.filter(hasText).map((name) => name.trim()))]
-    : [];
-  return names.length ? names : ['Unclassified'];
 }
 
 function journalName(paper) {

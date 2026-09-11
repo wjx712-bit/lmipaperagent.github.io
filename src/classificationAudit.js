@@ -1,3 +1,5 @@
+import { classifiedTopicLabels } from './paperTopics.js';
+
 const TOPICS = {
   liver: 'liver metabolism / masld',
   adipose: 'adipose tissue / adipocyte biology',
@@ -42,7 +44,8 @@ function duplicateKeys(papers, key) {
 /**
  * Public-record QA candidates, not ground-truth errors or private review metrics.
  * Issue order is fixed; paper lists retain input order and original references.
- * Topic totals count distinct nonblank labels per paper, including unknown labels.
+ * Topic totals count distinct substantive labels, including unknown labels but
+ * excluding the reserved unclassified review bucket.
  * Evidence is matched independently in title and English abstract, never in Korean,
  * journal names, AI reasons, or across the boundary between title and abstract.
  */
@@ -50,13 +53,13 @@ export function auditClassification(papers = []) {
   const duplicateDois = duplicateKeys(papers, (paper) => doiKey(paper.doi));
   const duplicateIds = duplicateKeys(papers, (paper) => text(paper.id));
   const records = papers.map((paper) => {
-    const topics = new Set((Array.isArray(paper.topics) ? paper.topics : []).map(normalized).filter(Boolean));
+    const topics = new Set(classifiedTopicLabels(paper.topics).map(normalized));
     const fields = [normalized(paper.title), normalized(paper.abstract)];
     const has = (pattern) => fields.some((field) => pattern.test(field));
     return { paper, topics, has };
   });
   const definitions = [
-    ['unclassified', 'No topic assigned', 'No nonblank topic labels. This may be intentional; inspect the available title and English abstract.',
+    ['unclassified', 'No topic assigned', 'No substantive topic labels, including the explicit unclassified group. Inspect the available title and English abstract; this is not an exclusion decision.',
       ({ topics }) => topics.size === 0],
     ...[
       ['title', 'title'], ['doi', 'DOI'], ['url', 'paper URL'],

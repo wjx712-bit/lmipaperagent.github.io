@@ -1,4 +1,5 @@
 import { buildClassificationPreview, PREVIEW_VERSION, PREVIEW_TOPICS } from './classificationPreview.js';
+import { classifiedTopicLabels } from './paperTopics.js';
 
 export const PREVIEW_SCHEMA = 'lmi-classification-preview/1';
 
@@ -18,7 +19,7 @@ export function previewSummary(records) {
     changed: records.filter((row) => row.changed).length,
     needsReview: records.filter((row) => row.needsReview).length,
     noCore: records.filter((row) => !row.coreTopics.length).length,
-    oldUnclassified: records.filter((row) => !row.oldTopics.length).length,
+    oldUnclassified: records.filter((row) => !classifiedTopicLabels(row.oldTopics).length).length,
     topics: labels.map((label) => ({
       label, kind: PREVIEW_TOPICS.find((topic) => topic.label === label)?.kind || 'legacy',
       old: records.filter((row) => row.oldTopics.includes(label)).length,

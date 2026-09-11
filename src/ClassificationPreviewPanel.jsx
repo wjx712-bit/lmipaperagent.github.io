@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Download, ExternalLink, LoaderCircle, Search, ShieldCheck } from 'lucide-react';
 import { makePreviewSnapshot, previewExportRows, previewSummary } from './previewSnapshot.js';
 import { toCsv } from './adminAnalytics.js';
+import { classifiedTopicLabels } from './paperTopics.js';
 
 const PAGE_SIZE = 20;
 const count = (value) => value.toLocaleString('ko-KR');
@@ -43,11 +44,11 @@ export default function ClassificationPreviewPanel({ papers }) {
   }, [papers, retry]);
 
   const paperById = useMemo(() => new Map(papers.map((paper) => [paper.id, paper])), [papers]);
-  const oldTopics = useMemo(() => [...new Set(papers.flatMap((paper) => paper.topics || []))].sort(compare), [papers]);
+  const oldTopics = useMemo(() => [...new Set(papers.flatMap((paper) => classifiedTopicLabels(paper.topics)))].sort(compare), [papers]);
   const journals = useMemo(() => [...new Set(papers.map((paper) => paper.journal || paper.journalShort || ''))].filter(Boolean).sort(compare), [papers]);
   const text = query.trim().toLowerCase();
   const filtered = useMemo(() => (snapshot?.records || []).filter((row) => (
-    (!oldTopic || (oldTopic === TOPIC_EMPTY ? !row.oldTopics.length : row.oldTopics.includes(oldTopic)))
+    (!oldTopic || (oldTopic === TOPIC_EMPTY ? !classifiedTopicLabels(row.oldTopics).length : row.oldTopics.includes(oldTopic)))
     && (!newTopic || (newTopic === TOPIC_EMPTY ? !row.coreTopics.length : row.coreTopics.includes(newTopic)))
     && (!journal || row.journal === journal)
     && (!text || `${row.title} ${row.doi}`.toLowerCase().includes(text))

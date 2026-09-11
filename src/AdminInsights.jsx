@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Download, ExternalLink, FileText } from 'lucide-react';
 import { buildAnalytics, reviewExportRows, toCsv } from './adminAnalytics';
 import { auditClassification } from './classificationAudit';
+import { topicNames } from './paperTopics.js';
 
 const PAGE_SIZE = 30;
 const QA_COPY = {
-  unclassified: ['미분류', '비어 있지 않은 주제 라벨이 없는 논문. 의도적인 미분류일 수도 있습니다.'],
+  unclassified: ['미분류', '주제가 비어 있거나 미분류로 묶인 논문. 평가 대상이며, 무관한 논문으로 확정한 것은 아닙니다.'],
   'missing-title': ['제목 누락', '제목 필드가 비어 있거나 텍스트가 아닌 논문.'],
   'missing-doi': ['DOI 누락', 'DOI 필드가 비어 있거나 텍스트가 아닌 논문.'],
   'missing-url': ['원문 링크 누락', '원문 URL 필드가 비어 있는 논문. 링크 접속 성공 여부는 별도 점검 대상입니다.'],
@@ -24,10 +25,6 @@ const QA_COPY = {
 };
 const number = (value) => Number(value || 0).toLocaleString('ko-KR');
 const percent = (value) => `${Number(value || 0).toFixed(1)}%`;
-const topicNames = (paper) => {
-  const topics = Array.isArray(paper.topics) ? [...new Set(paper.topics.filter((value) => typeof value === 'string' && value.trim()).map((value) => value.trim()))] : [];
-  return topics.length ? topics : ['Unclassified'];
-};
 const nameOf = (profile, userId) => profile?.display_name || profile?.email || userId;
 const timestamp = (value) => value && Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString('ko-KR') : '미기록';
 const safeUrl = (paper) => {

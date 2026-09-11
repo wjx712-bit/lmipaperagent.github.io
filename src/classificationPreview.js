@@ -1,6 +1,8 @@
 // Experimental rule draft / core candidates, not validated AI or scientific truth.
 // No paid APIs, live classifier, assignment, routing or storage dependencies.
-export const PREVIEW_VERSION = 'classification-preview-1.1.0-draft';
+import { classifiedTopicLabels, isUnclassifiedTopic } from './paperTopics.js';
+
+export const PREVIEW_VERSION = 'classification-preview-1.1.1-draft';
 export const PREVIEW_TOPICS = Object.freeze([
   { id: 'liver', label: 'Liver metabolism / MASLD', kind: 'organ' },
   { id: 'adipose', label: 'Adipose tissue / adipocyte biology', kind: 'organ' },
@@ -185,10 +187,10 @@ export function buildClassificationPreview(papers = []) {
     if (!coreTopics.includes(PREVIEW_TOPICS[4].label) && has(AMBIGUOUS_METHOD)) reasons.add('Method context unclear or unsupported; generic/bulk RNA sequencing is not single-cell evidence.');
     if (!evidence.length) reasons.add('No explicit topic evidence; unknown classification, not a general-metabolism default.');
     if (!coreTopics.length) reasons.add('No provisional core topic established.');
-    const oldKeys = new Set(oldTopics.map(key).filter(Boolean));
+    const oldKeys = new Set(classifiedTopicLabels(oldTopics).map(key));
     const coreKeys = new Set(coreTopics.map(key));
     const addedTopics = coreTopics.filter((label) => !oldKeys.has(key(label)));
-    const removedTopics = unique(oldTopics.filter((label) => key(label) && !coreKeys.has(key(label))));
+    const removedTopics = unique(oldTopics.filter((label) => key(label) && !isUnclassifiedTopic(label) && !coreKeys.has(key(label))));
     if ([...oldKeys].some((label) => !PREVIEW_TOPICS.some((t) => key(t.label) === label))) reasons.add('Unknown old topic label; inspect the proposed mapping manually.');
     const changed = addedTopics.length > 0 || removedTopics.length > 0;
     if (changed) reasons.add('Preview core candidates differ from the old assignments; admin review required before any adoption.');

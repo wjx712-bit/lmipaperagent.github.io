@@ -122,6 +122,13 @@ try {
   await page.getByRole('tab', { name: '주제별 평가', exact: true }).click();
   await page.getByLabel('관리자 주제 필터').selectOption('');
   await page.getByLabel('관리자 평가자 필터').selectOption('');
+  await page.getByLabel('관리자 주제 필터').selectOption('미분류');
+  const unclassifiedReviews = JSON.parse(await readDownload(page, '원점수 JSON'));
+  const unclassifiedIds = new Set(dataset.papers.filter(paper => paper.topics.includes('미분류')).map(paper => paper.id));
+  assert.equal(unclassifiedIds.size, 17);
+  assert.equal(unclassifiedReviews.records.length, rows.filter(row => unclassifiedIds.has(row.paper_id)).length);
+  assert.ok(unclassifiedReviews.records.every(row => row.paper_topics.includes('미분류')));
+  await page.getByLabel('관리자 주제 필터').selectOption('');
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const tab of ['저널·주제 분포', '주제별 평가', '평가 불일치 후보', '분류 품질 보고서']) {
@@ -153,6 +160,11 @@ try {
   const topicPreview = JSON.parse(await readDownload(page, '근거 포함 JSON'));
   assert.equal(topicPreview.records.length, dataset.papers.filter(paper => paper.topics.includes(previewTopic)).length);
   assert.ok(topicPreview.records.every(row => row.oldTopics.includes(previewTopic)));
+  await page.getByLabel('미리보기 기존 주제').selectOption('');
+  await page.getByLabel('미리보기 기존 주제').selectOption('__unclassified__');
+  const unclassifiedPreview = JSON.parse(await readDownload(page, '근거 포함 JSON'));
+  assert.equal(unclassifiedPreview.records.length, 17);
+  assert.equal(unclassifiedPreview.summary.oldUnclassified, 17);
   await page.getByLabel('미리보기 기존 주제').selectOption('');
   const brainSource = dataset.papers.find(paper => paper.doi === '10.1038/s41467-026-77116-9');
   assert.ok(brainSource, 'Expected brain-metabolism regression sample in catalog');
