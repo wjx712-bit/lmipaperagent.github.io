@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Download, ExternalLink, FileText } from 'lucide-
 import { buildAnalytics, reviewExportRows, toCsv } from './adminAnalytics';
 import { auditClassification } from './classificationAudit';
 import { topicNames } from './paperTopics.js';
+import { originLabel } from './reviewCoordination.js';
 
 const PAGE_SIZE = 30;
 const QA_COPY = {
@@ -86,7 +87,8 @@ export function AdminInsights({ papers, reviews, profiles, activeTab, fetchedAt 
       `작성 시각: ${new Date().toISOString()}`, `평가 조회 시각: ${fetchedAt}`, `논문 범위: ${filterLabel}`,
       `평가자 범위(진행률/원점수): ${reviewer ? nameOf(profileById.get(reviewer), reviewer) : '전체 평가자'}`, '',
       '## 해석 기준', '',
-      '- 주제는 현재 논문 분류입니다. 평가 당시 담당 주제와 기준 버전은 미기록입니다.',
+      '- 논문 주제와 최초 평가 경로는 별개입니다. 새 평가만 경로를 기록하며 기존 평가 경로와 기준 버전은 추정하지 않습니다.',
+      '- 모든 점수는 연구실 전체 관련성입니다. 경로는 작업 분담 정보이며 주제별 적합성 점수가 아닙니다.',
       '- 진행률 = 평가가 1건 이상인 고유 논문 수 / 현재 범위 논문 수. 담당자 배정 대비 완료율은 아닙니다.',
       '- 다중 주제 논문은 주제별로 중복 포함됩니다. 미평가는 0점/1점으로 대체하지 않습니다.',
       '- 평가 조회는 고유 키 기반의 여러 DB 요청을 합친 결과이며, 단일 시점 트랜잭션 스냅샷은 아닙니다.',
@@ -102,7 +104,7 @@ export function AdminInsights({ papers, reviews, profiles, activeTab, fetchedAt 
       '## 저널 분포', '', ...analytics.journals.map((row) => `- ${row.name}: ${row.total}편`), '',
       '## 평가 불일치 후보', '',
       ...comparison.disagreements.flatMap((item) => [
-        `### ${item.paper.title}`, `DOI: ${item.paper.doi || '미기록'}`, `주제: ${topicNames(item.paper).join('; ')}`, `점수 범위: ${item.min}~${item.max}; 차이 ${item.spread}`, ...item.reviews.map((row) => `- ${nameOf(profileById.get(row.user_id), row.user_id)} (${row.user_id}): ${row.score}점; ${row.updated_at || '시각 미기록'}; 노트: ${row.note || '(없음)'}`), '',
+        `### ${item.paper.title}`, `DOI: ${item.paper.doi || '미기록'}`, `주제: ${topicNames(item.paper).join('; ')}`, `점수 범위: ${item.min}~${item.max}; 차이 ${item.spread}`, ...item.reviews.map((row) => `- ${nameOf(profileById.get(row.user_id), row.user_id)} (${row.user_id}): ${row.score}점; 경로: ${originLabel(row.review_topic)}; ${row.updated_at || '시각 미기록'}; 노트: ${row.note || '(없음)'}`), '',
       ]),
       '## 분류 품질', '',
       `- 다중 주제 ${audit.multiTopicCount}편 / 주제 배정 총 ${audit.topicAssignments}건`,
@@ -156,23 +158,25 @@ export function AdminInsights({ papers, reviews, profiles, activeTab, fetchedAt 
       </div>
       <p className="analytics-note">진행률 = 평가가 1건 이상 있는 논문 ÷ 해당 주제 논문. 현재 논문 분류 기준이며 담당자 배정 대비 완료율은 아닙니다. 점수 1~5는 개인별 원점수 건수입니다.</p>
       <Table label="주제별 진행률"><thead><tr><th>논문 주제</th><th>전체</th><th>평가 / 미평가</th><th>진행률</th><th>원점수 / 평가자</th><th>점수 1 · 2 · 3 · 4 · 5</th></tr></thead><tbody>{analytics.topics.map((row) => <tr key={row.name}><th scope="row">{row.name}</th><td>{number(row.total)}</td><td>{number(row.reviewed)} / {number(row.pending)}</td><td><Coverage value={row.progress} /></td><td>{number(row.reviewCount)} / {number(row.reviewerCount)}</td><td><ScoreCounts counts={row.scoreCounts} /></td></tr>)}</tbody></Table>
+      <SectionHeading title="작업 주제 경유 진행률" meta={`평가 경로 미기록 ${analytics.reviews.filter((row) => !row.review_topic).length}건`} />
+      <Table label="작업 주제 경유 진행률"><thead><tr><th>작업 주제</th><th>경유 평가 / 주제 논문</th><th>진행률</th></tr></thead><tbody>{analytics.originTopics.map((row) => <tr key={row.name}><th scope="row">{row.name}</th><td>{number(row.reviewed)} / {number(row.total)}</td><td><Coverage value={row.progress} /></td></tr>)}</tbody></Table>
       <SectionHeading title="평가자별 집계" meta={filterLabel} />
       <Table label="평가자별 집계"><thead><tr><th>평가자</th><th>평가 논문</th><th>범위 대비 비율</th><th>점수 1 · 2 · 3 · 4 · 5</th></tr></thead><tbody>{analytics.reviewerStats.map((row) => <tr key={row.userId}><th scope="row">{nameOf(profileById.get(row.userId), row.userId)}</th><td>{number(row.reviewed)} / {number(row.total)}</td><td><Coverage value={row.progress} /></td><td><ScoreCounts counts={row.scoreCounts} /></td></tr>)}</tbody></Table>
       {!analytics.reviewerStats.length && <Empty text="이 범위에 저장된 평가가 없습니다." />}
-      <SectionHeading title="개인별 원점수·리뷰 노트" meta="평가 당시 주제·기준 버전: 미기록" />
-      <Paged key={`raw-${filterKey}`} rows={exportRows} label="평가 기록">{(rows) => <div className="analytics-raw-list">{rows.map((row) => <article key={`${row.reviewer_id}-${row.paper_id}`} className="analytics-raw-row"><div><b>{row.score}점</b><strong>{row.reviewer_name || row.reviewer_email || row.reviewer_id}</strong><time>{timestamp(row.updated_at)}</time></div><h4><PaperLink paper={{ ...row, id: row.paper_id }} /></h4><small>{Array.isArray(row.paper_topics) ? row.paper_topics.join(' · ') : row.paper_topics}</small><p>{row.note || '노트 없음'}</p></article>)}</div>}</Paged>
+      <SectionHeading title="개인별 원점수·리뷰 노트" meta="연구실 전체 관련성 · 최초 평가 경로" />
+      <Paged key={`raw-${filterKey}`} rows={exportRows} label="평가 기록">{(rows) => <div className="analytics-raw-list">{rows.map((row) => <article key={`${row.reviewer_id}-${row.paper_id}`} className="analytics-raw-row"><div><b>{row.score}점</b><strong>{row.reviewer_name || row.reviewer_email || row.reviewer_id}</strong><time>{timestamp(row.updated_at)}</time></div><h4><PaperLink paper={{ ...row, id: row.paper_id }} /></h4><small>{Array.isArray(row.paper_topics) ? row.paper_topics.join(' · ') : row.paper_topics}</small><small>최초 평가 경로 · {originLabel(row.review_topic)}</small><p>{row.note || '노트 없음'}</p></article>)}</div>}</Paged>
     </>}
 
     {activeTab === 'disagreements' && <>
       <SectionHeading title="평가 불일치 확인 후보" meta={`${number(disagreements.length)}편 / 복수 평가 ${number(comparison.summary.multiReviewed)}편`} />
-      <p className="analytics-note">동일 논문을 평가한 서로 다른 평가자의 최고점과 최저점 차이가 2점 이상인 경우입니다. 평가 당시 주제가 미기록이므로 같은 기준의 불일치로 확정하지 않습니다. 평가자 필터와 무관하게 전체 평가자를 비교합니다.</p>
+      <p className="analytics-note">동일 논문을 평가한 서로 다른 평가자의 점수 차이가 2점 이상인 확인 후보입니다. 모든 점수는 연구실 전체 관련성이며, 평가 경로는 작업 분담 정보입니다. 평가자 필터와 무관하게 전체 평가자를 비교합니다.</p>
       <label className="analytics-checkbox"><input type="checkbox" checked={onlySevere} onChange={(event) => setOnlySevere(event.target.checked)} />1~2점과 4~5점이 공존하는 후보만</label>
-      <Paged key={`disagreement-${filterKey}`} rows={disagreements} label="불일치 후보">{(rows) => <div>{rows.map((item) => <article key={item.paper.id} className="disagreement-row"><div className="disagreement-title"><h4><PaperLink paper={item.paper} /></h4><strong className={item.severe ? 'severe' : ''}>{item.min}~{item.max}점 · 차이 {item.spread}{item.severe ? ' · 우선 확인' : ''}</strong></div><small>{topicNames(item.paper).join(' · ')}</small><Table label={`${item.paper.title} 평가 비교`}><thead><tr><th>평가자</th><th>원점수</th><th>리뷰 노트</th><th>평가 시각</th></tr></thead><tbody>{item.reviews.map((row) => <tr key={row.user_id}><th scope="row">{nameOf(profileById.get(row.user_id), row.user_id)}</th><td>{row.score}</td><td className="note-cell">{row.note || '노트 없음'}</td><td>{timestamp(row.updated_at)}</td></tr>)}</tbody></Table></article>)}</div>}</Paged>
+      <Paged key={`disagreement-${filterKey}`} rows={disagreements} label="불일치 후보">{(rows) => <div>{rows.map((item) => <article key={item.paper.id} className="disagreement-row"><div className="disagreement-title"><h4><PaperLink paper={item.paper} /></h4><strong className={item.severe ? 'severe' : ''}>{item.min}~{item.max}점 · 차이 {item.spread}{item.severe ? ' · 우선 확인' : ''}</strong></div><small>{topicNames(item.paper).join(' · ')}</small><Table label={`${item.paper.title} 평가 비교`}><thead><tr><th>평가자</th><th>최초 평가 경로</th><th>원점수</th><th>리뷰 노트</th><th>평가 시각</th></tr></thead><tbody>{item.reviews.map((row) => <tr key={row.user_id}><th scope="row">{nameOf(profileById.get(row.user_id), row.user_id)}</th><td>{originLabel(row.review_topic)}</td><td>{row.score}</td><td className="note-cell">{row.note || '노트 없음'}</td><td>{timestamp(row.updated_at)}</td></tr>)}</tbody></Table></article>)}</div>}</Paged>
     </>}
 
     {activeTab === 'quality' && <>
       <SectionHeading title="분류 품질 점검 보고서" meta={`현재 범위 ${number(audit.total)}편 · 제목·영문 초록 기준`} />
-      <p className="analytics-note">아래 수치는 규칙 기반 확인 후보이며 오분류율이 아닙니다. 분류와 논문은 자동 수정·삭제하지 않았습니다. 실제 평가 주제 미기록으로, 평가 불일치를 분류 오류의 정답으로 사용하지 않습니다.</p>
+      <p className="analytics-note">아래 수치는 규칙 기반 확인 후보이며 오분류율이 아닙니다. 분류와 논문은 자동 수정·삭제하지 않았습니다. 평가 경로는 정답 주제가 아니며, 평가 불일치를 분류 오류의 정답으로 사용하지 않습니다.</p>
       <div className="analytics-totals">
         <div><span>다중 주제 논문</span><strong>{number(audit.multiTopicCount)}<small>편</small></strong></div>
         <div><span>주제 배정 합계</span><strong>{number(audit.topicAssignments)}<small>건</small></strong></div>

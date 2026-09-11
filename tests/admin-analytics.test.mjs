@@ -131,7 +131,7 @@ test('missing, empty, and malformed topics are Unclassified; journal falls back 
 
 test('empty scope has finite zero counts and no active reviewers', () => {
   assert.deepEqual(buildAnalytics([], []), {
-    papers: [], reviews: [], topics: [], journals: [], disagreements: [], reviewerStats: [],
+    papers: [], reviews: [], topics: [], originTopics: [], journals: [], disagreements: [], reviewerStats: [],
     summary: { total: 0, reviewed: 0, pending: 0, reviewCount: 0, reviewerCount: 0, multiReviewed: 0, disagreements: 0 },
     excluded: { orphanReviews: 0, invalidReviews: 0, duplicateReviews: 0 },
   });

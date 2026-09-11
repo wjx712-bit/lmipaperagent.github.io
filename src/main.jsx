@@ -33,6 +33,9 @@ import './styles.css';
 import { AdminPanel } from './AdminPanel';
 import { supabase } from './supabase';
 import { useAuth } from './useAuth';
+import { useReviewCompletion } from './useReviewCompletion.js';
+import { completionProgress, GENERAL_TOPIC, originLabel, reviewQueue, topicCompleted } from './reviewCoordination.js';
+import { CompletionStatus, ReviewStartDialog } from './ReviewCoordination.jsx';
 
 const REVIEW_LABELS = {
   1: '제외',
@@ -67,7 +70,7 @@ async function fetchVisibleReviewRows(userId, isAdmin) {
   for (let from = 0; ; from += REVIEW_FETCH_PAGE_SIZE) {
     let query = supabase
       .from('paper_reviews')
-      .select('user_id,paper_id,score,note,updated_at')
+      .select('user_id,paper_id,score,note,updated_at,review_topic')
       .order('paper_id', { ascending: true })
       .order('user_id', { ascending: true })
       .range(from, from + REVIEW_FETCH_PAGE_SIZE - 1);
@@ -123,6 +126,9 @@ function App() {
   const [reviews, setReviews] = useState(getStoredReviews);
   const [labReviewRows, setLabReviewRows] = useState([]);
   const [reviewSession, setReviewSession] = useState(null);
+  const [reviewStart, setReviewStart] = useState(null);
+  const [explicitWorkTopic, setExplicitWorkTopic] = useState('');
+  const [topicPendingOnly, setTopicPendingOnly] = useState(false);
   const [reviewScope, setReviewScope] = useState('lab');
   const [loadedReviewOwner, setLoadedReviewOwner] = useState(null);
   const [sessionNotice, setSessionNotice] = useState('');
@@ -137,6 +143,9 @@ function App() {
   const currentReviewOwner = useRef(reviewOwner);
   currentReviewOwner.current = reviewOwner;
   const reviewsVisible = (!auth.configured || auth.isApproved) && loadedReviewOwner === reviewOwner;
+  const completion = useReviewCompletion(supabase, auth, dataset.papers);
+  const sharedVisible = reviewsVisible && completion.visible;
+  const workTopic = selectedTopics.length === 1 ? selectedTopics[0] : explicitWorkTopic;
   const labScope = auth.isAdmin && reviewScope === 'lab';
   const reviewAccessLabel = auth.loading ? '확인 중' : !auth.configured ? '평가 불러오는 중'
     : !auth.user ? '로그인 후 확인' : !auth.isApproved ? '승인 후 확인'
@@ -187,7 +196,7 @@ function App() {
       if (!active || request !== reviewRequest.current) return;
       const accountReviews = Object.fromEntries(ownRows.map((review) => [
         review.paper_id,
-        { score: review.score, note: review.note, updatedAt: review.updated_at },
+        { score: review.score, note: review.note, updatedAt: review.updated_at, reviewTopic: review.review_topic ?? null },
       ]));
       const localReviews = getStoredReviews();
       const missingLocalEntries = Object.entries(localReviews).filter(([paperId]) => !accountReviews[paperId]);
@@ -226,6 +235,8 @@ function App() {
 
   useEffect(() => {
     setReviewSession(null);
+    setReviewStart(null);
+    setTopicPendingOnly(false);
     setSessionNotice('');
   }, [reviewOwner, auth.isApproved]);
 
@@ -250,6 +261,7 @@ function App() {
         reviewScore: labScope && reviewsVisible ? labReview?.maxScore ?? null : ownReviewScore,
         reviewCount: labScope && reviewsVisible ? labReview?.count ?? 0 : null,
         reviewNote: reviewsVisible ? reviews[paper.id]?.note ?? '' : '',
+        reviewTopic: reviewsVisible ? reviews[paper.id]?.reviewTopic ?? null : null,
       };
     }),
     [dataset.papers, reviews, labReviewSummary, labScope, reviewsVisible],
@@ -266,12 +278,14 @@ function App() {
       const matchesJournal = !selectedJournals.length || selectedJournals.includes(paper.journalShort);
       const matchesTopic = !selectedTopics.length || selectedTopics.some((topic) => paper.topics.includes(topic));
       const matchesAi = paper.aiScore >= minimumAiScore;
+      const matchesWork = !workTopic || workTopic === GENERAL_TOPIC || paper.topics.includes(workTopic);
+      const matchesCompletion = !topicPendingOnly || (sharedVisible && !topicCompleted(paper, completion.rows, reviews, workTopic));
       const matchesTab = activeTab === 'all'
         || (activeTab === 'must' && paper.reviewScore === 5)
         || (activeTab === 'review' && [3, 4].includes(paper.reviewScore))
         || (activeTab === 'new' && isWithinDays(paper.addedAt, 7))
         || (activeTab === 'unlabeled' && paper.reviewScore == null);
-      return matchesQuery && matchesJournal && matchesTopic && matchesAi && matchesTab;
+      return matchesQuery && matchesJournal && matchesTopic && matchesAi && matchesTab && matchesWork && matchesCompletion;
     });
 
     return result.sort((a, b) => {
@@ -280,17 +294,22 @@ function App() {
       if (sort === 'score') return (b.reviewScore || 0) - (a.reviewScore || 0);
       return new Date(b.addedAt) - new Date(a.addedAt);
     });
-  }, [papers, query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort]);
+  }, [papers, query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort, workTopic, topicPendingOnly, sharedVisible, completion.rows, reviews]);
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort]);
+  }, [query, selectedJournals, selectedTopics, minimumAiScore, activeTab, sort, workTopic, topicPendingOnly]);
 
   const visiblePapers = filteredPapers.slice(0, visibleCount);
-  const ownPendingPapers = filteredPapers.filter((paper) => paper.ownReviewScore == null);
+  const ownPendingPapers = reviewQueue(filteredPapers, workTopic);
+  const overallProgress = completionProgress(dataset.papers, completion.rows, reviewsVisible ? reviews : {});
+  const workProgress = workTopic ? completionProgress(dataset.papers, completion.rows, reviewsVisible ? reviews : {}, workTopic) : null;
+  const progressVisible = auth.configured ? sharedVisible : reviewsVisible;
+  const progressAccessLabel = reviewsVisible && auth.configured ? (completion.error ? '공유 현황 확인 필요' : '공유 현황 불러오는 중') : reviewAccessLabel;
   const selectedPaper = reviewSession && reviewSession.owner === reviewOwner
     ? papers.find((paper) => paper.id === reviewSession.ids[reviewSession.index]) : null;
   const selectedNeedsReviewAccess = ['must', 'review', 'unlabeled'].includes(activeTab) && !reviewsVisible;
+  const selectedNeedsCompletion = topicPendingOnly && !sharedVisible;
 
   const stats = useMemo(() => {
     const labeled = labScope
@@ -306,7 +325,7 @@ function App() {
     };
   }, [papers, labScope]);
 
-  const activeFilterCount = selectedJournals.length + selectedTopics.length + (minimumAiScore ? 1 : 0);
+  const activeFilterCount = selectedJournals.length + selectedTopics.length + (minimumAiScore ? 1 : 0) + (explicitWorkTopic && explicitWorkTopic !== GENERAL_TOPIC ? 1 : 0) + (topicPendingOnly ? 1 : 0);
 
   function toggleItem(value, setter) {
     setter((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
@@ -316,24 +335,29 @@ function App() {
     setSelectedJournals([]);
     setSelectedTopics([]);
     setMinimumAiScore(0);
+    setExplicitWorkTopic('');
+    setTopicPendingOnly(false);
   }
 
   async function saveReview(paperId, score, note) {
-    const savedReview = { score, note, updatedAt: new Date().toISOString() };
+    const reviewTopic = reviews[paperId]?.score != null ? reviews[paperId].reviewTopic ?? null : reviewSession?.topic ?? null;
+    const savedReview = { score, note, reviewTopic, updatedAt: new Date().toISOString() };
     reviewWriting.current = reviewOwner;
     ++reviewRequest.current;
     try {
       if (auth.configured) {
         if (!auth.user || !auth.isApproved || !reviewsVisible) throw new Error('승인된 연구실 계정이 필요합니다.');
         const paper = dataset.papers.find((item) => item.id === paperId);
-        const { error } = await supabase.from('paper_reviews').upsert({
+        const { data: savedRow, error } = await supabase.from('paper_reviews').upsert({
           user_id: auth.user.id,
           paper_id: paperId,
           doi: paper?.doi || null,
           score,
           note,
-        });
+          review_topic: reviewTopic,
+        }).select('review_topic').single();
         if (error) throw error;
+        savedReview.reviewTopic = savedRow.review_topic ?? null;
       } else {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...reviews, [paperId]: savedReview }));
       }
@@ -342,19 +366,30 @@ function App() {
       if (auth.isAdmin) {
         setLabReviewRows((current) => [
           ...current.filter((review) => !(review.user_id === auth.user.id && review.paper_id === paperId)),
-          { user_id: auth.user.id, paper_id: paperId, score, note, updated_at: savedReview.updatedAt },
+          { user_id: auth.user.id, paper_id: paperId, score, note, review_topic: savedReview.reviewTopic, updated_at: savedReview.updatedAt },
         ]);
       }
+      void completion.refresh();
     } finally {
       if (reviewWriting.current === reviewOwner) reviewWriting.current = false;
     }
   }
 
   function openReview(paper, pendingOnly = false) {
+    if (reviewsVisible && !workTopic) {
+      setReviewStart({ paper, pendingOnly });
+      return;
+    }
+    startReview(paper, pendingOnly, workTopic);
+  }
+
+  function startReview(paper, pendingOnly, topic) {
     // Freeze the filtered queue so saving cannot reorder or remove the next paper.
-    const queue = pendingOnly ? ownPendingPapers : filteredPapers;
+    const queue = reviewQueue(filteredPapers, topic, pendingOnly);
+    const index = pendingOnly ? 0 : queue.findIndex((item) => item.id === paper.id);
+    if (!queue.length || index < 0) { setSessionNotice('이 주제에 검토할 논문이 없습니다.'); return; }
     setSessionNotice('');
-    setReviewSession({ ids: queue.map((item) => item.id), index: queue.findIndex((item) => item.id === paper.id), owner: reviewOwner, view: 'abstract' });
+    setReviewSession({ ids: queue.map((item) => item.id), index, topic, owner: reviewOwner, view: 'abstract' });
   }
 
   function advanceReview() {
@@ -399,11 +434,11 @@ function App() {
           <StatCard icon={CalendarDays} label="이번 주 신규" value={stats.weekly} meta="최근 7일" accent="coral" />
           <StatCard
             icon={Check}
-            label="라벨링 진행률"
-            value={reviewsVisible ? `${stats.progress}%` : reviewAccessLabel}
-            meta={reviewsVisible ? `${stats.labeled} / ${stats.total}편 · ${labScope ? '연구실 전체' : '내 평가'}` : '개인별 평가 기록'}
-            progress={reviewsVisible ? stats.progress : null}
-            locked={!reviewsVisible}
+            label="전체 평가 진행률"
+            value={progressVisible ? `${overallProgress.percent}%` : progressAccessLabel}
+            meta={progressVisible ? `${overallProgress.reviewed} / ${overallProgress.total}편 · ${auth.configured ? '한 명 이상 평가' : '내 평가 (로컬)'}` : '승인된 연구실 멤버 전용'}
+            progress={progressVisible ? overallProgress.percent : null}
+            locked={!progressVisible}
           />
         </section>
 
@@ -460,7 +495,7 @@ function App() {
               selectedTopics={selectedTopics}
               minimumAiScore={minimumAiScore}
               onJournal={(value) => toggleItem(value, setSelectedJournals)}
-              onTopic={(value) => toggleItem(value, setSelectedTopics)}
+              onTopic={(value) => { toggleItem(value, setSelectedTopics); setExplicitWorkTopic(''); setTopicPendingOnly(false); }}
               onMinimumAiScore={setMinimumAiScore}
               onReset={resetFilters}
               onClose={() => setMobileFiltersOpen(false)}
@@ -468,7 +503,7 @@ function App() {
 
             <div className="paper-results">
               <div className="results-meta">
-                <span><strong>{filteredPapers.length.toLocaleString()}</strong>편 중 {visiblePapers.length.toLocaleString()}편 표시</span>
+                <span>{selectedNeedsCompletion ? '공유 현황 확인 필요' : <><strong>{filteredPapers.length.toLocaleString()}</strong>편 중 {visiblePapers.length.toLocaleString()}편 표시</>}</span>
                 {reviewSyncError && <span className="review-sync-error">평가 동기화 오류</span>}
                 {activeFilterCount > 0 && <button type="button" onClick={resetFilters}>필터 초기화</button>}
               </div>
@@ -476,15 +511,28 @@ function App() {
                 <span>현재 목록 · 내 미평가 <strong>{ownPendingPapers.length.toLocaleString()}</strong>편</span>
                 <button className="primary-button" type="button" disabled={loading || !ownPendingPapers.length || Boolean(reviewSyncError)} onClick={() => openReview(ownPendingPapers[0], true)}><BookOpen size={15} /> 미평가 연속 검토</button>
               </div>}
+              {reviewsVisible && <div className="coordination-toolbar">
+                <label className="work-topic">작업 주제<select aria-label="작업 주제" value={workTopic} disabled={selectedTopics.length === 1} onChange={(event) => { setExplicitWorkTopic(event.target.value); setTopicPendingOnly(false); }}>
+                  <option value="">주제 선택</option>
+                  {(selectedTopics.length ? selectedTopics : topics).map((topic) => <option key={topic} value={topic}>{topic}</option>)}
+                  <option value={GENERAL_TOPIC}>전체 목록</option>
+                </select></label>
+                {auth.configured && <>
+                  <label className="topic-pending"><input type="checkbox" checked={topicPendingOnly} disabled={!sharedVisible || !workTopic} onChange={(event) => setTopicPendingOnly(event.target.checked)} />현재 작업 주제에서 미평가만</label>
+                  <IconButton label="공유 평가 현황 새로고침" disabled={completion.loading} onClick={completion.refresh}><RefreshCw size={16} /></IconButton>
+                  <span className="coordination-progress" role="status">{!sharedVisible ? progressAccessLabel : workProgress ? `${originLabel(workTopic)} 경유 평가 ${workProgress.reviewed} / ${workProgress.total}편 (${workProgress.percent}%)` : `내 평가 ${papers.filter((paper) => paper.ownReviewScore != null).length}편`}</span>
+                </>}
+              </div>}
               {sessionNotice && <p className="session-notice" role="status">{sessionNotice}</p>}
               {auth.error && <p className="review-save-error" role="alert">{auth.error}</p>}
 
               {loading && <LoadingRows />}
               {loadError && <EmptyState icon={CircleAlert} title="논문 데이터를 불러오지 못했습니다" detail="data/papers.json 파일을 확인해 주세요." />}
               {!loading && selectedNeedsReviewAccess && <EmptyState icon={LockKeyhole} title={reviewAccessLabel} detail="개인별 평가 기록" />}
-              {!loading && !loadError && !selectedNeedsReviewAccess && filteredPapers.length === 0 && <EmptyState icon={Search} title="조건에 맞는 논문이 없습니다" detail="검색어 또는 필터를 변경해 보세요." />}
+              {!loading && selectedNeedsCompletion && <EmptyState icon={CircleAlert} title="공유 평가 현황 확인 필요" detail="평가 여부를 확인할 수 없어 이 필터의 결과를 표시하지 않았습니다." />}
+              {!loading && !loadError && !selectedNeedsReviewAccess && !selectedNeedsCompletion && filteredPapers.length === 0 && <EmptyState icon={Search} title="조건에 맞는 논문이 없습니다" detail="검색어 또는 필터를 변경해 보세요." />}
               {!loading && !loadError && !selectedNeedsReviewAccess && visiblePapers.map((paper) => (
-                <PaperRow key={paper.id} paper={paper} onOpen={() => openReview(paper)} reviewsVisible={reviewsVisible} reviewAccessLabel={reviewAccessLabel} />
+                <PaperRow key={paper.id} paper={paper} onOpen={() => openReview(paper)} reviewsVisible={reviewsVisible} reviewAccessLabel={reviewAccessLabel} sharedVisible={sharedVisible} completionStatus={completion.rows.get(paper.id)} workTopic={workTopic} />
               ))}
               {!loading && visiblePapers.length < filteredPapers.length && (
                 <div className="load-more-row">
@@ -505,8 +553,11 @@ function App() {
 
       {selectedPaper && <ReviewDrawer key={`${reviewOwner}:${selectedPaper.id}:${reviewsVisible}`} paper={selectedPaper} auth={auth} reviewsVisible={reviewsVisible}
         onClose={() => setReviewSession(null)} onSave={saveReview} session={reviewSession}
+        sharedVisible={sharedVisible} completionStatus={completion.rows.get(selectedPaper.id)}
         onView={(view) => setReviewSession((current) => ({ ...current, view }))}
         onNavigate={(index) => setReviewSession((current) => ({ ...current, index }))} onSavedNext={advanceReview} />}
+      {reviewStart && reviewsVisible && <ReviewStartDialog topics={reviewStart.pendingOnly ? (selectedTopics.length ? selectedTopics : topics) : reviewStart.paper.topics}
+        onClose={() => setReviewStart(null)} onStart={(topic) => { setExplicitWorkTopic(topic); startReview(reviewStart.paper, reviewStart.pendingOnly, topic); setReviewStart(null); }} />}
       {adminOpen && auth.isAdmin && <AdminPanel key={auth.user.id} isAdmin={auth.isAdmin} papers={dataset.papers} onClose={() => setAdminOpen(false)} />}
     </div>
   );
@@ -550,7 +601,7 @@ function CheckOption({ label, checked, onChange }) {
   return <label className="check-option"><input type="checkbox" checked={checked} onChange={onChange} /><span><Check size={13} /></span>{label}</label>;
 }
 
-function PaperRow({ paper, onOpen, reviewsVisible, reviewAccessLabel }) {
+function PaperRow({ paper, onOpen, reviewsVisible, reviewAccessLabel, sharedVisible, completionStatus, workTopic }) {
   return (
     <article className="paper-row">
       <button className="paper-main" type="button" onClick={onOpen} aria-label={`${paper.title} 검토 열기`}>
@@ -566,6 +617,7 @@ function PaperRow({ paper, onOpen, reviewsVisible, reviewAccessLabel }) {
         <div className="paper-tags">
           <div className="topic-list">{paper.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
         </div>
+        {sharedVisible && <CompletionStatus status={completionStatus} topic={workTopic} />}
       </button>
       <div className="paper-metrics">
         <div className="metric ai"><span>주제 관련도</span><strong>{paper.aiScore}</strong><small>/ 100</small></div>
@@ -583,7 +635,7 @@ function PaperRow({ paper, onOpen, reviewsVisible, reviewAccessLabel }) {
   );
 }
 
-function ReviewDrawer({ paper, auth, onClose, onSave, reviewsVisible, session, onView, onNavigate, onSavedNext }) {
+function ReviewDrawer({ paper, auth, onClose, onSave, reviewsVisible, session, onView, onNavigate, onSavedNext, sharedVisible, completionStatus }) {
   const [score, setScore] = useState(paper.ownReviewScore);
   const [note, setNote] = useState(paper.reviewNote || '');
   const [saved, setSaved] = useState(false);
@@ -688,6 +740,8 @@ function ReviewDrawer({ paper, auth, onClose, onSave, reviewsVisible, session, o
             </div>
             <h3>{paper.title}</h3>
             <p>{paper.authors.join(', ')}</p>
+            {sharedVisible && <CompletionStatus status={completionStatus} topic={session.topic} />}
+            {canReview && <p className="review-origin">{paper.ownReviewScore != null ? '최초 평가 경로' : '이번 평가 경로'} · {originLabel(paper.ownReviewScore != null ? paper.reviewTopic : session.topic)}</p>}
           </div>
 
           <div className="drawer-tabs" role="tablist" aria-label="논문 상세 보기">
@@ -719,7 +773,7 @@ function ReviewDrawer({ paper, auth, onClose, onSave, reviewsVisible, session, o
                 <>
                   {!auth.configured && <p className="local-review-notice">현재 평가는 이 브라우저에만 저장됩니다.</p>}
                   <fieldset className="score-fieldset" disabled={saving}>
-                    <legend>내 연구 관련성 평가</legend>
+                    <legend>연구실 전체 관련성 평가</legend>
                     <div className="score-options">
                       {[1, 2, 3, 4, 5].map((value) => (
                         <label key={value} className={score === value ? 'selected' : ''}>

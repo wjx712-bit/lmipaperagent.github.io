@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test:admin": "node --test tests/admin-analytics.test.mjs tests/admin-data.test.mjs tests/classification-audit.test.mjs",
     "test:preview": "node --test tests/classification-preview.test.mjs tests/preview-snapshot.test.mjs",
+    "test:coordination": "node --test tests/review-coordination.test.mjs tests/review-coordination-db.test.mjs",
     "classification:preview": "node scripts/export_classification_preview.mjs",
     "data:export": "python -m paper_agent.export_site_json",
     "test:collector": "python -m unittest discover -s tests -v"
@@ -22,5 +23,7 @@
     "react-dom": "latest",
     "lucide-react": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  }
 }

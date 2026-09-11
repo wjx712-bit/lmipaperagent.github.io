@@ -165,6 +165,11 @@ export function buildAnalytics(papers = [], reviews = []) {
     papers: scope.papers,
     reviews: scope.reviews,
     topics: groupStats(scope.papers, reviewsByPaper, disagreementIds, topicNames),
+    originTopics: [...new Set(scope.papers.flatMap(topicNames))].sort(compareText).map((name) => {
+      const topicPapers = scope.papers.filter((paper) => topicNames(paper).includes(name));
+      const reviewed = topicPapers.filter((paper) => (reviewsByPaper.get(paper.id) || []).some((review) => review.review_topic === name)).length;
+      return { name, total: topicPapers.length, reviewed, progress: progress(reviewed, topicPapers.length) };
+    }),
     journals: groupStats(scope.papers, reviewsByPaper, disagreementIds, (paper) => [journalName(paper)]),
     disagreements,
     reviewerStats: [...reviewers.values()].map((stats) => ({
@@ -199,9 +204,9 @@ export function reviewExportRows(papers = [], reviews = [], profiles = []) {
       title: paper.title ?? '',
       journal: paper.journal || paper.journalShort || '',
       paper_topics: Array.isArray(paper.topics) ? [...paper.topics] : [],
-      // Reviews do not record a topic or rubric version; never infer them from the paper.
-      review_topic: null,
-      review_topic_status: 'not_recorded',
+      // Preserve legacy unknown origins; never infer navigation from the paper's tags.
+      review_topic: review.review_topic ?? null,
+      review_topic_status: review.review_topic ? 'recorded' : 'not_recorded',
       reviewer_id: review.user_id,
       reviewer_name: profile?.display_name || profile?.email || review.user_id,
       reviewer_email: profile?.email ?? '',

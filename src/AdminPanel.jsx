@@ -15,6 +15,7 @@ import {
 import { supabase } from './supabase';
 import { fetchAdminData } from './adminData';
 import { AdminInsights } from './AdminInsights';
+import { originLabel } from './reviewCoordination.js';
 
 const ClassificationPreviewPanel = lazy(() => import('./ClassificationPreviewPanel.jsx'));
 
@@ -236,6 +237,7 @@ function ReviewTable({ reviews, profileById, paperById }) {
             <div className="admin-review-score"><strong>{review.score}</strong><span>/ 5</span></div>
             <div className="admin-review-copy">
               <div><strong>{profile?.display_name || profile?.email || '알 수 없는 사용자'}</strong><span>{profile?.email}</span><time dateTime={review.updated_at}>{formatDateTime(review.updated_at)}</time></div>
+              <small>최초 평가 경로 · {originLabel(review.review_topic)}</small>
               <h3>{paper?.title || review.paper_id}</h3>
               {review.note ? <p>{review.note}</p> : <p className="empty-note">작성된 리뷰 노트가 없습니다.</p>}
             </div>

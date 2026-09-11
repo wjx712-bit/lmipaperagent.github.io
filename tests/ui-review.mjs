@@ -11,7 +11,7 @@ assert.ok(['localhost', '127.0.0.1'].includes(new URL(baseUrl).hostname), 'Run w
 const dataset = JSON.parse(await readFile('public/data/papers.json', 'utf8'));
 const topic = 'Adipose tissue / adipocyte biology';
 const sample = dataset.papers.slice(0, 4).map((paper, index) => ({
-  ...paper, topics: index < 3 ? [topic] : ['Liver metabolism / MASLD'],
+  ...paper, topics: index < 2 ? [topic, 'Liver metabolism / MASLD'] : index === 2 ? [topic] : ['Liver metabolism / MASLD'],
   addedAt: `2026-08-${30 - index}T00:00:00Z`,
 }));
 const artifacts = '.cache/ui-review';
@@ -24,14 +24,17 @@ async function setup(role, { fullData = false } = {}) {
   const page = await context.newPage();
   page.setDefaultTimeout(10000);
   page.on('pageerror', (error) => failures.push(error.message));
+  await page.route('https://*.supabase.co/**', route => { failures.push('Unexpected real Supabase request'); return route.abort(); });
   await page.addInitScript(({ role, sample }) => {
     window.__testRole = role;
     window.__reviewWrites = [];
     window.__failSave = false;
     window.__saveDelay = 0;
+    window.__failCompletion = false;
+    window.__completionResponses = [];
     window.__rows = [
-      { user_id: 'other', paper_id: sample[0].id, score: 5, note: 'Other member private note' },
-      { user_id: 'other', paper_id: sample[1].id, score: 3, note: '' },
+      { user_id: 'other', paper_id: sample[0].id, score: 5, note: 'Other member private note', review_topic: 'Liver metabolism / MASLD' },
+      { user_id: 'other', paper_id: sample[1].id, score: 3, note: '', review_topic: 'Liver metabolism / MASLD' },
       { user_id: 'member', paper_id: sample[0].id, score: 2, note: 'My existing note' },
     ];
   }, { role, sample });
@@ -44,7 +47,7 @@ async function setup(role, { fullData = false } = {}) {
       import React from ${JSON.stringify(reactUrl)};
       export function useAuth() {
         const [role, setRole] = React.useState(window.__testRole);
-        React.useEffect(() => { window.__setRole = setRole; }, []);
+        React.useEffect(() => { window.__setRole = setRole; window.__activeRole = role; }, [role]);
         const signedIn = role !== 'anonymous';
         return { configured: true, loading: false, error: '',
           user: signedIn ? { id: role, email: role + '@example.test', user_metadata: {} } : null,
@@ -56,7 +59,20 @@ async function setup(role, { fullData = false } = {}) {
   });
   // Isolate persistence at the module boundary; no Supabase requests or real labels are written.
   await page.route(/\/src\/supabase(?:\.js)?(\?.*)?$/, (route) => route.fulfill({ contentType: 'text/javascript', body: `
-    export const supabase = { from() {
+    export const supabase = {
+      async rpc(name, args) {
+        if (window.__failCompletion) return { error: { message: 'Completion unavailable' } };
+        const rows = window.__rows.filter(row => args.requested_paper_ids.includes(row.paper_id));
+        const papers = [...new Set(rows.map(row => row.paper_id))].map(paper_id => {
+          const all = rows.filter(row => row.paper_id === paper_id);
+          const others = all.filter(row => row.user_id !== window.__activeRole);
+          return { paper_id, topics: [...new Set(all.map(row => row.review_topic).filter(Boolean))], other_topics: [...new Set(others.map(row => row.review_topic).filter(Boolean))], other_unattributed: others.some(row => !row.review_topic) };
+        });
+        const data = { version: 1, papers };
+        window.__completionResponses.push(data);
+        return { data, error: null };
+      },
+      from() {
       let userId, start = 0, end = 999;
       return { select() { return this; }, order() { return this; },
         eq(key, value) { userId = value; return this; },
@@ -65,13 +81,17 @@ async function setup(role, { fullData = false } = {}) {
           const rows = window.__rows.filter(row => !userId || row.user_id === userId);
           return Promise.resolve({ data: rows.slice(start, end + 1), error: null }).then(resolve);
         },
-        async upsert(row) {
-          window.__reviewWrites.push(structuredClone(row));
-          await new Promise(resolve => setTimeout(resolve, window.__saveDelay));
-          if (window.__failSave) return { error: { message: 'Simulated save failure' } };
-          window.__rows = window.__rows.filter(old => old.user_id !== row.user_id || old.paper_id !== row.paper_id);
-          window.__rows.push(structuredClone(row));
-          return { error: null };
+        upsert(row) {
+          return { select() { return this; }, async single() {
+            window.__reviewWrites.push(structuredClone(row));
+            await new Promise(resolve => setTimeout(resolve, window.__saveDelay));
+            if (window.__failSave) return { error: { message: 'Simulated save failure' } };
+            const old = window.__rows.find(old => old.user_id === row.user_id && old.paper_id === row.paper_id);
+            const saved = { ...row, review_topic: old ? old.review_topic ?? null : row.review_topic };
+            window.__rows = window.__rows.filter(old => old.user_id !== row.user_id || old.paper_id !== row.paper_id);
+            window.__rows.push(structuredClone(saved));
+            return { error: null, data: { review_topic: saved.review_topic } };
+          }};
         }
       };
     }};` }));
@@ -144,6 +164,7 @@ try {
   assert.equal(unclassifiedWrites[0].paper_id, reviewedPaper.id);
   assert.equal(unclassifiedWrites[0].user_id, 'member');
   assert.equal(unclassifiedWrites[0].score, 1);
+  assert.equal(unclassifiedWrites[0].review_topic, '미분류');
   const preservedRows = await unclassified.page.evaluate(id => JSON.stringify(window.__rows.filter(row => row.paper_id !== id)), reviewedPaper.id);
   assert.equal(preservedRows, priorRows);
   await unclassified.context.close();
@@ -208,6 +229,7 @@ try {
   assert.ok(writes.every(row => row.user_id === 'member'), 'Only the current author is written');
   assert.equal(writes[1].paper_id, sample[1].id);
   assert.equal(writes[2].paper_id, sample[2].id);
+  assert.ok(writes.every(row => row.review_topic === topic));
   await page.evaluate(() => window.__setRole('anonymous'));
   await waitFor(page, () => document.querySelectorAll('.stat-card.locked').length === 3);
   assert.equal(await page.locator('.review-queue-bar').count(), 0);
@@ -215,6 +237,7 @@ try {
   console.log('PASS: filtered pending queue, no skips, failed saves, dirty drafts, previous/next, completion, author isolation');
 
   const admin = await setup('admin');
+  await admin.page.getByLabel('작업 주제', { exact: true }).selectOption('__general__');
   assert.ok((await admin.page.locator('.stat-card').filter({ hasText: '필독 후보' }).innerText()).includes('1'));
   assert.equal(await admin.page.locator('.review-scope button[aria-pressed="true"]').innerText(), '연구실 전체');
   await admin.page.locator('.paper-main').first().click();
@@ -244,6 +267,81 @@ try {
   await pending.context.close();
   assert.deepEqual(failures, [], 'No browser exceptions');
   console.log('PASS: approval gating and no browser errors');
+
+  const shared = await setup('member');
+  const sharedPage = shared.page;
+  await sharedPage.locator('.stat-card').filter({ hasText: '전체 평가 진행률' }).getByText('50%', { exact: true }).waitFor();
+  assert.equal(await sharedPage.getByText('Other member private note', { exact: true }).count(), 0);
+  const sharedJson = await sharedPage.evaluate(() => JSON.stringify(window.__completionResponses));
+  assert.ok(!sharedJson.match(/score|note|user_id|email/));
+  await sharedPage.locator('.check-option').filter({ hasText: topic }).click();
+  assert.equal(await sharedPage.getByLabel('작업 주제', { exact: true }).inputValue(), topic);
+  await sharedPage.getByLabel('현재 작업 주제에서 미평가만', { exact: true }).check();
+  assert.equal(await sharedPage.locator('.paper-row').count(), 3, 'Other-topic and unknown-origin reviews do not complete the current work topic');
+  await sharedPage.evaluate(({ id, topic }) => window.__rows.push({ user_id: 'another', paper_id: id, score: 4, note: 'Still private', review_topic: topic }), { id: sample[2].id, topic });
+  await sharedPage.getByRole('button', { name: '공유 평가 현황 새로고침' }).click();
+  await waitFor(sharedPage, () => document.querySelectorAll('.paper-row').length === 2);
+  assert.deepEqual(await sharedPage.locator('.paper-row h3').allTextContents(), sample.slice(0, 2).map(p => p.title));
+  assert.ok((await sharedPage.locator('.paper-row').nth(1).locator('.completion-status').innerText()).includes('Liver metabolism / MASLD 경유 · 평가 있음'));
+  assert.ok((await sharedPage.locator('.coordination-progress').innerText()).includes('1 / 3편 (33.3%)'));
+  for (const width of [320, 390, 768, 1440]) {
+    await sharedPage.setViewportSize({ width, height: 950 });
+    await checkWidth(sharedPage, `shared completion ${width}`);
+    const progressBounds = await sharedPage.locator('.stat-card').filter({ hasText: '전체 평가 진행률' }).evaluate(card => ({ text: card.querySelector('small').getBoundingClientRect().bottom, track: card.querySelector('.progress-track').getBoundingClientRect().top }));
+    assert.ok(progressBounds.text + 3 <= progressBounds.track, 'Progress text stays clear of its bar');
+    if ([390, 1440].includes(width)) await sharedPage.locator('.paper-results').screenshot({ path: `${artifacts}/coordination-${width}.png` });
+  }
+  await sharedPage.getByRole('button', { name: '미평가 연속 검토' }).click();
+  assert.equal(await drawerTitle(sharedPage), sample[1].title);
+  assert.equal(await sharedPage.locator('.drawer-navigation > span').innerText(), '1 / 1');
+  await sharedPage.getByRole('button', { name: '평가하기', exact: true }).click();
+  await selectScore(sharedPage, 2);
+  await sharedPage.getByRole('button', { name: '평가 저장', exact: true }).click();
+  await sharedPage.getByText('저장되었습니다', { exact: true }).waitFor();
+  assert.equal(await sharedPage.evaluate(() => window.__reviewWrites.at(-1).review_topic), topic);
+  await sharedPage.getByRole('button', { name: '검토창 닫기' }).click();
+  await waitFor(sharedPage, () => document.querySelector('.coordination-progress')?.textContent.includes('2 / 3편 (66.7%)'));
+  assert.equal(await sharedPage.locator('.stat-card').filter({ hasText: '전체 평가 진행률' }).locator('strong').innerText(), '75%');
+  await sharedPage.getByLabel('현재 작업 주제에서 미평가만', { exact: true }).uncheck();
+  await sharedPage.locator('.paper-main').first().click();
+  assert.ok((await sharedPage.locator('.review-origin').innerText()).includes('평가 경로 미기록'));
+  await sharedPage.getByRole('button', { name: '평가하기', exact: true }).click();
+  await selectScore(sharedPage, 4);
+  await sharedPage.getByRole('button', { name: '평가 저장', exact: true }).click();
+  await sharedPage.getByText('저장되었습니다', { exact: true }).waitFor();
+  assert.equal(await sharedPage.evaluate(() => window.__reviewWrites.at(-1).review_topic), null);
+  await sharedPage.getByRole('button', { name: '검토창 닫기' }).click();
+
+  await sharedPage.getByLabel('현재 작업 주제에서 미평가만', { exact: true }).check();
+  await sharedPage.evaluate(() => { window.__failCompletion = true; });
+  await sharedPage.getByRole('button', { name: '공유 평가 현황 새로고침' }).click();
+  await sharedPage.getByText('공유 평가 현황 확인 필요', { exact: true }).waitFor();
+  assert.equal(await sharedPage.getByText('조건에 맞는 논문이 없습니다', { exact: true }).count(), 0);
+  assert.equal(await sharedPage.locator('.completion-status').count(), 0);
+  await sharedPage.evaluate(() => { window.__failCompletion = false; });
+  await sharedPage.getByRole('button', { name: '공유 평가 현황 새로고침' }).click();
+  await waitFor(sharedPage, () => document.querySelectorAll('.paper-row').length === 1);
+  await sharedPage.evaluate(() => window.__setRole('anonymous'));
+  await waitFor(sharedPage, () => document.querySelectorAll('.stat-card.locked').length === 3);
+  assert.equal(await sharedPage.locator('.completion-status').count(), 0);
+  await shared.context.close();
+  console.log('PASS: anonymous statuses, unique total/topic coverage, cross-topic review preserved, old origins unchanged, fail-closed refresh and logout');
+
+  const start = await setup('member');
+  await start.page.locator('.check-option').filter({ hasText: topic }).click();
+  await start.page.locator('.check-option').filter({ hasText: 'Liver metabolism / MASLD' }).click();
+  await start.page.getByRole('button', { name: '미평가 연속 검토' }).click();
+  await start.page.getByRole('dialog', { name: '이번 작업 주제' }).waitFor();
+  assert.equal(await start.page.getByRole('button', { name: '검토 시작', exact: true }).isDisabled(), true);
+  await start.page.getByLabel('검토 시작 주제').selectOption('Liver metabolism / MASLD');
+  await start.page.getByRole('button', { name: '검토 시작', exact: true }).click();
+  assert.equal(await start.page.locator('.drawer-navigation > span').innerText(), '1 / 2');
+  assert.equal(await drawerTitle(start.page), sample[1].title);
+  await start.page.getByRole('button', { name: '다음 논문', exact: true }).click();
+  assert.equal(await drawerTitle(start.page), sample[3].title);
+  await start.context.close();
+  assert.deepEqual(failures, [], 'No errors in new coordination flow');
+  console.log('PASS: multi-topic start requires a single explicit origin and freezes only the matching queue');
 } finally {
   await browser.close();
 }

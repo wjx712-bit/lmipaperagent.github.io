@@ -457,6 +457,27 @@ footer span:first-child { color: var(--text); font-weight: 800; }
   .admin-review-copy time { width: 100%; margin-left: 0; }
 }
 
+.stat-card:has(.progress-track) { padding-bottom: 32px; }
+.coordination-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px 15px; border-bottom: 1px solid var(--line); }
+.work-topic { display: grid; flex: 1 1 240px; min-width: 0; gap: 5px; color: var(--text-muted); font-size: 11px; font-weight: 650; }
+.work-topic select, .review-start-dialog select { width: 100%; min-width: 0; height: 39px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); color: var(--text); font-size: 12px; text-overflow: ellipsis; }
+.work-topic select:disabled { opacity: 1; color: var(--text-muted); }
+.topic-pending { display: flex; align-items: center; gap: 7px; font-size: 11px; }
+.topic-pending input { flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--teal); }
+.coordination-progress { flex-basis: 100%; font-size: 11px; color: var(--text-muted); overflow-wrap: anywhere; }
+.completion-status { display: flex; flex-direction: column; gap: 3px; margin-top: 9px; color: var(--text-muted); font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; font-weight: 400; }
+.completion-status .completed { color: var(--teal); }
+.drawer-paper .review-origin { margin: 9px 0 0; color: var(--text-muted); font-size: 12px; overflow-wrap: anywhere; }
+.review-start-dialog { margin: auto; width: min(440px, calc(100% - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; padding: 20px; border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+.review-start-dialog header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 20px; }
+.review-start-dialog h2 { margin: 0; font-size: 18px; }
+.review-start-dialog label { display: grid; gap: 8px; margin-bottom: 20px; font-size: 12px; color: var(--text-muted); }
+.review-start-dialog > button { width: 100%; }
+@media (max-width: 620px) {
+  .work-topic { flex-basis: 100%; }
+  .coordination-toolbar > .icon-button { margin-left: auto; }
+}
+
 .admin-analytics { min-width: 0; }
 .analytics-filters { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .analytics-filters label { min-width: 0; display: grid; gap: 6px; color: var(--text-muted); font-size: 11px; font-weight: 700; }

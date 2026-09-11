@@ -74,6 +74,7 @@ Supabase가 설정되기 전에는 리뷰가 브라우저별 `localStorage`에 �
 사이트는 Supabase Google Auth를 사용합니다. 신규 사용자는 `pending`으로 등록되고, 관리자가 승인한 뒤 본인 평가를 작성할 수 있습니다. 일반 사용자는 본인의 점수와 노트만 읽을 수 있으며, `wjx712@gmail.com` 관리자만 모든 개인 평가와 가입 요청을 볼 수 있습니다. 이 제한은 화면 코드가 아니라 PostgreSQL Row Level Security에서 강제됩니다.
 
 1. Supabase 프로젝트의 SQL Editor에서 `supabase/migrations/202608130001_auth_and_reviews.sql` 전체를 실행합니다.
+   이어서 `supabase/migrations/202609110001_review_coordination.sql`을 실행합니다. 기존 운영 DB에는 두 번째 파일만 적용합니다. 이 변경은 기존 평가를 수정하지 않고, 승인된 멤버에게 평가 완료 여부와 최초 평가 경로만 공유합니다. 점수·노트·평가자 신원은 공유 API에서 반환하지 않습니다. 자세한 운영 기준은 `REVIEW_WORKFLOW_AND_BACKLOG.md`를 참고합니다.
 2. Supabase `Authentication > Providers > Google`에서 Google 로그인을 활성화합니다.
 3. Supabase `Authentication > URL Configuration`에 아래 주소를 등록합니다.
 

@@ -34,7 +34,7 @@ export async function fetchAdminData(client) {
   await requireAdmin(client);
   const [profiles, reviews] = await Promise.all([
     readAllRows(client, 'profiles', 'id,email,display_name,avatar_url,status,role,created_at', ['id']),
-    readAllRows(client, 'paper_reviews', 'user_id,paper_id,doi,score,note,created_at,updated_at', ['paper_id', 'user_id']),
+    readAllRows(client, 'paper_reviews', 'user_id,paper_id,doi,score,note,created_at,updated_at,review_topic', ['paper_id', 'user_id']),
   ]);
   await requireAdmin(client);
   return { profiles, reviews, fetchedAt: new Date().toISOString() };

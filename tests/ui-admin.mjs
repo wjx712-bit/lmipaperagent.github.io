@@ -40,7 +40,14 @@ async function setup(role) {
   });
   await page.route(/\/src\/supabase(?:\.js)?(\?.*)?$/, route => route.fulfill({ contentType: 'text/javascript', body: `
     export const supabase = {
-      async rpc(name) { window.__calls.push({rpc:name}); return {data:!window.__denyAdmin,error:null}; },
+      async rpc(name, args) {
+        window.__calls.push({rpc:name});
+        if (name === 'review_completion') {
+          const papers = [...new Set(window.__rows.filter(row => args.requested_paper_ids.includes(row.paper_id)).map(row => row.paper_id))].map(paper_id => ({paper_id, topics: [], other_topics: [], other_unattributed: true}));
+          return {data: {version:1,papers}, error:null};
+        }
+        return {data:!window.__denyAdmin,error:null};
+      },
       from(table) {
         let from=0,to=999,userId,cursor,order=[];
         return { select(){return this}, order(key){order.push(key);return this}, eq(key,value){userId=value;return this},
@@ -83,7 +90,7 @@ try {
     assert.equal(await page.locator('.admin-panel').count(), 0);
     assert.equal(await page.getByRole('tab', { name: '새 분류 미리보기', exact: true }).count(), 0);
     assert.equal(await page.getByText('Other private note', { exact: true }).count(), 0);
-    assert.equal(await page.evaluate(() => window.__calls.some(call => call.table === 'profiles' || call.rpc)), false);
+    assert.equal(await page.evaluate(() => window.__calls.some(call => call.table === 'profiles' || (call.rpc && call.rpc !== 'review_completion'))), false);
     await context.close();
   }
   console.log('PASS: anonymous/member/pending have no admin entry, data fetch, or private review leak');
@@ -115,7 +122,7 @@ try {
   assert.ok(await page.getByLabel('관리자 평가자 필터').isDisabled());
   assert.equal(await page.locator('.disagreement-row tbody tr').count(), 2);
   const report = await readDownload(page, '보고서');
-  assert.ok(report.includes('평가 당시 담당 주제와 기준 버전은 미기록'));
+  assert.ok(report.includes('기존 평가 경로와 기준 버전은 추정하지 않습니다'));
   assert.ok(report.includes('Other private note'));
   console.log('PASS: paginated admin data, topic/journal/reviewer exports, raw scores, CSV safety, disagreement across authors');
 

@@ -36,6 +36,8 @@ jobs:
         run: pnpm test:admin
       - name: Check isolated classification preview
         run: pnpm test:preview
+      - name: Check anonymous review coordination and PostgreSQL permissions
+        run: pnpm test:coordination
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
