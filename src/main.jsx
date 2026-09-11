@@ -34,7 +34,7 @@ import { AdminPanel } from './AdminPanel';
 import { supabase } from './supabase';
 import { useAuth } from './useAuth';
 import { useReviewCompletion } from './useReviewCompletion.js';
-import { completionProgress, GENERAL_TOPIC, originLabel, reviewQueue, topicCompleted } from './reviewCoordination.js';
+import { completionProgress, GENERAL_TOPIC, originLabel, resolveWorkTopic, reviewQueue, topicCompleted } from './reviewCoordination.js';
 import { CompletionStatus, ReviewStartDialog } from './ReviewCoordination.jsx';
 
 const REVIEW_LABELS = {
@@ -145,7 +145,7 @@ function App() {
   const reviewsVisible = (!auth.configured || auth.isApproved) && loadedReviewOwner === reviewOwner;
   const completion = useReviewCompletion(supabase, auth, dataset.papers);
   const sharedVisible = reviewsVisible && completion.visible;
-  const workTopic = selectedTopics.length === 1 ? selectedTopics[0] : explicitWorkTopic;
+  const workTopic = resolveWorkTopic(selectedTopics, explicitWorkTopic);
   const labScope = auth.isAdmin && reviewScope === 'lab';
   const reviewAccessLabel = auth.loading ? '확인 중' : !auth.configured ? '평가 불러오는 중'
     : !auth.user ? '로그인 후 확인' : !auth.isApproved ? '승인 후 확인'
@@ -512,11 +512,7 @@ function App() {
                 <button className="primary-button" type="button" disabled={loading || !ownPendingPapers.length || Boolean(reviewSyncError)} onClick={() => openReview(ownPendingPapers[0], true)}><BookOpen size={15} /> 미평가 연속 검토</button>
               </div>}
               {reviewsVisible && <div className="coordination-toolbar">
-                <label className="work-topic">작업 주제<select aria-label="작업 주제" value={workTopic} disabled={selectedTopics.length === 1} onChange={(event) => { setExplicitWorkTopic(event.target.value); setTopicPendingOnly(false); }}>
-                  <option value="">주제 선택</option>
-                  {(selectedTopics.length ? selectedTopics : topics).map((topic) => <option key={topic} value={topic}>{topic}</option>)}
-                  <option value={GENERAL_TOPIC}>전체 목록</option>
-                </select></label>
+                <div className="work-topic" role="status" aria-label="현재 평가 경로"><span>평가 경로</span><strong>{workTopic ? originLabel(workTopic) : '여러 주제 선택'}</strong></div>
                 {auth.configured && <>
                   <label className="topic-pending"><input type="checkbox" checked={topicPendingOnly} disabled={!sharedVisible || !workTopic} onChange={(event) => setTopicPendingOnly(event.target.checked)} />현재 작업 주제에서 미평가만</label>
                   <IconButton label="공유 평가 현황 새로고침" disabled={completion.loading} onClick={completion.refresh}><RefreshCw size={16} /></IconButton>
@@ -556,7 +552,7 @@ function App() {
         sharedVisible={sharedVisible} completionStatus={completion.rows.get(selectedPaper.id)}
         onView={(view) => setReviewSession((current) => ({ ...current, view }))}
         onNavigate={(index) => setReviewSession((current) => ({ ...current, index }))} onSavedNext={advanceReview} />}
-      {reviewStart && reviewsVisible && <ReviewStartDialog topics={reviewStart.pendingOnly ? (selectedTopics.length ? selectedTopics : topics) : reviewStart.paper.topics}
+      {reviewStart && reviewsVisible && <ReviewStartDialog topics={reviewStart.pendingOnly ? selectedTopics : selectedTopics.filter((topic) => reviewStart.paper.topics.includes(topic))}
         onClose={() => setReviewStart(null)} onStart={(topic) => { setExplicitWorkTopic(topic); startReview(reviewStart.paper, reviewStart.pendingOnly, topic); setReviewStart(null); }} />}
       {adminOpen && auth.isAdmin && <AdminPanel key={auth.user.id} isAdmin={auth.isAdmin} papers={dataset.papers} onClose={() => setAdminOpen(false)} />}
     </div>

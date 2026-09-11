@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fetchCompletion, completionProgress, topicCompleted, reviewQueue, GENERAL_TOPIC, originLabel } from '../src/reviewCoordination.js';
+import { fetchCompletion, completionProgress, topicCompleted, resolveWorkTopic, reviewQueue, GENERAL_TOPIC, originLabel } from '../src/reviewCoordination.js';
 import { buildAnalytics, reviewExportRows } from '../src/adminAnalytics.js';
 
 const papers = [
@@ -12,6 +12,21 @@ const snapshot = new Map([
   ['a', { topics: ['Liver'], otherTopics: ['Liver'], otherUnattributed: false }],
   ['b', { topics: [], otherTopics: [], otherUnattributed: true }],
 ]);
+
+test('review origin follows sidebar selection without a second selector', () => {
+  assert.equal(resolveWorkTopic([]), GENERAL_TOPIC);
+  assert.equal(resolveWorkTopic([], 'Liver'), GENERAL_TOPIC);
+  assert.equal(resolveWorkTopic(['Adipose']), 'Adipose');
+  assert.equal(resolveWorkTopic(['Adipose'], 'Liver'), 'Adipose');
+  assert.equal(resolveWorkTopic(['Adipose'], GENERAL_TOPIC), 'Adipose');
+});
+
+test('only multiple selected topics need a remembered explicit choice', () => {
+  assert.equal(resolveWorkTopic(['Adipose', 'Liver']), '');
+  assert.equal(resolveWorkTopic(['Adipose', 'Liver'], 'Liver'), 'Liver');
+  assert.equal(resolveWorkTopic(['Adipose', 'Liver'], GENERAL_TOPIC), GENERAL_TOPIC);
+  assert.equal(resolveWorkTopic(['Adipose', 'Liver'], 'Aging'), '');
+});
 
 test('unique-paper progress includes legacy and excludes orphan reviews; topics do not inherit coverage', () => {
   const data = new Map([...snapshot, ['not-in-catalog', { topics: [] }]]);

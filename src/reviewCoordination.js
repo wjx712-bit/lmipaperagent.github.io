@@ -1,6 +1,12 @@
 export const GENERAL_TOPIC = '__general__';
 export const originLabel = (topic) => topic === GENERAL_TOPIC ? '전체 목록' : topic || '평가 경로 미기록';
 
+export function resolveWorkTopic(selectedTopics, explicitWorkTopic = '') {
+  if (!selectedTopics.length) return GENERAL_TOPIC;
+  if (selectedTopics.length === 1) return selectedTopics[0];
+  return explicitWorkTopic === GENERAL_TOPIC || selectedTopics.includes(explicitWorkTopic) ? explicitWorkTopic : '';
+}
+
 export async function fetchCompletion(client, papers) {
   const ids = [...new Set(papers.map((paper) => paper.id))];
   if (!ids.length) return new Map();

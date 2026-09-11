@@ -237,7 +237,7 @@ try {
   console.log('PASS: filtered pending queue, no skips, failed saves, dirty drafts, previous/next, completion, author isolation');
 
   const admin = await setup('admin');
-  await admin.page.getByLabel('작업 주제', { exact: true }).selectOption('__general__');
+  assert.equal(await admin.page.getByLabel('현재 평가 경로').locator('strong').innerText(), '전체 목록');
   assert.ok((await admin.page.locator('.stat-card').filter({ hasText: '필독 후보' }).innerText()).includes('1'));
   assert.equal(await admin.page.locator('.review-scope button[aria-pressed="true"]').innerText(), '연구실 전체');
   await admin.page.locator('.paper-main').first().click();
@@ -253,6 +253,7 @@ try {
   await selectScore(admin.page, 3);
   await admin.page.getByRole('button', { name: '평가 저장', exact: true }).click();
   await admin.page.getByText('저장되었습니다', { exact: true }).waitFor();
+  assert.equal(await admin.page.evaluate(() => window.__reviewWrites.at(-1).review_topic), '__general__');
   assert.equal(await drawerTitle(admin.page), sample[0].title);
   await admin.page.getByRole('button', { name: '검토창 닫기' }).click();
   await admin.page.getByRole('group', { name: '평가 집계 범위' }).getByRole('button', { name: '연구실 전체', exact: true }).click();
@@ -275,7 +276,8 @@ try {
   const sharedJson = await sharedPage.evaluate(() => JSON.stringify(window.__completionResponses));
   assert.ok(!sharedJson.match(/score|note|user_id|email/));
   await sharedPage.locator('.check-option').filter({ hasText: topic }).click();
-  assert.equal(await sharedPage.getByLabel('작업 주제', { exact: true }).inputValue(), topic);
+  assert.equal(await sharedPage.getByLabel('현재 평가 경로').locator('strong').innerText(), topic);
+  assert.equal(await sharedPage.locator('.work-topic select').count(), 0, 'No separate work-topic selector');
   await sharedPage.getByLabel('현재 작업 주제에서 미평가만', { exact: true }).check();
   assert.equal(await sharedPage.locator('.paper-row').count(), 3, 'Other-topic and unknown-origin reviews do not complete the current work topic');
   await sharedPage.evaluate(({ id, topic }) => window.__rows.push({ user_id: 'another', paper_id: id, score: 4, note: 'Still private', review_topic: topic }), { id: sample[2].id, topic });
@@ -339,9 +341,31 @@ try {
   assert.equal(await drawerTitle(start.page), sample[1].title);
   await start.page.getByRole('button', { name: '다음 논문', exact: true }).click();
   assert.equal(await drawerTitle(start.page), sample[3].title);
+  await start.page.getByRole('button', { name: '검토창 닫기' }).click();
+  await start.page.getByRole('button', { name: '미평가 연속 검토' }).click();
+  assert.equal(await start.page.getByRole('dialog', { name: '이번 작업 주제' }).count(), 0, 'Reuse the chosen path until sidebar topics change');
+  assert.equal(await start.page.locator('.drawer-navigation > span').innerText(), '1 / 2');
+  await start.page.getByRole('button', { name: '검토창 닫기' }).click();
+  await start.page.locator('.check-option').filter({ hasText: 'Liver metabolism / MASLD' }).click();
+  assert.equal(await start.page.getByLabel('현재 평가 경로').locator('strong').innerText(), topic);
+  await start.page.getByRole('button', { name: '미평가 연속 검토' }).click();
+  assert.equal(await start.page.getByRole('dialog', { name: '이번 작업 주제' }).count(), 0);
+  await start.page.getByRole('button', { name: '다음 논문', exact: true }).click();
+  assert.equal(await drawerTitle(start.page), sample[2].title, 'The sidebar now determines the queue');
+  await start.page.getByRole('button', { name: '검토창 닫기' }).click();
+  await start.page.locator('.check-option').filter({ hasText: 'Liver metabolism / MASLD' }).click();
+  await start.page.locator('.paper-main').filter({ hasText: sample[2].title }).click();
+  await start.page.getByRole('dialog', { name: '이번 작업 주제' }).waitFor();
+  assert.deepEqual(await start.page.getByLabel('검토 시작 주제').locator('option').evaluateAll(options => options.map(option => option.value)), ['', topic, '__general__'], 'Individual review only offers selected topics on that paper');
+  await start.page.getByRole('button', { name: '주제 선택 닫기' }).click();
+  await start.page.getByRole('button', { name: '필터 초기화', exact: true }).click();
+  assert.equal(await start.page.getByLabel('현재 평가 경로').locator('strong').innerText(), '전체 목록');
+  await start.page.getByRole('button', { name: '미평가 연속 검토' }).click();
+  assert.equal(await start.page.getByRole('dialog', { name: '이번 작업 주제' }).count(), 0);
+  assert.equal(await start.page.locator('.drawer-navigation > span').innerText(), '1 / 3');
   await start.context.close();
   assert.deepEqual(failures, [], 'No errors in new coordination flow');
-  console.log('PASS: multi-topic start requires a single explicit origin and freezes only the matching queue');
+  console.log('PASS: sidebar-linked origin, automatic all-topics start, remembered multi-topic choice and filtered queues');
 } finally {
   await browser.close();
 }
