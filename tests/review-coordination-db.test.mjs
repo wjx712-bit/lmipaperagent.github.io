@@ -103,5 +103,78 @@ test('PostgreSQL migration preserves data, private RLS and anonymous topic compl
       const data = (await db.query("select public.review_completion(array(select 'bulk-'||i from generate_series(1,1500)i)) as data")).rows[0].data;
       assert.equal(data.papers.length, 1500);
     });
+
+    const auditMigration = await readFile('supabase/migrations/202609110002_review_origin_backfill_audit.sql', 'utf8');
+    const backfill = await readFile('supabase/maintenance/backfill_review_origins.sql', 'utf8');
+    const assignments = [
+      { user_id: member, expected_name: 'Researcher One', topic: adipose },
+      { user_id: other, expected_name: 'Researcher Two', topic: liver },
+    ];
+    const supply = rows => db.query("select set_config('lmi.confirmed_review_origins', $1, false)", [JSON.stringify(rows)]);
+    await db.exec('reset role');
+    await db.query('update public.profiles set display_name=$1 where id=$2', ['Researcher One', member]);
+    await db.query('update public.profiles set display_name=$1 where id=$2', ['Researcher Two', other]);
+    await db.exec(auditMigration);
+    await db.exec(auditMigration);
+    await db.query("insert into public.paper_reviews(user_id,paper_id,score) values($1,'unassigned',2)", [pending]);
+    const preBackfill = (await db.query('select * from public.paper_reviews order by user_id,paper_id')).rows;
+
+    await t.test('owner-confirmed backfill only fills missing paths and preserves every other field', async () => {
+      await supply(assignments);
+      await db.exec(backfill);
+      const after = (await db.query('select * from public.paper_reviews order by user_id,paper_id')).rows;
+      assert.deepEqual(after.map(({ review_topic, ...row }) => row), preBackfill.map(({ review_topic, ...row }) => row));
+      for (let i = 0; i < after.length; i++) {
+        assert.equal(after[i].review_topic, preBackfill[i].review_topic ?? assignments.find(a => a.user_id === after[i].user_id)?.topic ?? null);
+      }
+      const log = (await db.query('select * from public.review_origin_backfill_log')).rows;
+      assert.equal(log.length, 1);
+      assert.equal(log[0].source, 'lab_owner_confirmation');
+      assert.deepEqual(log[0].assignments, assignments);
+      assert.equal(log[0].changes.length, 2);
+      assert.ok(log[0].changes.every(row => Object.keys(row).sort().join(',') === 'paper_id,review_topic,user_id'));
+      await db.exec(backfill);
+      assert.equal((await db.query('select count(*)::int as n from public.review_origin_backfill_log')).rows[0].n, 1);
+    });
+
+    await t.test('invalid mappings abort atomically without weakening review protection', async () => {
+      for (const input of [[], [...assignments, assignments[0]], [{ ...assignments[0], expected_name: 'Wrong person' }], [{ ...assignments[0], topic: 'Invalid' }], [{ ...assignments[0], user_id: blocked }]]) {
+        await supply(input);
+        await assert.rejects(db.exec(backfill), /assignment|mismatch|invalid topic/);
+        await db.exec('rollback');
+      }
+      await db.query("insert into public.paper_reviews(user_id,paper_id,score) values($1,'rollback-probe',2)", [member]);
+      await db.exec(`create function pg_temp.abort_origin_probe() returns trigger language plpgsql as $$
+        begin raise exception 'Simulated maintenance failure'; end; $$;
+        create trigger abort_origin_probe before update on public.paper_reviews
+        for each row execute function pg_temp.abort_origin_probe();`);
+      await supply(assignments);
+      await assert.rejects(db.exec(backfill), /Simulated maintenance failure/);
+      await db.exec('rollback');
+      assert.equal((await db.query("select review_topic from public.paper_reviews where paper_id='rollback-probe'")).rows[0].review_topic, null);
+      assert.equal((await db.query('select count(*)::int as n from public.review_origin_backfill_log')).rows[0].n, 1);
+      await db.exec('drop trigger abort_origin_probe on public.paper_reviews');
+      const triggers = (await db.query("select tgenabled from pg_trigger where tgrelid='public.paper_reviews'::regclass and not tgisinternal")).rows;
+      assert.ok(triggers.every(row => row.tgenabled === 'O'));
+      await asUser(member);
+      await db.query("update public.paper_reviews set review_topic='__general__' where paper_id='legacy'");
+      assert.equal((await db.query("select review_topic from public.paper_reviews where paper_id='legacy'")).rows[0].review_topic, adipose);
+    });
+
+    await t.test('correction provenance is admin-only and members cannot invoke owner maintenance', async () => {
+      assert.equal((await db.query('select * from public.review_origin_backfill_log')).rows.length, 0);
+      await supply([assignments[0]]);
+      await assert.rejects(db.exec(backfill), /permission denied|must be owner/);
+      await db.exec('rollback');
+      const privateRows = (await db.query('select * from public.paper_reviews')).rows;
+      assert.ok(privateRows.every(row => row.user_id === member));
+      const data = (await db.query('select public.review_completion($1) as data', [['legacy']])).rows[0].data;
+      assert.deepEqual(data.papers[0], { paper_id: 'legacy', topics: [adipose, liver], other_topics: [liver], other_unattributed: false });
+      await asUser(admin);
+      assert.equal((await db.query('select * from public.review_origin_backfill_log')).rows.length, 1);
+      await assert.rejects(db.exec("insert into public.review_origin_backfill_log(source,assignments,changes) values('lab_owner_confirmation','[]','[]')"), /permission denied/);
+      await asUser('', 'anon');
+      await assert.rejects(db.exec('select * from public.review_origin_backfill_log'), /permission denied/);
+    });
   } finally { await db.close(); }
 });
